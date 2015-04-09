@@ -1,0 +1,34 @@
+*** Version 1.7
+
+- Implemented "Dryrun", feature request #3.
+  There is now a new command line option "-dryrun" which will make
+  Anonimatron go through all it's paces, but without any writes to your
+  database. It will even create a synonym file if you want to.
+
+- Implemented "Prefetching", feature request #5.
+  If your Anonymizer implements the "Prefetcher" interface, Anonimatron will
+  make a pass through the table and feed every value for your column to your
+  Anonymizer. This will enable you to collect the characters used in the
+  source data, so you can base your generated Synonyms on that. Any strange
+  UTF-8 character in your source database can be in your output set now,
+  while still being Anonymized. 
+
+- Added "CharacterStringPrefetchAnonymizer" for feature #5.
+
+- Added "Base64StringFieldHandler" to handle writing binary data from and
+  to the Synonym XML file.
+
+- Changed the update strategy, Anonimatron now uses a cursor to go through
+  a resultset, instead of generating update statements.
+
+- Reduced memory usage and improved performance.  
+
+*** Version 1.6 (and earlier)
+The original Anonimatron versions 1.0 to 1.6 were released in rapid
+succession. New features and bugfixes were rapidly implemented to support
+some people who started using Anonimatron on production systems. This
+usage made Anonimatron what it is today:
+- 5 Star rating on Sourceforge
+- Featured on Softpedia
+
+  

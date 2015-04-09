@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+      "http://castor.org/mapping.dtd">
+
+<mapping>
+	<description>Mapping for the the Configuration classes</description>
+
+	<class name="com.rolfje.anonimatron.configuration.Configuration">
+		<map-to xml="configuration" />
+		<field name="anonymizerClasses" collection="arraylist" type="string">
+			<bind-xml name="anonymizerclass" node="element" />
+		</field>
+		<field name="jdbcurl" type="string">
+			<bind-xml name="jdbcurl" node="attribute" />
+		</field>
+		<field name="userid" type="string">
+			<bind-xml name="userid" node="attribute" />
+		</field>
+		<field name="password" type="string">
+			<bind-xml name="password" node="attribute" />
+		</field>
+
+		<field name="tables" collection="arraylist"
+			type="com.rolfje.anonimatron.configuration.Table">
+			<bind-xml name="table" />
+		</field>
+	</class>
+
+	<class name="com.rolfje.anonimatron.configuration.Table">
+		<map-to xml="table" />
+
+		<field name="name" type="string">
+			<bind-xml name="name" node="attribute" />
+		</field>
+
+		<field name="columns" collection="arraylist"
+			type="com.rolfje.anonimatron.configuration.Column">
+			<bind-xml name="column" />
+		</field>
+
+		<field name="discriminators" collection="arraylist"
+			type="com.rolfje.anonimatron.configuration.Discriminator">
+			<bind-xml name="discriminator" />
+		</field>
+	</class>
+
+	<class name="com.rolfje.anonimatron.configuration.Column">
+		<map-to xml="column" />
+		<field name="name" type="string">
+			<bind-xml name="name" node="attribute" />
+		</field>
+		<field name="type" type="string">
+			<bind-xml name="type" node="attribute" />
+		</field>
+	</class>
+
+	<class name="com.rolfje.anonimatron.configuration.Discriminator">
+		<map-to xml="discriminator" />
+
+		<field name="columnName" type="string">
+			<bind-xml name="columnname" node="attribute" />
+		</field>
+		<field name="value" type="string">
+			<bind-xml name="value" node="attribute" />
+		</field>
+
+		<field name="columns" collection="arraylist"
+			type="com.rolfje.anonimatron.configuration.Column">
+			<bind-xml name="column" />
+		</field>
+	</class>
+</mapping>
