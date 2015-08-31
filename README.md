@@ -1,6 +1,9 @@
 # Anonimatron
 
-Please visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron") to download the latest version of Anonimatron.
+No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`.
+
++ ![How Anonimatron Works](#anonimatron#how-anonimatron-works)
++ ![How Anonimatron Works](#quick-start)
 
 ## How Anonimatron Works
 
