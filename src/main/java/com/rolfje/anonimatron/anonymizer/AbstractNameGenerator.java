@@ -18,9 +18,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * 
  * <p>
  * This class is released under GNU general public license. This class is an
- * adapted version of the one found here: {@link http
- * ://forum.codecall.net/classes
- * -code-snippets/19615-java-random-name-generator.html}
+ * adapted version of the one found <a href="http://forum.codecall.net/topic/49665-java-random-name-generator/">here</a>.
  * 
  * <p>
  * <b>SYLLABLE FILE REQUIREMENTS/FORMAT:<br/>
@@ -88,8 +86,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 	ArrayList<String> sur = new ArrayList<String>();
 	private Set<String> generatedNames = new HashSet<String>();
 
-	final private static char[] vocals = { 'a', 'e', 'i', 'o', 'u', 'ä', 'ö',
-			'õ', 'ü', 'y' };
+	final private static char[] vocals = {'a', 'e', 'i', 'o', 'u', 'Ã¤', 'Ã¶', 'Ãµ', 'Ã¼', 'y'};
 	final private static char[] consonants = { 'b', 'c', 'd', 'f', 'g', 'h',
 			'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x',
 			'y' };
