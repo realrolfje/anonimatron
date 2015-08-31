@@ -2,8 +2,14 @@
 
 No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`.
 
+### Table of contents
+
 + [How Anonimatron Works](#how-anonimatron-works)
 + [Quick Start](#quick-start)
+  + [Setting up a test database](#setting-up-a-test-database)
+  + [Installing Anonimatron](#installing-anonimatron)
+  + [Configuring Anonimatron](#configuring-anonimatron)
+  + [Anonymize!](#anonymize)
 
 ## How Anonimatron Works
 
