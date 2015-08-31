@@ -80,7 +80,7 @@ select * from mydb.userdata;
 ```
 
 | id | firstname | lastname | creditcardnr |
-| -- | --------- | -------- | ------------ |
+|----|-----------|----------|--------------|
 | 1  | Homer     | Simpson  | 1234         |
 | 1  | Homer     | Simpson  | 1234         |
 | 2  | Marge     | Simpson  | 5678         |
@@ -92,7 +92,7 @@ select * from mydb.lastnames;
 ```
 
 | id | lastname  |
-| -- | --------- |
+|----|-----------|
 | 1  | Simpson   |
 | 2  | Flanders  |
 | 3  | Burns     |
@@ -233,7 +233,7 @@ select * from mydb.userdata;
 ```
 
 | id | firstname     | lastname       | creditcardnr |
-!----|---------------|----------------|--------------|
+|----|---------------|----------------|--------------|
 | 1  | Benulaubelius | Ahdulelhalel   | 4343         |
 | 2  | Alnulaucus    | Ahdulelhalel   | 8698         |
 | 3  | Ecus          | Ahelhaldethess | 6125         |
