@@ -15,13 +15,13 @@ mvn versions:set -DnewVersion=$1
 mvn clean assembly:assembly
 mvn versions:commit
 
-#git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
-#git commit -m "Release $1"
-#git tag "v$1"
+git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
+git commit -m "Release $1"
+git tag "v$1"
 
 echo $2 > src/main/java/com/rolfje/anonimatron/version.txt
 mvn versions:set -DnewVersion=$2
 mvn versions:commit
 
-#git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
-#git commit -m "Update version to $2"
+git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
+git commit -m "Update version to $2"
