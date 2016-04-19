@@ -4,7 +4,7 @@
 
 	<groupId>anonimatron</groupId>
 	<artifactId>anonimatron</artifactId>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.8.2</version>
 	<packaging>jar</packaging>
 
 	<name>anonimatron</name>
