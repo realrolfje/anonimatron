@@ -25,3 +25,9 @@ mvn versions:commit
 
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Update version to $2"
+
+echo "The files to upload for this release are:"
+echo
+ls -l target/*.zip
+echo
+echo "Don't forget to push incuding tags."
