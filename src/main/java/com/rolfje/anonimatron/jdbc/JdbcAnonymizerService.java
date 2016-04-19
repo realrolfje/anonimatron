@@ -416,6 +416,9 @@ public class JdbcAnonymizerService {
 			"org.postgresql.Driver");
 		drivers.put("jdbc:sybase:Tds:[HOST]:[PORT]",
 			"com.sybase.jdbc.SybDriver");
+		drivers.put("jdbc:sybase:Tds:[HOST]:[PORT]/[DB]",
+				"net.sourceforge.jtds.jdbc.Driver");
+
 
 		for (Entry<String, String> driverEntry : drivers.entrySet()) {
 			String driverURL = driverEntry.getKey();
