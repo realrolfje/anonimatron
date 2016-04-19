@@ -1,6 +1,6 @@
 package com.rolfje.anonimatron;
 
-import java.io.File;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,10 +21,24 @@ import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
  * 
  */
 public class Anonimatron {
-	public static final String VERSION="1.8-SNAPSHOT";
+	public static String VERSION="UNKNOWN";
 	private static final String OPT_CONFIGFILE = "config";
 	private static final String OPT_SYNONYMFILE = "synonyms";
 	private static final String OPT_DRYRUN = "dryrun";
+
+	static {
+		try {
+			InputStream resourceAsStream = Anonimatron.class.getResourceAsStream("version.txt");
+			InputStreamReader inputStreamReader = new InputStreamReader(resourceAsStream);
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			VERSION = bufferedReader.readLine();
+			bufferedReader.close();
+			inputStreamReader.close();
+			resourceAsStream.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Could not determine version. " + e.getMessage());
+		}
+	}
 	
 	public static void main(String[] args) throws Exception {
 		Options options = new Options();
