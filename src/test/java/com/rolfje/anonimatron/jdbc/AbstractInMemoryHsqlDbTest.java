@@ -27,6 +27,8 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 			.getLogger(AbstractInMemoryHsqlDbTest.class);
 	protected static Connection connection;
 	public final static String TEST_DB_URL = "jdbc:hsqldb:mem:tests";
+	public final static String TEST_DB_USERID = "testuser";
+	public final static String TEST_DB_PASSWORD = "testpassword";
 
 	Set<String> tableNames = new HashSet<String>();
 
@@ -44,7 +46,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 
 		// Creates the in-memory HSQLDB on the fly
 		if (connection == null) {
-			connection = DriverManager.getConnection(TEST_DB_URL, null, null);
+			connection = DriverManager.getConnection(TEST_DB_URL, TEST_DB_USERID, TEST_DB_PASSWORD);
 			connection.setAutoCommit(true);
 		}
 	}
@@ -117,8 +119,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	 * @return A full, valid configuration pointing to the in-memory database
 	 *         for the given table and columns
 	 */
-	protected Configuration createConfiguration(String tableName,
-			Column... columns) {
+	protected Configuration createConfiguration(String tableName, Column... columns) {
 		if (columns == null) {
 			fail("Did not pass in valid Column list for this test.");
 		}
@@ -146,6 +147,8 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	protected Configuration createConfiguration(){
 		Configuration config = new Configuration();
 		config.setJdbcurl(TEST_DB_URL);
+		config.setUserid(TEST_DB_USERID);
+		config.setPassword(TEST_DB_PASSWORD);
 		config.setTables(new ArrayList<Table>());
 		return config;
 	}

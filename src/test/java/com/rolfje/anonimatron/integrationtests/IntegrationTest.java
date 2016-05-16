@@ -22,37 +22,33 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-//		configFile = createConfiguration();
-//		synonymFile = File.createTempFile("anonimatron-synonyms", ".xml");
-//		
-//		createDatabase();
+		configFile = createConfigurationFile();
+		synonymFile = File.createTempFile("anonimatron-synonyms", ".xml");
+
+		createDatabase();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-//		configFile.deleteOnExit();
-//		synonymFile.deleteOnExit();
+		assertTrue("Could not delete temporary configuration.",configFile.delete());
+		assertTrue("Could not delete temporary synonym file.",synonymFile.delete());
 		super.tearDown();
 	}
 
 	public void testAnonimatron() throws Exception {
-		
-		// TODO implement this test properly
-		
-//		String configFile = "";
-//		String synonymFile = "";
-//
-//		runAnonimatron(configFile, synonymFile);
+		runAnonimatron(configFile.getAbsolutePath(), synonymFile.getAbsolutePath());
 	}
 
 	private void createDatabase() throws Exception {
-		executeSql("create table TABLE1 (COL1 VARCHAR(200))");
+		executeSql("create table TABLE1 (COL1 VARCHAR(200), ID IDENTITY)");
 		PreparedStatement p = connection
-				.prepareStatement("insert into TABLE1 values (?)");
+				.prepareStatement("insert into TABLE1 (COL1) values (?)");
 		for (int i = 0; i < 100; i++) {
 			p.setString(1, "varcharstring-" + i);
 			p.execute();
 		}
+
+		LOG.info("Created test database.");
 	}
 
 	/**
@@ -63,9 +59,8 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	 * @throws Exception
 	 */
 	private File createConfigurationFile() throws Exception {
-		LOG.debug("Copying "+IntegrationTest.class.getResource("integrationconfig.xml")+" to a tempfile.");
-		InputStream stream = IntegrationTest.class.getResourceAsStream(
-				"integrationconfig.xml");
+		LOG.debug("Copying " + IntegrationTest.class.getResource("integrationconfig.xml") + " to a tempfile.");
+		InputStream stream = IntegrationTest.class.getResourceAsStream("integrationconfig.xml");
 		assertNotNull(stream);
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(

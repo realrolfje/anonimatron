@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration jdbcurl="jdbc:hsqldb:mem:tests"
-    userid="" password="">
+    userid="testuser" password="testpassword">
     <table name="TABLE1">
         <column name="COL1" type="EMAIL_ADDRESS"/>
     </table>

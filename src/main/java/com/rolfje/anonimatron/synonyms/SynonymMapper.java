@@ -1,24 +1,20 @@
 package com.rolfje.anonimatron.synonyms;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
+import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Provides functionality for reading and writing {@link Synonym}s to an XML
  * file for later reference.
- * 
+ *
  */
 public class SynonymMapper {
 
@@ -29,6 +25,15 @@ public class SynonymMapper {
 		unmarshaller.setMapping(mapping);
 
 		File file = new File(filename);
+
+        if (file.exists() && !file.isFile()) {
+            throw new IOException("File " + file.getAbsolutePath() + " exists but is not a file.");
+        }
+
+		if (!file.exists() || file.length() == 0) {
+			return Collections.emptyList();
+		}
+
 		Reader reader = new FileReader(file);
 		return (List<Synonym>) unmarshaller.unmarshal(reader);
 	}
