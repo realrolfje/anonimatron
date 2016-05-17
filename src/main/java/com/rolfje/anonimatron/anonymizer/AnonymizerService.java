@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -161,7 +161,7 @@ public class AnonymizerService {
 
 	private Anonymizer getAnonymizer(String type) {
 		if (type == null) {
-			new UnsupportedOperationException(
+			throw new UnsupportedOperationException(
 					"Can not anonymyze without knowing the column type.");
 		}
 

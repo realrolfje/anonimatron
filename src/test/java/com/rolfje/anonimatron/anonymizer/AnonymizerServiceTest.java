@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -35,6 +36,17 @@ public class AnonymizerServiceTest extends TestCase {
 
 		testAnonymizer(fromList, type);
 	}
+
+//	public void testDateAnonymizer() {
+//		List<Object> fromList = new ArrayList<Object>();
+//		fromList.add(new Date(1000));
+//		fromList.add(new Date(2000));
+//		fromList.add(new Date(3000));
+//
+//		String type = Date.class.getName();
+//
+//		testAnonymizer(fromList, type);
+//	}
 
 	private void testAnonymizer(List<Object> fromList, String type) {
 		List<Object> toList = new ArrayList<Object>();

@@ -1,17 +1,11 @@
 package com.rolfje.anonimatron.integrationtests;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.sql.PreparedStatement;
-
-import org.apache.log4j.Logger;
-
 import com.rolfje.anonimatron.Anonimatron;
 import com.rolfje.anonimatron.jdbc.AbstractInMemoryHsqlDbTest;
+import org.apache.log4j.Logger;
+
+import java.io.*;
+import java.sql.PreparedStatement;
 
 public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	Logger LOG = Logger.getLogger(IntegrationTest.class);
@@ -30,8 +24,8 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 
 	@Override
 	protected void tearDown() throws Exception {
-		assertTrue("Could not delete temporary configuration.",configFile.delete());
-		assertTrue("Could not delete temporary synonym file.",synonymFile.delete());
+		assertTrue("Could not delete temporary configuration.", configFile.delete());
+		assertTrue("Could not delete temporary synonym file.", synonymFile.delete());
 		super.tearDown();
 	}
 
@@ -63,8 +57,7 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 		InputStream stream = IntegrationTest.class.getResourceAsStream("integrationconfig.xml");
 		assertNotNull(stream);
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				stream, "UTF-8"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
 		File tempConfig = File.createTempFile("anonimatron-config", ".xml");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(tempConfig));

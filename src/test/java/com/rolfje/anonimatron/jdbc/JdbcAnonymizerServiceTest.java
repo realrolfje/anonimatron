@@ -7,6 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -229,6 +230,22 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 		addToConfig(config, "TABLE3", "COL1", null);
 
 		anonymize(config, 3753);
+	}
+
+	public void testDataTypes() throws Exception {
+		executeSql("create table TABLE1 (COL1 DATE, ID IDENTITY)");
+		PreparedStatement p = connection
+				.prepareStatement("insert into TABLE1 (COL1) values (?)");
+		for (int i = 0; i < 2; i++) {
+			p.setDate(1, new Date(Math.round(System.currentTimeMillis() * Math.random())));
+			p.execute();
+		}
+		p.close();
+
+		Configuration config = super.createConfiguration();
+		super.addToConfig(config, "TABLE1", "COL1", null);
+
+		anonymize(config, 2);
 	}
 
 	private AnonymizerService anonymize(Configuration config, int numberOfRecords) throws Exception, SQLException {

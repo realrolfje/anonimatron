@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.synonyms;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,16 +41,13 @@ public class SynonymMapperTest extends TestCase {
 		s.setType("");
 		synonyms.add(s);
 
-		File tempFile = File.createTempFile("Anonimatron-SynonymMapperTest-",
-			".xml");
+		File tempFile = File.createTempFile("Anonimatron-SynonymMapperTest-", ".xml");
 		tempFile.deleteOnExit();
 
 		SynonymMapper.writeToFile(synonyms, tempFile.getAbsolutePath());
-		List<Synonym> synonymsFromFile = SynonymMapper.readFromFile(tempFile
-				.getAbsolutePath());
+		List<Synonym> synonymsFromFile = SynonymMapper.readFromFile(tempFile.getAbsolutePath());
 
-		assertEquals("Not all synonyms were serialized.", synonyms.size(),
-			synonymsFromFile.size());
+		assertEquals("Not all synonyms were serialized.", synonyms.size(), synonymsFromFile.size());
 
 		synonyms.removeAll(synonymsFromFile);
 		assertEquals("Some synonyms were serialized incorrectly.", 0,
