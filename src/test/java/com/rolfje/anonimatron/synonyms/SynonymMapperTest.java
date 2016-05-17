@@ -2,6 +2,7 @@ package com.rolfje.anonimatron.synonyms;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,12 @@ public class SynonymMapperTest extends TestCase {
 		s.setTo("");
 		s.setType("");
 		synonyms.add(s);
+
+		DateSynonym d = new DateSynonym();
+		d.setFrom(new Date(System.currentTimeMillis()));
+		d.setTo(new Date(System.currentTimeMillis()-1000));
+		d.setType("");
+		synonyms.add(d);
 
 		File tempFile = File.createTempFile("Anonimatron-SynonymMapperTest-", ".xml");
 		tempFile.deleteOnExit();
