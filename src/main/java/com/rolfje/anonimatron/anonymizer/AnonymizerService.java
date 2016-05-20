@@ -21,7 +21,7 @@ public class AnonymizerService {
 	private static Logger LOG = Logger.getLogger(AnonymizerService.class);
 
 	private Map<String, Anonymizer> customAnonymizers = new HashMap<String, Anonymizer>();
-	private Map<String, Anonymizer> defaultAnonymizers = new HashMap<String, Anonymizer>();
+	private Map<String, String> defaultTypeMapping = new HashMap<String, String>();
 
 	private Map<String, Map<Object, Synonym>> synonymCache = new HashMap<String, Map<Object, Synonym>>();
 
@@ -39,11 +39,12 @@ public class AnonymizerService {
 		registerAnonymizer(new DigitStringAnonymizer());
 		registerAnonymizer(new CharacterStringAnonymizer());
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
-		
+		registerAnonymizer(new DateAnonymizer());
+
 		// Default anonymizers for plain Java objects. If we really don't
 		// know or care how the data looks like.
-		defaultAnonymizers.put(String.class.getName(), new StringAnonymizer());
-		defaultAnonymizers.put(Date.class.getName(), new DateAnonymizer());
+		defaultTypeMapping.put(String.class.getName(), new StringAnonymizer().getType());
+		defaultTypeMapping.put(Date.class.getName(), new DateAnonymizer().getType());
 	}
 
 	public void registerAnonymizers(List<String> anonymizers) {
@@ -73,7 +74,7 @@ public class AnonymizerService {
 	}
 
 	public Set<String> getDefaultAnonymizerTypes() {
-		return Collections.unmodifiableSet(defaultAnonymizers.keySet());
+		return Collections.unmodifiableSet(defaultTypeMapping.keySet());
 	}
 
 	public Synonym anonymize(String type, Object from, int size) {
@@ -153,6 +154,11 @@ public class AnonymizerService {
 
 	private Synonym getFromCache(String type, Object from) {
 		Map<Object, Synonym> typemap = synonymCache.get(type);
+
+		if (typemap == null) {
+			typemap = synonymCache.get(defaultTypeMapping.get(type));
+		}
+
 		if (typemap != null) {
 			return typemap.get(from);
 		}
@@ -176,7 +182,7 @@ public class AnonymizerService {
 			}
 
 			// Fall back to default if we don't know how to handle this
-			anonymizer = defaultAnonymizers.get(type);
+			anonymizer = customAnonymizers.get(defaultTypeMapping.get(type));
 		}
 
 		if (anonymizer == null) {
