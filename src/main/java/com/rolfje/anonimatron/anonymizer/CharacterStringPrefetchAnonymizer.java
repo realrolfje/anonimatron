@@ -6,7 +6,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 
 /**
  * Provides the same functionality as {@link CharacterStringAnonymizer}, but
- * uses the prefetch cycle to collect it's output character set.
+ * uses the prefetch cycle to collect its output character set.
  * 
  * @author rolf
  */
