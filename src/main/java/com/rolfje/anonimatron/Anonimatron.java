@@ -68,8 +68,7 @@ public class Anonimatron {
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
 		// Create the jdbc service
-		JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config);
-		jdbcService.setAnonymizerService(anonymizerService);
+		JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
 
 		if (synonymFile != null) {
 			File file = new File(synonymFile);

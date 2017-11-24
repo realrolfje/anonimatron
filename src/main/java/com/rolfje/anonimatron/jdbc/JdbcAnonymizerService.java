@@ -43,14 +43,11 @@ public class JdbcAnonymizerService {
 		registerDrivers();
 	}
 
-	public JdbcAnonymizerService(Configuration config) throws Exception {
+	public JdbcAnonymizerService(Configuration config, AnonymizerService anonymizerService) throws Exception {
 		this();
 		this.config = config;
-		setConnection();
-	}
-
-	public void setAnonymizerService(AnonymizerService anonymizerService) {
 		this.anonymizerService = anonymizerService;
+		setConnection();
 	}
 
 	public void printConfigurationInfo() {

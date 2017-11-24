@@ -3,7 +3,7 @@ package com.rolfje.anonimatron.anonymizer;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
-class StringAnonymizer implements Anonymizer {
+public class StringAnonymizer implements Anonymizer {
 	private static final String TYPE = "STRING";
 
 	@Override

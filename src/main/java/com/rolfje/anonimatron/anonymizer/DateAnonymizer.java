@@ -7,7 +7,7 @@ import java.util.Set;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
-class DateAnonymizer implements Anonymizer {
+public class DateAnonymizer implements Anonymizer {
 	private static final String TYPE = "DATE";
 	private static final long RANDOMIZATION_MILLIS = 1000 * 60 * 60 * 24 * 31;
 

@@ -73,8 +73,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
 		try {
 			// Anonymize the data.
-			JdbcAnonymizerService serv = new JdbcAnonymizerService(config);
-			serv.setAnonymizerService(new AnonymizerService());
+			JdbcAnonymizerService serv = new JdbcAnonymizerService(config, new AnonymizerService());
 			serv.anonymize();
 
 			fail("Should not be able to store UUID in a 1 character varchar");
@@ -233,10 +232,9 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
 	private AnonymizerService anonymize(Configuration config, int numberOfRecords) throws Exception, SQLException {
 		// Anonymize the data.
-		JdbcAnonymizerService serv = new JdbcAnonymizerService(config);
 		AnonymizerService anonymizerService = new AnonymizerService();
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
-		serv.setAnonymizerService(anonymizerService);
+		JdbcAnonymizerService serv = new JdbcAnonymizerService(config, anonymizerService);
 		serv.anonymize();
 
 		assertEquals(numberOfRecords, serv.getProgress().getTotalitemstodo());
