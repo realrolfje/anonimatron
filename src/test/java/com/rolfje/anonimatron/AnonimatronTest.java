@@ -1,14 +1,13 @@
 package com.rolfje.anonimatron;
 
+import com.rolfje.anonimatron.file.CsvFileWriter;
+import com.rolfje.anonimatron.file.Record;
+import junit.framework.TestCase;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-
-import com.rolfje.anonimatron.anonymizer.Anonymizer;
-import com.rolfje.anonimatron.file.CsvFileWriter;
-import com.rolfje.anonimatron.file.Record;
-import junit.framework.TestCase;
 
 /**
  * Unit test for simple App.
@@ -59,8 +58,8 @@ public class AnonimatronTest extends TestCase {
 		printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		printWriter.write("<configuration>\n");
 		printWriter.write("<file " +
-				"inFile=\""+inFile.getAbsolutePath()+"\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
-				"outFile=\""+outFile.getAbsolutePath()+"\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
+				"inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
+				"outFile=\"" + outFile.getAbsolutePath() + "\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
 				">\n");
 		printWriter.write("<column name=\"1\" type=\"ROMAN_NAME\"/>\n");
 		printWriter.write("</file>\n");
