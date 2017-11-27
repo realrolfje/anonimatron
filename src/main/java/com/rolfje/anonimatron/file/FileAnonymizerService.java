@@ -1,4 +1,4 @@
-package com.rolfje.anonimatron.stream;
+package com.rolfje.anonimatron.file;
 
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
 import com.rolfje.anonimatron.configuration.Configuration;
@@ -8,14 +8,17 @@ import org.apache.log4j.Logger;
 /**
  * Reads rows from a file and returns anonymized rows.
  */
-public class StreamAnonymizerService {
-	private Logger LOG = Logger.getLogger(StreamAnonymizerService.class);
+public class FileAnonymizerService {
+	private Logger LOG = Logger.getLogger(FileAnonymizerService.class);
 
 	private Configuration config;
 	private AnonymizerService anonymizerService;
 
 
-	public StreamAnonymizerService(Configuration config, AnonymizerService anonymizerService) {
+	public FileAnonymizerService(Configuration config, AnonymizerService anonymizerService) {
+
+
+
 		this.anonymizerService = anonymizerService;
 	}
 

@@ -1,32 +1,27 @@
-package com.rolfje.anonimatron.stream;
+package com.rolfje.anonimatron.file;
 
-import com.rolfje.anonimatron.anonymizer.AnonymizerService;
-import com.rolfje.anonimatron.anonymizer.DateAnonymizer;
-import com.rolfje.anonimatron.anonymizer.DutchBSNAnononymizer;
-import com.rolfje.anonimatron.anonymizer.UUIDAnonymizer;
+import com.rolfje.anonimatron.anonymizer.*;
 import com.rolfje.anonimatron.configuration.Configuration;
 import junit.framework.TestCase;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public class StreamAnonymizerServiceTest extends TestCase {
+public class FileAnonymizerServiceTest extends TestCase {
 
-	private StreamAnonymizerService streamAnonymizerService;
+	private FileAnonymizerService fileAnonymizerService;
 
 	public void setUp() throws Exception {
 		super.setUp();
 
-		Configuration configuration = new Configuration();
+		Configuration config = new Configuration();
 		AnonymizerService anonymizerService = new AnonymizerService();
-		streamAnonymizerService = new StreamAnonymizerService(configuration, anonymizerService);
+		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
+		fileAnonymizerService = new FileAnonymizerService(config, anonymizerService);
 	}
 
 	public void testAnonymize() throws Exception {
 		Record record = new Record(new String[]{new DutchBSNAnononymizer().getType()}, new String[]{"ABC"});
-		Record anonymize = streamAnonymizerService.anonymize(record);
+		Record anonymize = fileAnonymizerService.anonymize(record);
 
 		assertEquals(record.types[0], anonymize.types[0]);
 		assertFalse(record.values[0].equals(anonymize.values[0]));
@@ -35,8 +30,7 @@ public class StreamAnonymizerServiceTest extends TestCase {
 	public void testAnonymizeRecords() throws Exception {
 		String[] types = new String[]{
 				new DutchBSNAnononymizer().getType(),
-				new DateAnonymizer().getType(),
-				new UUIDAnonymizer().getType()
+				new StringAnonymizer().getType()
 		};
 
 		final List<Record> sourceRecords = new ArrayList<Record>();
@@ -44,8 +38,7 @@ public class StreamAnonymizerServiceTest extends TestCase {
 		for (int i = 0; i < 10; i++) {
 			Object[] values = new Object[]{
 					"MyBSN",
-					new Date(),
-					UUID.randomUUID()
+					"some private text"
 			};
 			sourceRecords.add(new Record(types, values));
 		}
@@ -75,7 +68,7 @@ public class StreamAnonymizerServiceTest extends TestCase {
 			}
 		};
 
-		streamAnonymizerService.anonymize(recordReader, recordWriter);
+		fileAnonymizerService.anonymize(recordReader, recordWriter);
 		assertEquals(sourceRecords.size(), targetRecords.size());
 
 		for (int i = 0; i < sourceRecords.size(); i++) {
@@ -83,9 +76,9 @@ public class StreamAnonymizerServiceTest extends TestCase {
 			Record target = targetRecords.get(i);
 
 			for (int j = 0; j < source.types.length; j++) {
-				assertEquals(source.types[i], target.types[i]);
-				assertFalse(source.values[i].equals(target.types[i]));
-				assertNotNull(target.types[i]);
+				assertEquals(source.types[j], target.types[j]);
+				assertFalse(source.values[j].equals(target.types[j]));
+				assertNotNull(target.types[j]);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.rolfje.anonimatron.stream;
+package com.rolfje.anonimatron.file;
 
 public class Record {
 	final String[] types;
