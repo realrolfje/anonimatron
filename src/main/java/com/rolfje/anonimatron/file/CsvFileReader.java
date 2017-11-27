@@ -15,7 +15,11 @@ public class CsvFileReader implements RecordReader, Closeable {
 
 	public CsvFileReader(File file) throws IOException {
 		this.file = file;
-		reader = new BufferedReader(new FileReader(file));
+		try {
+			reader = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("Problem while reading file " + file.getAbsolutePath() + ".", e);
+		}
 	}
 
 	@Override

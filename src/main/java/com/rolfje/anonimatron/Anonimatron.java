@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.rolfje.anonimatron.file.FileAnonymizerService;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -67,9 +68,6 @@ public class Anonimatron {
 		AnonymizerService anonymizerService = new AnonymizerService();
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
-		// Create the jdbc service
-		JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
-
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
 			if (file.exists()) {
@@ -80,8 +78,17 @@ public class Anonimatron {
 			}
 		}
 
-		jdbcService.anonymize();
-		
+		if (config.getTables() != null && config.getTables().size() > 0) {
+			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
+			jdbcService.anonymize();
+		}
+		else if (config.getFiles() != null && config.getFiles().size() > 0) {
+			FileAnonymizerService fileService = new FileAnonymizerService(config, anonymizerService);
+			fileService.anonymize();
+		} else {
+			System.err.println("Configuration does not contain <table> or <file> elements. Nothing done.");
+		}
+
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
 			System.out.print("Writing Synonyms to " + file.getAbsolutePath()

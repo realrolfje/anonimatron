@@ -2,6 +2,7 @@ package com.rolfje.anonimatron.configuration;
 
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
 import com.rolfje.anonimatron.file.CsvFileReader;
+import com.rolfje.anonimatron.file.CsvFileWriter;
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
@@ -128,8 +129,8 @@ public class Configuration {
 		conf.setTables(tables);
 
 		List<DataFile> dataFiles = new ArrayList<DataFile>();
-		dataFiles.add(getDataFile("mydatafile.csv", getFileColumns()));
-		dataFiles.add(getDataFile("default_types.csv", getDefaultColumns()));
+		dataFiles.add(getDataFile("mydatafile.in.csv", "mydatafile.out.csv", getFileColumns()));
+		dataFiles.add(getDataFile("default_types.in.csv", "default_types.out.csv", getDefaultColumns()));
 
 		conf.setFiles(dataFiles);
 
@@ -139,10 +140,14 @@ public class Configuration {
 		return conf;
 	}
 
-	private static DataFile getDataFile(String fileName, List<Column> columns){
+	private static DataFile getDataFile(String inFile, String outFile, List<Column> columns) {
 		DataFile t = new DataFile();
-		t.setInFile(fileName);
+		t.setInFile(inFile);
 		t.setReader(CsvFileReader.class.getCanonicalName());
+
+		t.setOutFile(outFile);
+		t.setWriter(CsvFileWriter.class.getCanonicalName());
+
 		t.setColumns(columns);
 		return t;
 	}
