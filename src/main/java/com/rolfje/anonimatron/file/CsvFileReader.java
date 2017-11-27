@@ -7,12 +7,14 @@ import java.util.StringTokenizer;
 public class CsvFileReader implements RecordReader, Closeable {
 
 	private BufferedReader reader;
+	private File file;
 
 	public CsvFileReader(String fileName) throws IOException {
 		this(new File(fileName));
 	}
 
 	public CsvFileReader(File file) throws IOException {
+		this.file = file;
 		reader = new BufferedReader(new FileReader(file));
 	}
 
@@ -21,7 +23,7 @@ public class CsvFileReader implements RecordReader, Closeable {
 		try {
 			return reader.ready();
 		} catch (IOException e) {
-			throw new RuntimeException("Problem while reading file.", e);
+			throw new RuntimeException("Problem while reading file " + file.getAbsolutePath() + ".", e);
 		}
 	}
 
@@ -31,7 +33,7 @@ public class CsvFileReader implements RecordReader, Closeable {
 		try {
 			s = reader.readLine();
 		} catch (IOException e) {
-			throw new RuntimeException("Problem reading file.", e);
+			throw new RuntimeException("Problem reading file " + file.getAbsolutePath() + ".", e);
 		}
 
 		// Super simple implementation, not taking quotes into account.

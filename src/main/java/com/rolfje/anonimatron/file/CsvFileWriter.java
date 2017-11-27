@@ -8,12 +8,14 @@ import java.io.IOException;
 public class CsvFileWriter implements RecordWriter {
 
 	private BufferedWriter writer;
+	private File file;
 
 	public CsvFileWriter(String fileName) throws IOException {
 		this(new File(fileName));
 	}
 
 	public CsvFileWriter(File file) throws IOException {
+		this.file = file;
 		writer = new BufferedWriter(new FileWriter(file));
 	}
 
@@ -32,7 +34,7 @@ public class CsvFileWriter implements RecordWriter {
 		try {
 			writer.write(line.toString() + "\n");
 		} catch (IOException e) {
-			throw new RuntimeException("Problem writing file.", e);
+			throw new RuntimeException("Problem writing file " + file.getAbsolutePath() + ".", e);
 		}
 
 	}
