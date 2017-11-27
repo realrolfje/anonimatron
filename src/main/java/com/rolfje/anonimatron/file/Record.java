@@ -11,4 +11,19 @@ public class Record {
 		this.types = types;
 		this.values = values;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder("[Record: ");
+		if (types != null) {
+			for (int i = 0; i < types.length; i++) {
+				stringBuilder.append(types[i]);
+				stringBuilder.append(":");
+				stringBuilder.append("'" + values + "' ");
+			}
+		}
+
+		stringBuilder.append("]");
+		return stringBuilder.toString();
+	}
 }

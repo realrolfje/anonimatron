@@ -1,9 +1,13 @@
 package com.rolfje.anonimatron.file;
 
 import com.rolfje.anonimatron.anonymizer.*;
+import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
+import com.rolfje.anonimatron.configuration.DataFile;
 import junit.framework.TestCase;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class FileAnonymizerServiceTest extends TestCase {
@@ -81,5 +85,33 @@ public class FileAnonymizerServiceTest extends TestCase {
 				assertNotNull(target.types[j]);
 			}
 		}
+	}
+
+	public void testIntegrationTest() throws Exception {
+		// Create testfile
+		File tempInput = File.createTempFile("tempInput", ".csv");
+		PrintWriter printWriter = new PrintWriter(tempInput);
+		printWriter.write("test1,test2,test3");
+		printWriter.write("test3,test2,test1");
+		printWriter.close();
+
+		List<Column> columns = Arrays.asList(
+				new Column[]{
+						new Column("1", "String")
+				});
+
+
+		DataFile dataFile = new DataFile();
+		dataFile.setName(tempInput.getAbsolutePath());
+		dataFile.setReader(CsvFileReader.class.getCanonicalName());
+		dataFile.setColumns(columns);
+
+		Configuration configuration = new Configuration();
+		configuration.setFiles(Arrays.asList(new DataFile[]{dataFile}));
+		AnonymizerService anonymizerService = new AnonymizerService();
+		anonymizerService.registerAnonymizers(configuration.getAnonymizerClasses());
+		fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
+
+		fileAnonymizerService.anonymize();
 	}
 }
