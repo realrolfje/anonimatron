@@ -141,7 +141,7 @@ public class Configuration {
 
 	private static DataFile getDataFile(String fileName, List<Column> columns){
 		DataFile t = new DataFile();
-		t.setName(fileName);
+		t.setInFile(fileName);
 		t.setReader(CsvFileReader.class.getCanonicalName());
 		t.setColumns(columns);
 		return t;

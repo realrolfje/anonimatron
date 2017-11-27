@@ -5,19 +5,23 @@ import java.util.List;
 import java.util.Map;
 
 public class DataFile {
-	private String name;
+	private String inFile;
 	private String reader;
-	private List<Column> columns;
-	private List<Discriminator> discriminators;
 
+	private String outFile;
+	private String writer;
+
+	private List<Column> columns;
+
+	private List<Discriminator> discriminators;
 	private long numberOfRecords;
 
-	public String getName() {
-		return name;
+	public String getInFile() {
+		return inFile;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setInFile(String inFile) {
+		this.inFile = inFile;
 	}
 
 	public void setReader(String reader) {
@@ -26,6 +30,22 @@ public class DataFile {
 
 	public String getReader() {
 		return reader;
+	}
+
+	public String getOutFile() {
+		return outFile;
+	}
+
+	public void setOutFile(String outFile) {
+		this.outFile = outFile;
+	}
+
+	public String getWriter() {
+		return writer;
+	}
+
+	public void setWriter(String writer) {
+		this.writer = writer;
 	}
 
 	public List<Column> getColumns() {

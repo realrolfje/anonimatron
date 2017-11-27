@@ -7,6 +7,7 @@ import com.rolfje.anonimatron.configuration.DataFile;
 import junit.framework.TestCase;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -48,6 +49,11 @@ public class FileAnonymizerServiceTest extends TestCase {
 		}
 
 		RecordReader recordReader = new RecordReader() {
+			@Override
+			public void close() throws IOException {
+				// nothing
+			}
+
 			private int i = 0;
 
 
@@ -66,6 +72,11 @@ public class FileAnonymizerServiceTest extends TestCase {
 
 		final List<Record> targetRecords = new ArrayList<Record>();
 		RecordWriter recordWriter = new RecordWriter() {
+			@Override
+			public void close() throws IOException {
+				// nothing
+			}
+
 			@Override
 			public void write(Record record) {
 				targetRecords.add(record);
@@ -91,19 +102,23 @@ public class FileAnonymizerServiceTest extends TestCase {
 		// Create testfile
 		File tempInput = File.createTempFile("tempInput", ".csv");
 		PrintWriter printWriter = new PrintWriter(tempInput);
-		printWriter.write("test1,test2,test3");
-		printWriter.write("test3,test2,test1");
+		printWriter.write("test1,test2,test3\n");
+		printWriter.write("test3,test2,test1\n");
 		printWriter.close();
+
+
+		String tempOutput = tempInput.getAbsoluteFile() + ".out.csv";
 
 		List<Column> columns = Arrays.asList(
 				new Column[]{
 						new Column("1", "String")
 				});
 
-
 		DataFile dataFile = new DataFile();
-		dataFile.setName(tempInput.getAbsolutePath());
+		dataFile.setInFile(tempInput.getAbsolutePath());
+		dataFile.setOutFile(tempOutput);
 		dataFile.setReader(CsvFileReader.class.getCanonicalName());
+		dataFile.setWriter(CsvFileWriter.class.getCanonicalName());
 		dataFile.setColumns(columns);
 
 		Configuration configuration = new Configuration();
@@ -113,5 +128,17 @@ public class FileAnonymizerServiceTest extends TestCase {
 		fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
 
 		fileAnonymizerService.anonymize();
+
+		File outPutFile = new File(tempOutput);
+		assertTrue(outPutFile.exists());
+
+		CsvFileReader csvFileReader = new CsvFileReader(outPutFile.getAbsoluteFile());
+		Record outputRecord1 = csvFileReader.read();
+		Record outputRecord2 = csvFileReader.read();
+		assertFalse(csvFileReader.hasRecords());
+
+		assertEquals(outputRecord1.values[0], outputRecord2.values[2]);
+		assertEquals(outputRecord1.values[1], outputRecord2.values[1]);
+		assertEquals(outputRecord1.values[2], outputRecord2.values[0]);
 	}
 }

@@ -53,12 +53,20 @@
 	<class name="com.rolfje.anonimatron.configuration.DataFile">
 		<map-to xml="file" />
 
-		<field name="name" type="string">
-			<bind-xml name="name" node="attribute" />
+		<field name="inFile" type="string">
+			<bind-xml name="inFile" node="attribute" />
 		</field>
 
 		<field name="reader" type="string">
 			<bind-xml name="reader" node="attribute" />
+		</field>
+
+		<field name="outFile" type="string">
+			<bind-xml name="outFile" node="attribute" />
+		</field>
+
+		<field name="writer" type="string">
+			<bind-xml name="writer" node="attribute" />
 		</field>
 
 		<field name="columns" collection="arraylist"
