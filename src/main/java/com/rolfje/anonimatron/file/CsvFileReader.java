@@ -1,7 +1,5 @@
 package com.rolfje.anonimatron.file;
 
-import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -41,15 +39,17 @@ public class CsvFileReader implements RecordReader, Closeable {
 		// to figure out if we want to switch to a newer Java.
 		StringTokenizer stringTokenizer = new StringTokenizer(s, ",");
 
-		ArrayList<String> types = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<String> strings = new ArrayList<String>();
+		int i = 1;
 		while (stringTokenizer.hasMoreTokens()) {
-			types.add(new StringAnonymizer().getType());
+			names.add(String.valueOf(i));
 			strings.add(stringTokenizer.nextToken());
+			i++;
 		}
 
 		return new Record(
-				types.toArray(new String[]{}),
+				names.toArray(new String[]{}),
 				strings.toArray()
 		);
 	}

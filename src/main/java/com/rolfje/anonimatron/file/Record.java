@@ -1,23 +1,23 @@
 package com.rolfje.anonimatron.file;
 
 public class Record {
-	final String[] types;
+	final String[] names;
 	final Object[] values;
 
-	public Record(String[] types, Object[] values) {
-		if (types.length != values.length) {
+	public Record(String[] names, Object[] values) {
+		if (names.length != values.length) {
 			throw new IllegalArgumentException("Argument Arrays need to be the same size.");
 		}
-		this.types = types;
+		this.names = names;
 		this.values = values;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder stringBuilder = new StringBuilder("[Record: ");
-		if (types != null) {
-			for (int i = 0; i < types.length; i++) {
-				stringBuilder.append(types[i]);
+		if (names != null) {
+			for (int i = 0; i < names.length; i++) {
+				stringBuilder.append(names[i]);
 				stringBuilder.append(":");
 				stringBuilder.append("'" + values + "' ");
 			}
