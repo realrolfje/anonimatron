@@ -22,7 +22,7 @@ import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
  * 
  */
 public class Anonimatron {
-	public static final String VERSION="1.8-SNAPSHOT";
+	public static final String VERSION="1.9-SNAPSHOT";
 	private static final String OPT_CONFIGFILE = "config";
 	private static final String OPT_SYNONYMFILE = "synonyms";
 	private static final String OPT_DRYRUN = "dryrun";
