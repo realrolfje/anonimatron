@@ -23,10 +23,10 @@ public class CsvFileWriter implements RecordWriter {
 	public void write(Record record) {
 		StringBuilder line = new StringBuilder();
 
-		for (int i = 0; i < record.values.length; i++) {
-			String value = record.values[i].toString();
+		for (int i = 0; i < record.getValues().length; i++) {
+			String value = record.getValues()[i].toString();
 			line.append(value);
-			if (i < record.values.length - 1) {
+			if (i < record.getValues().length - 1) {
 				line.append(",");
 			}
 		}

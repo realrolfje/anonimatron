@@ -1,6 +1,8 @@
 package com.rolfje.anonimatron.file;
 
-import com.rolfje.anonimatron.anonymizer.*;
+import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.DutchBSNAnononymizer;
+import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.configuration.DataFile;
@@ -9,7 +11,10 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class FileAnonymizerServiceTest extends TestCase {
 
@@ -27,13 +32,13 @@ public class FileAnonymizerServiceTest extends TestCase {
 	public void testAnonymize() throws Exception {
 		Record record = new Record(new String[]{"bsn"}, new String[]{"ABC"});
 
-		HashMap<String, String> nameTypeMap = new HashMap<String, String>();
-		nameTypeMap.put("bsn", new DutchBSNAnononymizer().getType());
+		HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+		nameTypeMap.put("bsn", new Column("bsn", new DutchBSNAnononymizer().getType(), 50));
 
 		Record anonymize = fileAnonymizerService.anonymize(record, nameTypeMap);
 
-		assertEquals(record.names[0], anonymize.names[0]);
-		assertFalse(record.values[0].equals(anonymize.values[0]));
+		assertEquals(record.getNames()[0], anonymize.getNames()[0]);
+		assertFalse(record.getValues()[0].equals(anonymize.getValues()[0]));
 	}
 
 	public void testAnonymizeRecords() throws Exception {
@@ -87,9 +92,9 @@ public class FileAnonymizerServiceTest extends TestCase {
 			}
 		};
 
-		HashMap<String, String> nameTypeMap = new HashMap<String, String>();
-		nameTypeMap.put(names[0], names[0]);
-		nameTypeMap.put(names[1], names[1]);
+		HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+		nameTypeMap.put(names[0], new Column(names[0], names[0], 50));
+		nameTypeMap.put(names[1], new Column(names[1], names[1], 50));
 
 		fileAnonymizerService.anonymize(recordReader, recordWriter, nameTypeMap);
 		assertEquals(sourceRecords.size(), targetRecords.size());
@@ -98,10 +103,10 @@ public class FileAnonymizerServiceTest extends TestCase {
 			Record source = sourceRecords.get(i);
 			Record target = targetRecords.get(i);
 
-			for (int j = 0; j < source.names.length; j++) {
-				assertEquals(source.names[j], target.names[j]);
-				assertFalse(source.values[j].equals(target.names[j]));
-				assertNotNull(target.names[j]);
+			for (int j = 0; j < source.getNames().length; j++) {
+				assertEquals(source.getNames()[j], target.getNames()[j]);
+				assertFalse(source.getValues()[j].equals(target.getNames()[j]));
+				assertNotNull(target.getNames()[j]);
 			}
 		}
 	}
@@ -118,9 +123,9 @@ public class FileAnonymizerServiceTest extends TestCase {
 
 		List<Column> columns = Arrays.asList(
 				new Column[]{
-						new Column("1", "STRING"),
-						new Column("3", "STRING"),
-						new Column("4", "STRING"),
+						new Column("1", "STRING", 50),
+						new Column("3", "STRING", 50),
+						new Column("4", "STRING", 50),
 				});
 
 		DataFile dataFile = new DataFile();
@@ -146,12 +151,12 @@ public class FileAnonymizerServiceTest extends TestCase {
 		Record outputRecord2 = csvFileReader.read();
 		assertFalse(csvFileReader.hasRecords());
 
-		assertEquals(outputRecord1.values[0], outputRecord2.values[3]);
-		assertEquals(outputRecord1.values[1], outputRecord2.values[1]);
-		assertEquals(outputRecord1.values[2], outputRecord2.values[2]);
-		assertEquals(outputRecord1.values[3], outputRecord2.values[0]);
+		assertEquals(outputRecord1.getValues()[0], outputRecord2.getValues()[3]);
+		assertEquals(outputRecord1.getValues()[1], outputRecord2.getValues()[1]);
+		assertEquals(outputRecord1.getValues()[2], outputRecord2.getValues()[2]);
+		assertEquals(outputRecord1.getValues()[3], outputRecord2.getValues()[0]);
 
-		assertEquals("notouch", outputRecord1.values[1]);
-		assertEquals("notouch", outputRecord2.values[1]);
+		assertEquals("notouch", outputRecord1.getValues()[1]);
+		assertEquals("notouch", outputRecord2.getValues()[1]);
 	}
 }

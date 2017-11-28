@@ -44,7 +44,7 @@ public class FileAnonymizerService {
 			RecordReader reader = createReader(file);
 			RecordWriter writer = createWriter(file);
 
-			Map<String, String> columns = toMap(file.getColumns());
+			Map<String, Column> columns = toMap(file.getColumns());
 
 			anonymize(
 					reader,
@@ -128,7 +128,7 @@ public class FileAnonymizerService {
 		return allFiles;
 	}
 
-	void anonymize(RecordReader reader, RecordWriter writer, Map<String, String> columns) throws Exception {
+	void anonymize(RecordReader reader, RecordWriter writer, Map<String, Column> columns) throws Exception {
 		while(reader.hasRecords()) {
 			Record read = reader.read();
 			Record anonymized = anonymize(read, columns);
@@ -136,27 +136,30 @@ public class FileAnonymizerService {
 		}
 	}
 
-	Record anonymize(Record record, Map<String, String> columns) {
-		Object[] values = new Object[record.values.length];
-		for (int i = 0; i < record.names.length; i++) {
-			String name = record.names[i];
-			Object value = record.values[i];
+	Record anonymize(Record record, Map<String, Column> columns) {
+		Object[] values = new Object[record.getValues().length];
+		for (int i = 0; i < record.getNames().length; i++) {
+			String name = record.getNames()[i];
+			Object value = record.getValues()[i];
 
 			if (columns.containsKey(name)) {
-				String type = columns.get(name);
-				Synonym synonym = anonymizerService.anonymize(type, value, Integer.MAX_VALUE);
+				Column column = columns.get(name);
+				String type = column.getType();
+				int size = column.getSize();
+
+				Synonym synonym = anonymizerService.anonymize(type, value, size);
 				values[i] = synonym.getTo();
 			} else {
 				values[i] = value;
 			}
 		}
-		return new Record(record.names, values);
+		return new Record(record.getNames(), values);
 	}
 
-	private Map<String, String> toMap(List<Column> columns) {
-		HashMap<String, String> map = new HashMap<String, String>();
+	private Map<String, Column> toMap(List<Column> columns) {
+		HashMap<String, Column> map = new HashMap<String, Column>();
 		for (Column column : columns) {
-			map.put(column.getName(), column.getType());
+			map.put(column.getName(), column);
 		}
 		return map;
 	}

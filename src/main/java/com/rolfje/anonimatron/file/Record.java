@@ -1,8 +1,8 @@
 package com.rolfje.anonimatron.file;
 
 public class Record {
-	final String[] names;
-	final Object[] values;
+	private final String[] names;
+	private final Object[] values;
 
 	public Record(String[] names, Object[] values) {
 		if (names.length != values.length) {
@@ -25,5 +25,13 @@ public class Record {
 
 		stringBuilder.append("]");
 		return stringBuilder.toString();
+	}
+
+	public String[] getNames() {
+		return names;
+	}
+
+	public Object[] getValues() {
+		return values;
 	}
 }

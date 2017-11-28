@@ -101,11 +101,13 @@ public class Anonimatron {
 	private static void printHelp(Options options) {
 		System.out
 				.println("\nThis is Anonimatron "+VERSION+", a command line tool to consistently \n"
-						+ "replace live data in your database with data data which \n" 
-						+ "can not be traced back to the original data.\n"
+						+ "replace live data in your database or data files with data data which \n"
+						+ "can not easily be traced back to the original data.\n"
 						+ "You can use this tool to transform a dump from a production \n"
 						+ "database into a large representative dataset you can \n"
 						+ "share with your development and test team.\n"
+						+ "The tool can also read files with sensitive data and write\n"
+						+ "consistently anonymized versions of those files to a different location.\n"
 						+ "Use the -configexample command line option to get an idea of\n"
 						+ "what your configuration file needs to look like.\n\n");
 

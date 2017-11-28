@@ -61,7 +61,7 @@ public class AnonimatronTest extends TestCase {
 				"inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
 				"outFile=\"" + outFile.getAbsolutePath() + "\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
 				">\n");
-		printWriter.write("<column name=\"1\" type=\"ROMAN_NAME\"/>\n");
+		printWriter.write("<column name=\"1\" type=\"ROMAN_NAME\" size=\"50\"/>\n");
 		printWriter.write("</file>\n");
 		printWriter.write("</configuration>\n");
 		printWriter.close();
