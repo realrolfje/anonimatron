@@ -19,7 +19,17 @@ public class Record {
 			for (int i = 0; i < names.length; i++) {
 				stringBuilder.append(names[i]);
 				stringBuilder.append(":");
-				stringBuilder.append("'" + values + "' ");
+
+				if (values[i] != null) {
+					stringBuilder.append("'" + (values[i].toString()) + "'");
+				} else {
+					stringBuilder.append("null");
+				}
+
+				if (i < names.length-1) {
+					stringBuilder.append(", ");
+				}
+
 			}
 		}
 
