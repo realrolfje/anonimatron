@@ -1,13 +1,13 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.util.Date;
+import com.rolfje.anonimatron.synonyms.DateSynonym;
+import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.rolfje.anonimatron.synonyms.StringSynonym;
-import com.rolfje.anonimatron.synonyms.Synonym;
-
-public class DateAnonymizer implements Anonymizer {
+class DateAnonymizer implements Anonymizer {
 	private static final String TYPE = "DATE";
 	private static final long RANDOMIZATION_MILLIS = 1000 * 60 * 60 * 24 * 31;
 
@@ -15,22 +15,24 @@ public class DateAnonymizer implements Anonymizer {
 
 	@Override
 	public Synonym anonymize(Object from, int size) {
-		StringSynonym s = new StringSynonym();
+		DateSynonym s = new DateSynonym();
 		s.setType(TYPE);
-		s.setFrom(from);
 
 		if (from == null) {
+			s.setFrom(null);
 			s.setTo(null);
 		} else if (from instanceof Date) {
-			long originalDate = ((Date) from).getTime();
+			s.setFrom(from);
+
+			long originalepoch = ((Date) from).getTime();
 
 			Date newDate;
 			do {
 				long deviation = Math.round(2 * RANDOMIZATION_MILLIS
 						* Math.random())
 						- RANDOMIZATION_MILLIS;
-				newDate = new Date(originalDate + deviation);
-			} while (!generatedDates.contains(newDate));
+				newDate = new Date(originalepoch + deviation);
+			} while (generatedDates.contains(newDate));
 
 			generatedDates.add(newDate);
 			s.setTo(newDate);

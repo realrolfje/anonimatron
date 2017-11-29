@@ -1,8 +1,10 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
+import com.rolfje.anonimatron.synonyms.DateSynonym;
 import junit.framework.TestCase;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
@@ -22,7 +24,7 @@ public class AnonymizerServiceTest extends TestCase {
 
 		String type = new StringAnonymizer().getType();
 
-		testAnonymizer(fromList, type);
+		testAnonymizer(fromList, type, type);
 	}
 
 	public void testUUIDAnonymizer() throws Exception {
@@ -33,18 +35,32 @@ public class AnonymizerServiceTest extends TestCase {
 
 		String type = new UUIDAnonymizer().getType();
 
-		testAnonymizer(fromList, type);
+		testAnonymizer(fromList, type, type);
 	}
 
-	private void testAnonymizer(List<Object> fromList, String type) {
+	public void testDateAnonymizer() {
+
+		assertEquals(new Date(0), new Date(0));
+
+		List<Object> fromList = new ArrayList<Object>();
+		fromList.add(new Date(0));
+		fromList.add(new Date(86400000L));
+		fromList.add(new Date(172800000L));
+
+		String type = Date.class.getName();
+
+		testAnonymizer(fromList, type, "DATE");
+	}
+
+	private void testAnonymizer(List<Object> fromList, String lookupType, String synonymType) {
 		List<Object> toList = new ArrayList<Object>();
 
 		// First pass
 		for (Object from : fromList) {
-			Synonym s = anonService.anonymize(type, from, 100);
+			Synonym s = anonService.anonymize(lookupType, from, 100);
 
 			assertEquals(from, s.getFrom());
-			assertEquals(type, s.getType());
+			assertEquals(synonymType, s.getType());
 			assertNotNull(s.getTo());
 
 			toList.add(s.getTo());
@@ -52,11 +68,11 @@ public class AnonymizerServiceTest extends TestCase {
 
 		// Second pass (consistency check)
 		for (int i = 0; i < fromList.size(); i++) {
-			Synonym s = anonService.anonymize(type, fromList.get(i), 100);
+			Synonym s = anonService.anonymize(lookupType, fromList.get(i), 100);
 			assertEquals(toList.get(i), s.getTo());
 		}
 
 		// Test passing in null
-		assertNull(anonService.anonymize(type, null, 100).getTo());
+		assertNull(anonService.anonymize(lookupType, null, 100).getTo());
 	}
 }
