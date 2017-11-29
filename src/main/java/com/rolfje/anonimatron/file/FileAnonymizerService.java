@@ -36,6 +36,7 @@ public class FileAnonymizerService {
 
 	public void anonymize() throws Exception {
 		List<DataFile> files = expandDirectories(config.getFiles());
+		System.out.println("Files to process: " + files.size());
 
 		List<FileFilter> fileFilters = getFileFilters();
 
@@ -51,6 +52,7 @@ public class FileAnonymizerService {
 			}
 
 			if (!process || new File(file.getOutFile()).exists()) {
+				System.out.println("Skipping " + file.getInFile());
 				continue;
 			}
 
@@ -90,52 +92,47 @@ public class FileAnonymizerService {
 		ArrayList<DataFile> allFiles = new ArrayList<DataFile>();
 
 		for (DataFile file : files) {
-			File inFile = new File(file.getInFile());
-			File outFile = new File(file.getOutFile());
 
-			if (inFile.exists() && inFile.isDirectory()) {
-				if (outFile.exists() && outFile.isDirectory()) {
-					// Input and Output are directories. Expand to single elements.
+				// Get all input files
+			List<File> inFiles = new ArrayList();
+			{
+				File inFile = new File(file.getInFile());
+				if (inFile.exists() && inFile.isDirectory()) {
 					File[] inputFiles = inFile.listFiles();
 					for (int i = 0; i < inputFiles.length; i++) {
 						File inputFile = inputFiles[i];
-						File outputFile = new File(outFile.getAbsoluteFile() + File.separator + inputFile.getName());
-
-						if (inputFile.isDirectory()) {
-							continue;
+						if (inputFile.isFile()) {
+							inFiles.add(inputFile);
 						}
-
-						DataFile dataFile = new DataFile();
-						dataFile.setColumns(file.getColumns());
-						dataFile.setReader(file.getReader());
-						dataFile.setWriter(file.getWriter());
-						dataFile.setInFile(inputFile.getAbsolutePath());
-						dataFile.setOutFile(outputFile.getAbsolutePath());
-						dataFile.setDiscriminators(file.getDiscriminators());
-						allFiles.add(dataFile);
 					}
 				}
-				else if (outFile.exists() && outFile.isFile()) {
-					throw new RuntimeException("Input " + inFile.getName() + " is a directory, but output " + outFile.getName() + " is a file. Check configuration.");
+				else if (inFile.exists() && inFile.isFile()) {
+					inFiles.add(inFile);
+				}
+				else {
+					throw new RuntimeException("Input file does not exist: " + inFile.getAbsolutePath());
 				}
 			}
-			else if (inFile.exists() && inFile.isFile() &&
-					outFile.exists() && outFile.isDirectory()) {
-				// Create output filename if it is a directory
-				File outputFile = new File(outFile.getAbsoluteFile() + File.separator + inFile.getName());
+
+			// Check that we don't write multiple input to single output
+			File parent = new File(file.getOutFile());
+			for (File inFile : inFiles) {
+				File outFile = parent;
+				if (outFile.exists() && outFile.isDirectory()) {
+					outFile = new File(outFile, inFile.getName());
+				}
+				else if (outFile.exists()) {
+					throw new RuntimeException("Output file exists: " + inFile.getAbsolutePath());
+				}
 
 				DataFile dataFile = new DataFile();
 				dataFile.setColumns(file.getColumns());
 				dataFile.setReader(file.getReader());
 				dataFile.setWriter(file.getWriter());
 				dataFile.setInFile(inFile.getAbsolutePath());
-				dataFile.setOutFile(outputFile.getAbsolutePath());
+				dataFile.setOutFile(outFile.getAbsolutePath());
 				dataFile.setDiscriminators(file.getDiscriminators());
 				allFiles.add(dataFile);
-			}
-			else {
-				// No special treatment
-				allFiles.add(file);
 			}
 		}
 

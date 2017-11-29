@@ -53,6 +53,7 @@ public class AnonimatronTest extends TestCase {
 		csvFileWriter.close();
 
 		File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
+		outFile.delete();
 
 		File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
 		PrintWriter printWriter = new PrintWriter(configFile);
