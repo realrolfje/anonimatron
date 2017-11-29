@@ -3,7 +3,7 @@ package com.rolfje.anonimatron.anonymizer;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
-class EmailAddressAnonymizer implements Anonymizer {
+public class EmailAddressAnonymizer implements Anonymizer {
 	private static final String EMAIL_DOMAIN = "@example.com";
 	private static final String TYPE = "EMAIL_ADDRESS";
 

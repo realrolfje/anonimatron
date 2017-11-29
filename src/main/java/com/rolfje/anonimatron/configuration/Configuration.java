@@ -1,22 +1,19 @@
 package com.rolfje.anonimatron.configuration;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
+import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.file.CsvFileReader;
+import com.rolfje.anonimatron.file.CsvFileWriter;
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
-import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Configuration {
 	private static Logger LOG = Logger.getLogger(Configuration.class);
@@ -25,7 +22,9 @@ public class Configuration {
 	private String userid;
 	private String password;
 	private List<Table> tables;
+	private List<DataFile> files;
 	private List<String> anonymizerClasses;
+	private List<String> fileFilters;
 	private boolean dryrun = false;
 
 	public boolean isDryrun() {
@@ -75,6 +74,8 @@ public class Configuration {
 		return anonymizerClasses;
 	}
 
+
+
 	public String getJdbcurl() {
 		return jdbcurl;
 	}
@@ -107,6 +108,14 @@ public class Configuration {
 		this.tables = tables;
 	}
 
+	public void setFiles(List<DataFile> files) {
+		this.files = files;
+	}
+
+	public List<DataFile> getFiles() {
+		return files;
+	}
+
 	private static Configuration createConfiguration() throws Exception {
 		Configuration conf = new Configuration();
 
@@ -122,10 +131,28 @@ public class Configuration {
 
 		conf.setTables(tables);
 
+		List<DataFile> dataFiles = new ArrayList<DataFile>();
+		dataFiles.add(getDataFile("mydatafile.in.csv", "mydatafile.out.csv", getFileColumns()));
+		dataFiles.add(getDataFile("default_types.in.csv", "default_types.out.csv", getDefaultColumns()));
+
+		conf.setFiles(dataFiles);
+
 		conf.setUserid("userid");
 		conf.setPassword("password");
 		conf.setJdbcurl("jdbc:oracle:thin:@[HOST]:[PORT]:[SID]");
 		return conf;
+	}
+
+	private static DataFile getDataFile(String inFile, String outFile, List<Column> columns) {
+		DataFile t = new DataFile();
+		t.setInFile(inFile);
+		t.setReader(CsvFileReader.class.getCanonicalName());
+
+		t.setOutFile(outFile);
+		t.setWriter(CsvFileWriter.class.getCanonicalName());
+
+		t.setColumns(columns);
+		return t;
 	}
 
 	private static Table getDiscriminatorExample() {
@@ -169,6 +196,24 @@ public class Configuration {
 		return t;
 	}
 
+
+	private static List<Column> getFileColumns() throws Exception {
+		List<Column> columns = new ArrayList<Column>();
+
+		AnonymizerService as = new AnonymizerService();
+		String[] types = as.getCustomAnonymizerTypes().toArray(new String[]{});
+
+		// For csv files, indexed column names are the more common example
+		for (int i = 0; i < types.length; i++) {
+			Column c = new Column();
+			c.setName(String.valueOf(i+1));
+			c.setType(types[i]);
+			columns.add(c);
+		}
+
+		return columns;
+	}
+
 	private static List<Column> getColumns() throws Exception {
 		List<Column> columns = new ArrayList<Column>();
 
@@ -197,5 +242,13 @@ public class Configuration {
 			columns.add(c);
 		}
 		return columns;
+	}
+
+	public List<String> getFileFilters() {
+		return fileFilters;
+	}
+
+	public void setFileFilters(List<String> fileFilters) {
+		this.fileFilters = fileFilters;
 	}
 }

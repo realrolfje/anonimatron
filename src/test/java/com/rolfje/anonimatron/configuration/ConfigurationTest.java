@@ -33,6 +33,12 @@ public class ConfigurationTest extends TestCase {
 		for (String type : defaulttypes) {
 			assertTrue("Demo xml does not contain "+type,demoxml.indexOf(type.toUpperCase().replace('.','_'))>0);
 		}
+
+		// See if we have File records in the configuration.
+		demoxml.indexOf("fff");
+
+		// For convenience and visual checking.
+		System.out.println(demoxml);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.rolfje.anonimatron.file.FileAnonymizerService;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -18,7 +19,7 @@ import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
 
 /**
  * Start of a beautiful anonymized new world.
- * 
+ *
  */
 public class Anonimatron {
 	public static String VERSION="UNKNOWN";
@@ -39,7 +40,7 @@ public class Anonimatron {
 			throw new RuntimeException("Could not determine version. " + e.getMessage());
 		}
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		Options options = new Options();
 		options.addOption(OPT_CONFIGFILE, true,
@@ -81,10 +82,6 @@ public class Anonimatron {
 		AnonymizerService anonymizerService = new AnonymizerService();
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
-		// Create the jdbc service
-		JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config);
-		jdbcService.setAnonymizerService(anonymizerService);
-
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
 			if (file.exists()) {
@@ -95,8 +92,17 @@ public class Anonimatron {
 			}
 		}
 
-		jdbcService.anonymize();
-		
+		if (config.getTables() != null && config.getTables().size() > 0) {
+			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
+			jdbcService.anonymize();
+		}
+		else if (config.getFiles() != null && config.getFiles().size() > 0) {
+			FileAnonymizerService fileService = new FileAnonymizerService(config, anonymizerService);
+			fileService.anonymize();
+		} else {
+			System.err.println("Configuration does not contain <table> or <file> elements. Nothing done.");
+		}
+
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
 			System.out.print("Writing Synonyms to " + file.getAbsolutePath()
@@ -109,11 +115,13 @@ public class Anonimatron {
 	private static void printHelp(Options options) {
 		System.out
 				.println("\nThis is Anonimatron "+VERSION+", a command line tool to consistently \n"
-						+ "replace live data in your database with data data which \n" 
-						+ "can not be traced back to the original data.\n"
+						+ "replace live data in your database or data files with data data which \n"
+						+ "can not easily be traced back to the original data.\n"
 						+ "You can use this tool to transform a dump from a production \n"
 						+ "database into a large representative dataset you can \n"
 						+ "share with your development and test team.\n"
+						+ "The tool can also read files with sensitive data and write\n"
+						+ "consistently anonymized versions of those files to a different location.\n"
 						+ "Use the -configexample command line option to get an idea of\n"
 						+ "what your configuration file needs to look like.\n\n");
 

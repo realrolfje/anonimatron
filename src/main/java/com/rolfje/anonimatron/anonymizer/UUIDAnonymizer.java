@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
-class UUIDAnonymizer implements Anonymizer {
+public class UUIDAnonymizer implements Anonymizer {
 	private static final String TYPE = "UUID";
 
 	@Override

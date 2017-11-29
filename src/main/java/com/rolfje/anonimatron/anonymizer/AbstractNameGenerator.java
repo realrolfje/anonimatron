@@ -104,7 +104,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 	 * @throws IOException
 	 */
 	public AbstractNameGenerator(String fileName) throws IOException {
-		InputStream inputStream = this.getClass().getResourceAsStream(fileName);
+		InputStream inputStream = AbstractNameGenerator.class.getResourceAsStream(fileName);
 		BufferedReader bufRead = new BufferedReader(new InputStreamReader(
 				inputStream));
 		refresh(bufRead);

@@ -41,6 +41,8 @@ public class AnonymizerService {
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
 		registerAnonymizer(new DateAnonymizer());
 
+		registerAnonymizer(new CountryCodeAnonymizer());
+
 		// Default anonymizers for plain Java objects. If we really don't
 		// know or care how the data looks like.
 		defaultTypeMapping.put(String.class.getName(), new StringAnonymizer().getType());

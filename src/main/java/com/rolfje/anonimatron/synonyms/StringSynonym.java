@@ -10,6 +10,15 @@ public class StringSynonym implements Synonym {
 	private String from;
 	private String to;
 
+	public StringSynonym() {
+	}
+
+	public StringSynonym(String type, String from, String to) {
+		this.type = type;
+		this.from = from;
+		this.to = to;
+	}
+
 	public String getType() {
 		return type;
 	}

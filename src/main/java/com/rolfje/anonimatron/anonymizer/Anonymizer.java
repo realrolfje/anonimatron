@@ -1,8 +1,8 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.sql.Date;
-
 import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.sql.Date;
 
 /**
  * Provides functionality for consitently anonymizing a piece of data.
@@ -34,6 +34,7 @@ public interface Anonymizer {
 	 *            the data to be anonymized, usually passed in as a
 	 *            {@link String}, {@link Integer}, {@link Date} or other classes
 	 *            which can be stored in a single JDBC database column.
+	 * @param size the optional maximum size of the generated value
 	 * @return a {@link Synonym}
 	 */
 	Synonym anonymize(Object from, int size);
