@@ -11,6 +11,9 @@
 		<field name="anonymizerClasses" collection="arraylist" type="string">
 			<bind-xml name="anonymizerclass" node="element" />
 		</field>
+		<field name="fileFilters" collection="arraylist" type="string">
+			<bind-xml name="filefilterclass" node="element" />
+		</field>
 		<field name="jdbcurl" type="string">
 			<bind-xml name="jdbcurl" node="attribute" />
 		</field>

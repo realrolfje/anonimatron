@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +29,7 @@ public class AnonymizerService {
 	private Set<String> seenTypes = new HashSet<String>();
 
 	public AnonymizerService() throws Exception {
+
 		// Custom anonymizers which produce more life-like data
 		registerAnonymizer(new StringAnonymizer());
 		registerAnonymizer(new UUIDAnonymizer());
@@ -39,6 +41,7 @@ public class AnonymizerService {
 		registerAnonymizer(new DigitStringAnonymizer());
 		registerAnonymizer(new CharacterStringAnonymizer());
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
+		registerAnonymizer(new CountryCodeAnonymizer());
 		
 		// Default anonymizers for plain Java objects. If we really don't
 		// know or care how the data looks like.

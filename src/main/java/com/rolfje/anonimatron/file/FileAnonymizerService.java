@@ -8,6 +8,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
@@ -36,8 +37,23 @@ public class FileAnonymizerService {
 	public void anonymize() throws Exception {
 		List<DataFile> files = expandDirectories(config.getFiles());
 
+		List<FileFilter> fileFilters = getFileFilters();
 
 		for (DataFile file : files) {
+
+			boolean process = true;
+			for (FileFilter fileFilter : fileFilters) {
+				if (!fileFilter.accept(new File(file.getInFile()))) {
+					// Skip file
+					process = false;
+					continue;
+				}
+			}
+
+			if (!process || new File(file.getOutFile()).exists()) {
+				continue;
+			}
+
 			System.out.println("Anonymizing from " + file.getInFile());
 			System.out.println("              to " + file.getOutFile());
 
@@ -57,6 +73,17 @@ public class FileAnonymizerService {
 		}
 
 		System.out.println("\nAnonymization process completed.\n");
+	}
+
+	private List<FileFilter> getFileFilters() throws Exception {
+		List<FileFilter> fileFilters = new ArrayList<FileFilter>();
+		List<String> fileFilterStrings = config.getFileFilters();
+		if (fileFilterStrings != null) {
+			for (String fileFilterString : fileFilterStrings) {
+				fileFilters.add(createFileFilter(fileFilterString));
+			}
+		}
+		return fileFilters;
 	}
 
 	private List<DataFile> expandDirectories(List<DataFile> files) {
@@ -183,4 +210,15 @@ public class FileAnonymizerService {
 			throw new RuntimeException("Problem creating writer " + file.getWriter() + " for output file " + file.getOutFile() + ".", e);
 		}
 	}
+
+	private FileFilter createFileFilter(String fileFilterClass) throws Exception {
+		try {
+			Class clazz = Class.forName(fileFilterClass);
+			Constructor constructor = clazz.getConstructor();
+			return (FileFilter) constructor.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException("Problem creating file filter " + fileFilterClass + ".", e);
+		}
+	}
+
 }

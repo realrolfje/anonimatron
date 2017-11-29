@@ -1,5 +1,6 @@
 package com.rolfje.anonimatron;
 
+import com.rolfje.anonimatron.file.AcceptAllFilter;
 import com.rolfje.anonimatron.file.CsvFileWriter;
 import com.rolfje.anonimatron.file.Record;
 import junit.framework.TestCase;
@@ -57,6 +58,7 @@ public class AnonimatronTest extends TestCase {
 		PrintWriter printWriter = new PrintWriter(configFile);
 		printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		printWriter.write("<configuration>\n");
+		printWriter.write("<filefilterclass>com.rolfje.anonimatron.file.AcceptAllFilter</filefilterclass>");
 		printWriter.write("<file " +
 				"inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
 				"outFile=\"" + outFile.getAbsolutePath() + "\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
@@ -68,5 +70,8 @@ public class AnonimatronTest extends TestCase {
 
 		String[] arguments = new String[]{"-config", configFile.getAbsolutePath()};
 		Anonimatron.main(arguments);
+
+		assertEquals(1, AcceptAllFilter.getAcceptCount());
+
 	}
 }

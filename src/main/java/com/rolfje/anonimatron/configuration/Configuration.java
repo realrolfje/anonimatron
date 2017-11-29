@@ -24,6 +24,7 @@ public class Configuration {
 	private List<Table> tables;
 	private List<DataFile> files;
 	private List<String> anonymizerClasses;
+	private List<String> fileFilters;
 	private boolean dryrun = false;
 
 	public boolean isDryrun() {
@@ -72,6 +73,8 @@ public class Configuration {
 	public List<String> getAnonymizerClasses() {
 		return anonymizerClasses;
 	}
+
+
 
 	public String getJdbcurl() {
 		return jdbcurl;
@@ -239,5 +242,13 @@ public class Configuration {
 			columns.add(c);
 		}
 		return columns;
+	}
+
+	public List<String> getFileFilters() {
+		return fileFilters;
+	}
+
+	public void setFileFilters(List<String> fileFilters) {
+		this.fileFilters = fileFilters;
 	}
 }
