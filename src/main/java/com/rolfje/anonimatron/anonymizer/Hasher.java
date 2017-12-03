@@ -14,8 +14,17 @@ import java.security.spec.KeySpec;
 
 
 public class Hasher {
-	private static final int ITERATIONS = 1000;
+
+	// Ideally more iterations mean better protection against brute
+	// force attacks. Since synonyms are accross the while dataset,
+	// an attacker would only know the generated synonym type based
+	// on the synonym file, but not the source date type or location.
+	private static final int ITERATIONS = 64;
+
+	// Roughly same space as version 4 UUID, more than 5 undecillion combinations,
+	// very unlikely to generate collisions.
 	private static final int SIZE = 128;
+
 	private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 	public static final Charset CHARSET = Charset.forName("UTF-8");
 	private byte[] salt;

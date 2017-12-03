@@ -60,7 +60,7 @@ public class AnonymizerService {
 			}
 		}
 
-		LOG.info(anonymizers.size()+" anonimyzers registered.");
+		LOG.info(anonymizers.size()+" anonymizers registered.");
 	}
 
 	public Set<String> getCustomAnonymizerTypes() {
