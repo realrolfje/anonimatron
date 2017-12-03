@@ -1,21 +1,13 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.sql.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import com.rolfje.anonimatron.synonyms.NullSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import com.rolfje.anonimatron.synonyms.SynonymMapper;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.sql.Date;
+import java.util.*;
 
 public class AnonymizerService {
 	private static Logger LOG = Logger.getLogger(AnonymizerService.class);
@@ -83,6 +75,8 @@ public class AnonymizerService {
 		if (from == null) {
 			return new NullSynonym(type);
 		}
+
+		// Hash from here.
 
 		Synonym synonym = getFromCache(type, from);
 		if (synonym == null) {

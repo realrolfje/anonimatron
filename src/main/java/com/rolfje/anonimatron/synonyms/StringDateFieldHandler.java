@@ -1,15 +1,11 @@
 package com.rolfje.anonimatron.synonyms;
 
-import org.castor.core.util.Base64Decoder;
-import org.castor.core.util.Base64Encoder;
 import org.exolab.castor.mapping.GeneralizedFieldHandler;
 
 import java.sql.Date;
 
 /**
- * Converts object values to a Base64 String and back, see
- * "Writing a GeneralizedFieldHandler" at
- * http://castor.org/xml-fieldhandlers.html
+ * Converts date to epoch String representation.
  */
 public class StringDateFieldHandler extends GeneralizedFieldHandler {
 

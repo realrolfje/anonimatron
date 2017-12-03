@@ -20,7 +20,8 @@ public class Base64StringFieldHandler extends GeneralizedFieldHandler {
 		if (objectValue == null || objectValue.equals("")) {
 			return objectValue;
 		}
-		
+
+		// TODO enforce encoding here.
 		byte[] stringBytes = ((String)objectValue).getBytes();
 		char[] base64EncodedChars = Base64Encoder.encode(stringBytes);
 		return String.copyValueOf(base64EncodedChars);

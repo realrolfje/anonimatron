@@ -1,13 +1,11 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.util.ArrayList;
-import java.sql.Date;
-import java.util.List;
-
-import com.rolfje.anonimatron.synonyms.DateSynonym;
+import com.rolfje.anonimatron.synonyms.Synonym;
 import junit.framework.TestCase;
 
-import com.rolfje.anonimatron.synonyms.Synonym;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnonymizerServiceTest extends TestCase {
 	AnonymizerService anonService;
