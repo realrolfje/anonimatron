@@ -2,10 +2,8 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.NullSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import com.rolfje.anonimatron.synonyms.SynonymMapper;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.sql.Date;
 import java.util.*;
 
@@ -15,11 +13,15 @@ public class AnonymizerService {
 	private Map<String, Anonymizer> customAnonymizers = new HashMap<String, Anonymizer>();
 	private Map<String, String> defaultTypeMapping = new HashMap<String, String>();
 
-	private Map<String, Map<Object, Synonym>> synonymCache = new HashMap<String, Map<Object, Synonym>>();
+//	private Map<String, Map<Object, Synonym>> synonymCache = new HashMap<String, Map<Object, Synonym>>();
+
+	private SynonymCache synonymCache;
 
 	private Set<String> seenTypes = new HashSet<String>();
 
 	public AnonymizerService() throws Exception {
+		this.synonymCache = new SynonymCache();
+
 		// Custom anonymizers which produce more life-like data
 		registerAnonymizer(new StringAnonymizer());
 		registerAnonymizer(new UUIDAnonymizer());
@@ -39,6 +41,11 @@ public class AnonymizerService {
 		// know or care how the data looks like.
 		defaultTypeMapping.put(String.class.getName(), new StringAnonymizer().getType());
 		defaultTypeMapping.put(Date.class.getName(), new DateAnonymizer().getType());
+	}
+
+	public AnonymizerService(SynonymCache synonymCache) throws Exception {
+		this();
+		this.synonymCache = synonymCache;
 	}
 
 	public void registerAnonymizers(List<String> anonymizers) {
@@ -77,51 +84,20 @@ public class AnonymizerService {
 		}
 
 		// Hash from here.
+		String hashedFrom = new Hasher("secretsalt").base64Hash(from);
 
-		Synonym synonym = getFromCache(type, from);
+		// Find for regular type
+		Synonym synonym = synonymCache.get(type, from);
+		if (synonym == null) {
+			// Fallback for default type
+			synonym = synonymCache.get(defaultTypeMapping.get(type), from);
+		}
+
 		if (synonym == null) {
 			synonym = getAnonymizer(type).anonymize(from, size);
-			putInCache(synonym);
+			synonymCache.put(synonym);
 		}
 		return synonym;
-	}
-
-	/**
-	 * Reads the synonyms from the specified file and (re-)initializes the
-	 * {@link #synonymCache} with it.
-	 * 
-	 * @param synonymXMLfile the xml file containing the synonyms, as written by
-	 *            {@link #writeSynonymCache(File)}
-	 * @throws Exception
-	 */
-	public void readSynonymCache(File synonymXMLfile) throws Exception {
-		List<Synonym> synonymsFromFile = SynonymMapper
-				.readFromFile(synonymXMLfile.getAbsolutePath());
-
-		for (Synonym synonym : synonymsFromFile) {
-			putInCache(synonym);
-		}
-	}
-
-	/**
-	 * Writes all known {@link Synonym}s in the cache out to the specified file
-	 * in XML format.
-	 * 
-	 * @param synonymXMLfile an empty writeable xml file to write the synonyms
-	 *            to.
-	 * @throws Exception
-	 */
-	public void writeSynonymCache(File synonymXMLfile) throws Exception {
-		List<Synonym> allSynonyms = new ArrayList<Synonym>();
-
-		// Flatten the type -> From -> Synonym map.
-		Collection<Map<Object, Synonym>> allObjectMaps = synonymCache.values();
-		for (Map<Object, Synonym> typeMap : allObjectMaps) {
-			allSynonyms.addAll(typeMap.values());
-		}
-
-		SynonymMapper
-				.writeToFile(allSynonyms, synonymXMLfile.getAbsolutePath());
 	}
 
 	private void registerAnonymizer(Anonymizer anonymizer) {
@@ -139,27 +115,7 @@ public class AnonymizerService {
 		customAnonymizers.put(anonymizer.getType(), anonymizer);
 	}
 
-	private void putInCache(Synonym synonym) {
-		Map<Object, Synonym> map = synonymCache.get(synonym.getType());
-		if (map == null) {
-			map = new HashMap<Object, Synonym>();
-			synonymCache.put(synonym.getType(), map);
-		}
-		map.put(synonym.getFrom(), synonym);
-	}
 
-	private Synonym getFromCache(String type, Object from) {
-		Map<Object, Synonym> typemap = synonymCache.get(type);
-
-		if (typemap == null) {
-			typemap = synonymCache.get(defaultTypeMapping.get(type));
-		}
-
-		if (typemap != null) {
-			return typemap.get(from);
-		}
-		return null;
-	}
 
 	private Anonymizer getAnonymizer(String type) {
 		if (type == null) {
@@ -196,7 +152,11 @@ public class AnonymizerService {
 			((Prefetcher)anonymizer).prefetch(databaseColumnValue);
 			return true;
 		}
-		
+
 		return false;
+	}
+
+	public SynonymCache getSynonymCache() {
+		return synonymCache;
 	}
 }

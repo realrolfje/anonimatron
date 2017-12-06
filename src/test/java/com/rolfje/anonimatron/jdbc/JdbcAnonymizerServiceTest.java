@@ -1,22 +1,16 @@
 package com.rolfje.anonimatron.jdbc;
 
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.sql.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
 import com.rolfje.anonimatron.anonymizer.ToLowerAnonymizer;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.configuration.Discriminator;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 	private static Logger LOG = Logger.getLogger(JdbcAnonymizerServiceTest.class);
@@ -46,7 +40,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
 		File f = File.createTempFile("test", ".xml");
 		f.deleteOnExit();
-		anonymizerService.writeSynonymCache(f);
+		anonymizerService.getSynonymCache().toFile(f);
 		LOG.debug("Synonyms written to " + f.getAbsolutePath());
 
 		// See if the data got anonymized

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.rolfje.anonimatron.anonymizer.SynonymCache;
 import com.rolfje.anonimatron.file.FileAnonymizerService;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -78,38 +79,51 @@ public class Anonimatron {
 		Configuration config = Configuration.readFromFile(configFile);
 		config.setDryrun(dryrun);
 
+		// Load Synonyms from disk if present.
+		SynonymCache synonymCache = getSynonymCache(synonymFile);
+
 		// Create Anononymizer service
-		AnonymizerService anonymizerService = new AnonymizerService();
+		AnonymizerService anonymizerService;
+		if (synonymCache != null) {
+			anonymizerService = new AnonymizerService(synonymCache);
+		} else {
+			anonymizerService = new AnonymizerService();
+		}
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
-		if (synonymFile != null) {
-			File file = new File(synonymFile);
-			if (file.exists()) {
-				System.out.print("Reading Synonyms from "
-						+ file.getAbsolutePath() + " ...");
-				anonymizerService.readSynonymCache(file);
-				System.out.println("[done].");
-			}
-		}
 
 		if (config.getTables() != null && config.getTables().size() > 0) {
 			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
 			jdbcService.anonymize();
-		}
-		else if (config.getFiles() != null && config.getFiles().size() > 0) {
+
+		} else if (config.getFiles() != null && config.getFiles().size() > 0) {
 			FileAnonymizerService fileService = new FileAnonymizerService(config, anonymizerService);
 			fileService.anonymize();
+
 		} else {
 			System.err.println("Configuration does not contain <table> or <file> elements. Nothing done.");
 		}
 
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
-			System.out.print("Writing Synonyms to " + file.getAbsolutePath()
-					+ " ...");
-			anonymizerService.writeSynonymCache(new File(synonymFile));
+			System.out.print("Writing Synonyms to " + file.getAbsolutePath() + " ...");
+			anonymizerService.getSynonymCache().toFile(new File(synonymFile));
 			System.out.println("[done].");
 		}
+	}
+
+	private static SynonymCache getSynonymCache(String synonymFile) throws Exception {
+		SynonymCache synonymCache = null;
+		if (synonymFile != null) {
+			File file = new File(synonymFile);
+			if (file.exists()) {
+				System.out.print("Reading Synonyms from "
+						+ file.getAbsolutePath() + " ...");
+				synonymCache = SynonymCache.fromFile(file);
+				System.out.println("[done].");
+			}
+		}
+		return synonymCache;
 	}
 
 	private static void printHelp(Options options) {
