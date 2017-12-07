@@ -12,7 +12,7 @@ public class SynonymCache {
 	private Map<String, Map<Object, Synonym>> synonymCache = new HashMap<>();
 	private Hasher hasher;
 
-	SynonymCache() {
+	public SynonymCache() {
 	}
 
 	/**
@@ -86,5 +86,9 @@ public class SynonymCache {
 		} else {
 			return typemap.get(from);
 		}
+	}
+
+	public void setHasher(Hasher hasher) {
+		this.hasher = hasher;
 	}
 }

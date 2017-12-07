@@ -1,5 +1,7 @@
 package com.rolfje.anonimatron;
 
+import com.rolfje.anonimatron.anonymizer.Hasher;
+import com.rolfje.anonimatron.anonymizer.SynonymCache;
 import com.rolfje.anonimatron.file.AcceptAllFilter;
 import com.rolfje.anonimatron.file.CsvFileWriter;
 import com.rolfje.anonimatron.file.Record;
@@ -46,19 +48,23 @@ public class AnonimatronTest extends TestCase {
 		// Create fake input file
 		File inFile = File.createTempFile(this.getClass().getSimpleName(), ".input.csv");
 		CsvFileWriter csvFileWriter = new CsvFileWriter(inFile);
-		csvFileWriter.write(new Record(
-				new String[]{"ignored", "value1"},
-				new String[]{"ignored", "value2"}
-		));
+		Record inputRecords = new Record(
+				new String[]{"colname1", "colname2"},
+				new String[]{"value1", "value2"}
+		);
+		csvFileWriter.write(inputRecords);
 		csvFileWriter.close();
 
 		File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
 		outFile.delete();
 
+		File synonymFile = File.createTempFile(this.getClass().getSimpleName(), "synonyms.xml");
+		synonymFile.delete();
+
 		File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
 		PrintWriter printWriter = new PrintWriter(configFile);
 		printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		printWriter.write("<configuration>\n");
+		printWriter.write("<configuration salt=\"testsalt\">\n");
 		printWriter.write("<filefilterclass>com.rolfje.anonimatron.file.AcceptAllFilter</filefilterclass>");
 		printWriter.write("<file " +
 				"inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
@@ -69,10 +75,25 @@ public class AnonimatronTest extends TestCase {
 		printWriter.write("</configuration>\n");
 		printWriter.close();
 
-		String[] arguments = new String[]{"-config", configFile.getAbsolutePath()};
+		String[] arguments = new String[]{
+				"-config", configFile.getAbsolutePath(),
+				"-synonyms", synonymFile.getAbsolutePath()
+		};
+
 		Anonimatron.main(arguments);
 
 		assertEquals(1, AcceptAllFilter.getAcceptCount());
 
+		// Check that original data is not present in the synonym file.
+		SynonymCache synonymCache = SynonymCache.fromFile(synonymFile);
+		Object[] inputValues = inputRecords.getValues();
+		for (int i = 0; i < inputValues.length; i++) {
+			assertNull(synonymCache.get("ROMAN_NAME", inputValues[i]));
+		}
+
+		// Check that we can find the hashed first column value
+		synonymCache.setHasher(new Hasher("testsalt"));
+		assertNotNull("Hashed value not found.", synonymCache.get("ROMAN_NAME", inputValues[0]));
+		assertNull("Hashed value found.", synonymCache.get("ROMAN_NAME", inputValues[1]));
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.rolfje.anonimatron.anonymizer.Hasher;
 import com.rolfje.anonimatron.anonymizer.SynonymCache;
 import com.rolfje.anonimatron.file.FileAnonymizerService;
 import org.apache.commons.cli.BasicParser;
@@ -17,6 +18,7 @@ import org.apache.commons.cli.UnrecognizedOptionException;
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
+import org.castor.core.util.StringUtil;
 
 /**
  * Start of a beautiful anonymized new world.
@@ -82,15 +84,15 @@ public class Anonimatron {
 		// Load Synonyms from disk if present.
 		SynonymCache synonymCache = getSynonymCache(synonymFile);
 
-		// Create Anononymizer service
-		AnonymizerService anonymizerService;
-		if (synonymCache != null) {
-			anonymizerService = new AnonymizerService(synonymCache);
-		} else {
-			anonymizerService = new AnonymizerService();
+		// Set salt if we have it.
+		String salt = config.getSalt();
+		if (salt != null && salt.length() > 0) {
+			synonymCache.setHasher(new Hasher(salt));
 		}
-		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
+		// Create Anononymizer service
+		AnonymizerService anonymizerService = new AnonymizerService(synonymCache);
+		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
 		if (config.getTables() != null && config.getTables().size() > 0) {
 			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
@@ -113,7 +115,8 @@ public class Anonimatron {
 	}
 
 	private static SynonymCache getSynonymCache(String synonymFile) throws Exception {
-		SynonymCache synonymCache = null;
+		SynonymCache synonymCache = new SynonymCache();
+
 		if (synonymFile != null) {
 			File file = new File(synonymFile);
 			if (file.exists()) {
@@ -123,6 +126,7 @@ public class Anonimatron {
 				System.out.println("[done].");
 			}
 		}
+
 		return synonymCache;
 	}
 

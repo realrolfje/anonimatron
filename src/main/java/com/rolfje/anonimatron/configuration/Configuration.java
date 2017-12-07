@@ -21,12 +21,14 @@ public class Configuration {
 	private String jdbcurl;
 	private String userid;
 	private String password;
+
+	private String salt;
+
 	private List<Table> tables;
 	private List<DataFile> files;
 	private List<String> anonymizerClasses;
 	private List<String> fileFilters;
 	private boolean dryrun = false;
-
 	public boolean isDryrun() {
 		return dryrun;
 	}
@@ -74,8 +76,6 @@ public class Configuration {
 		return anonymizerClasses;
 	}
 
-
-
 	public String getJdbcurl() {
 		return jdbcurl;
 	}
@@ -116,8 +116,26 @@ public class Configuration {
 		return files;
 	}
 
+	public List<String> getFileFilters() {
+		return fileFilters;
+	}
+
+	public void setFileFilters(List<String> fileFilters) {
+		this.fileFilters = fileFilters;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
 	private static Configuration createConfiguration() throws Exception {
 		Configuration conf = new Configuration();
+
+		conf.setSalt("examplesalt");
 
 		List<String> anonymizers = new ArrayList<String>();
 		anonymizers.add("my.demo.java.SmurfAnonymizer");
@@ -242,13 +260,5 @@ public class Configuration {
 			columns.add(c);
 		}
 		return columns;
-	}
-
-	public List<String> getFileFilters() {
-		return fileFilters;
-	}
-
-	public void setFileFilters(List<String> fileFilters) {
-		this.fileFilters = fileFilters;
 	}
 }

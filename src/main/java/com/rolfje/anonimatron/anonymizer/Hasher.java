@@ -36,8 +36,7 @@ public class Hasher {
 	public String base64Hash(Object object) {
 		byte[] serialize = serialize(object);
 		char[] chars = toCharArray(serialize);
-
-		return new String(pbkdf2(chars), CHARSET);
+		return new String(Base64Encoder.encode(pbkdf2(chars)));
 	}
 
 	public String base64Hash(String object) {

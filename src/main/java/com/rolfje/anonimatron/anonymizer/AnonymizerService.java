@@ -13,8 +13,6 @@ public class AnonymizerService {
 	private Map<String, Anonymizer> customAnonymizers = new HashMap<String, Anonymizer>();
 	private Map<String, String> defaultTypeMapping = new HashMap<String, String>();
 
-//	private Map<String, Map<Object, Synonym>> synonymCache = new HashMap<String, Map<Object, Synonym>>();
-
 	private SynonymCache synonymCache;
 
 	private Set<String> seenTypes = new HashSet<String>();
