@@ -155,8 +155,10 @@ public class FileAnonymizerService {
 	void anonymize(RecordReader reader, RecordWriter writer, Map<String, Column> columns) throws Exception {
 		while(reader.hasRecords()) {
 			Record read = reader.read();
-			Record anonymized = anonymize(read, columns);
-			writer.write(anonymized);
+			if (read != null) {
+				Record anonymized = anonymize(read, columns);
+				writer.write(anonymized);
+			}
 		}
 	}
 
@@ -167,6 +169,7 @@ public class FileAnonymizerService {
 			Object value = record.getValues()[i];
 
 			if (columns.containsKey(name)) {
+
 				Column column = columns.get(name);
 				String type = column.getType();
 				int size = column.getSize();
@@ -177,7 +180,14 @@ public class FileAnonymizerService {
 				values[i] = value;
 			}
 		}
-		return new Record(record.getNames(), values);
+
+		Record outputRecord = new Record(record.getNames(), values);
+
+		if (LOG.isTraceEnabled()) {
+			LOG.trace(record);
+			LOG.trace(outputRecord);
+		}
+		return outputRecord;
 	}
 
 	private Map<String, Column> toMap(List<Column> columns) {
