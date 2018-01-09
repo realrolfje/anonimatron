@@ -4,6 +4,8 @@ import com.rolfje.anonimatron.anonymizer.AnonymizerService;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.configuration.DataFile;
+import com.rolfje.anonimatron.progress.Progress;
+import com.rolfje.anonimatron.progress.ProgressPrinter;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
 
@@ -20,6 +22,7 @@ public class FileAnonymizerService {
 
 	private Configuration config;
 	private AnonymizerService anonymizerService;
+	private Progress progress;
 
 
 	public FileAnonymizerService(Configuration config, AnonymizerService anonymizerService) {
@@ -40,19 +43,37 @@ public class FileAnonymizerService {
 
 		List<FileFilter> fileFilters = getFileFilters();
 
+
+		long totalBytes = 0;
 		for (DataFile file : files) {
+			totalBytes += new File(file.getInFile()).length();
+		}
+
+		progress = new Progress();
+		progress.setTotalitemstodo(totalBytes);
+
+		ProgressPrinter printer = new ProgressPrinter(progress);
+		printer.setPrintIntervalMillis(1000);
+
+// 		Enable this when printing is better tested.
+//		printer.start();
+
+		for (DataFile file : files) {
+			File infile = new File(file.getInFile());
 
 			boolean process = true;
 			for (FileFilter fileFilter : fileFilters) {
-				if (!fileFilter.accept(new File(file.getInFile()))) {
+				if (!fileFilter.accept(infile)) {
 					// Skip file
 					process = false;
+					progress.incItemsCompleted(infile.length());
 					continue;
 				}
 			}
 
 			if (!process || new File(file.getOutFile()).exists()) {
 				System.out.println("Skipping " + file.getInFile());
+				progress.incItemsCompleted(infile.length());
 				continue;
 			}
 
@@ -72,7 +93,9 @@ public class FileAnonymizerService {
 
 			reader.close();
 			writer.close();
+			progress.incItemsCompleted(infile.length());
 		}
+		printer.stop();
 
 		System.out.println("\nAnonymization process completed.\n");
 	}
@@ -155,6 +178,7 @@ public class FileAnonymizerService {
 	void anonymize(RecordReader reader, RecordWriter writer, Map<String, Column> columns) throws Exception {
 		while(reader.hasRecords()) {
 			Record read = reader.read();
+
 			if (read != null) {
 				Record anonymized = anonymize(read, columns);
 				writer.write(anonymized);
