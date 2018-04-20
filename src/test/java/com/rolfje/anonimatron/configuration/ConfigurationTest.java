@@ -35,7 +35,7 @@ public class ConfigurationTest extends TestCase {
 		}
 
 		// See if we have File records in the configuration.
-		demoxml.indexOf("fff");
+		assertTrue(demoxml.contains("<file inFile=\"mydatafile.in.csv\""));
 
 		// For convenience and visual checking.
 		System.out.println(demoxml);

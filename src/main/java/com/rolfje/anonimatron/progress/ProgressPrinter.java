@@ -74,6 +74,10 @@ public class ProgressPrinter implements Runnable {
 	}
 
 	public void stop() {
+		if (!printing) {
+			return;
+		}
+
 		printing = false;
 
 		while (thread != null && thread.isAlive()) {

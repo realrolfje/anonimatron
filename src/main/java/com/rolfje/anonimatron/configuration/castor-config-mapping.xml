@@ -14,6 +14,9 @@
 		<field name="fileFilters" collection="arraylist" type="string">
 			<bind-xml name="filefilterclass" node="element" />
 		</field>
+		<field name="salt" type="string">
+			<bind-xml name="salt" node="attribute" />
+		</field>
 		<field name="jdbcurl" type="string">
 			<bind-xml name="jdbcurl" node="attribute" />
 		</field>
