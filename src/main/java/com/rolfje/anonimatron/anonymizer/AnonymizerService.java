@@ -44,7 +44,7 @@ public class AnonymizerService {
 		registerAnonymizer(new CountryCodeAnonymizer());
 
 		// Default anonymizers for plain Java objects. If we really don't
-		// know or care how the data looks like.
+		// know or care what the data looks like.
 		defaultTypeMapping.put(String.class.getName(), new StringAnonymizer().getType());
 		defaultTypeMapping.put(Date.class.getName(), new DateAnonymizer().getType());
 	}
@@ -95,7 +95,7 @@ public class AnonymizerService {
 	/**
 	 * Reads the synonyms from the specified file and (re-)initializes the
 	 * {@link #synonymCache} with it.
-	 * 
+	 *
 	 * @param synonymXMLfile the xml file containing the synonyms, as written by
 	 *            {@link #writeSynonymCache(File)}
 	 * @throws Exception
@@ -112,7 +112,7 @@ public class AnonymizerService {
 	/**
 	 * Writes all known {@link Synonym}s in the cache out to the specified file
 	 * in XML format.
-	 * 
+	 *
 	 * @param synonymXMLfile an empty writeable xml file to write the synonyms
 	 *            to.
 	 * @throws Exception
@@ -178,8 +178,7 @@ public class AnonymizerService {
 
 			if (!seenTypes.contains(type)) {
 				// Log this unknown type
-				LOG.warn("Unknown type '" + type
-						+ "', trying fallback to default anonymizer for this type.");
+				LOG.warn("Unknown type '" + type + "', trying fallback to default anonymizer for this type.");
 				seenTypes.add(type);
 			}
 
@@ -190,8 +189,7 @@ public class AnonymizerService {
 		if (anonymizer == null) {
 			// Fall back did not work, give up.
 			throw new UnsupportedOperationException(
-					"Do not know how to anonymize type '" + type
-							+ "'.");
+					"Do not know how to anonymize type '" + type + "'.");
 		}
 		return anonymizer;
 	}
@@ -202,7 +200,7 @@ public class AnonymizerService {
 			((Prefetcher)anonymizer).prefetch(databaseColumnValue);
 			return true;
 		}
-		
+
 		return false;
 	}
 }
