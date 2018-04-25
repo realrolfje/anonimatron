@@ -2,6 +2,8 @@
 
 No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`.
 
+[Travis Build Status](https://travis-ci.org/realrolfje/anonimatron/branches) ![](https://travis-ci.org/realrolfje/anonimatron.svg?branch=master)
+
 ### Table of contents
 
 + [How Anonimatron Works](#how-anonimatron-works)
