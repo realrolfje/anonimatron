@@ -8,7 +8,22 @@
 	<packaging>jar</packaging>
 
 	<name>anonimatron</name>
-	<url>http://maven.apache.org</url>
+    <description>Database and file anonymization tool which is consistent between runs.</description>
+	<url>https://realrolfje.github.io/anonimatron/</url>
+
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>https://github.com/realrolfje/anonimatron/blob/master/LICENSE.md</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Rolf</name>
+            <organizationUrl>https://github.com/realrolfje</organizationUrl>
+        </developer>
+    </developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -89,6 +104,12 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.5</version>
 			</plugin>
 		</plugins>
 	</build>
