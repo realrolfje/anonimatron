@@ -21,7 +21,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * adapted version of the one found <a href="http://forum.codecall.net/topic/49665-java-random-name-generator/">here</a>.
  * 
  * <p>
- * <b>SYLLABLE FILE REQUIREMENTS/FORMAT:<br/>
+ * <b>SYLLABLE FILE REQUIREMENTS/FORMAT:<br>
  * </b>
  * <ol>
  * <li>all syllables are separated by line break.</li>
@@ -30,34 +30,34 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * <li>+ and - characters are used to set rules, and using them in other way,
  * may result in unpredictable results.</li>
  * <li>Empty lines are ignored.</li>
- * <ol>
+ * </ol>
  * 
  * <p>
- * <b>SYLLABLE CLASSIFICATION:<br/>
+ * <b>SYLLABLE CLASSIFICATION:<br>
  * </b> Name is usually composed from 3 different class of syllables, which
- * include prefix, middle part and suffix.<br/>
+ * include prefix, middle part and suffix.<br>
  * To declare syllable as a prefix in the file, insert "-" as a first character
- * of the line. <br/>
+ * of the line. <br>
  * To declare syllable as a suffix in the file, insert "+" as a first character
- * of the line. <br/>
- * everything else is read as a middle part.<br/>
+ * of the line. <br>
+ * everything else is read as a middle part.<br>
  * 
  * <p>
- * <b>NUMBER OF SYLLABLES:<br/>
+ * <b>NUMBER OF SYLLABLES:<br>
  * </b> Names may have any positive number of syllables. In case of 2 syllables,
- * name will be composed from prefix and suffix.<br/>
- * In case of 1 syllable, name will be chosen from amongst the prefixes.<br/>
+ * name will be composed from prefix and suffix.<br>
+ * In case of 1 syllable, name will be chosen from amongst the prefixes.<br>
  * In case of 3 and more syllables, name will begin with prefix, is filled with
- * middle parts and ended with suffix.<br/>
+ * middle parts and ended with suffix.<br>
  * 
  * <p>
- * <b>ASSIGNING RULES:<br/>
+ * <b>ASSIGNING RULES:<br>
  * </b> I included a way to set 4 kind of rules for every syllable. To add rules
  * to the syllables, write them right after the syllable and SEPARATE WITH
  * WHITESPACE. (example: "aad +v -c"). The order of rules is not important.
  * 
  * <p>
- * <b>RULES:<br/>
+ * <b>RULES:<br>
  * </b>
  * <ol>
  * <li>+v means that next syllable must definitely start with a vocal.</li>
@@ -73,7 +73,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * vocals, which will be detected and RuntimeException will be thrown.
  * 
  * <p>
- * <b>TO START:<br/>
+ * <b>TO START:<br>
  * </b> Create a new NameGenerator object, provide the syllable file, and create
  * names using compose() method.
  * 
@@ -101,7 +101,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 	 * 
 	 * @param fileName
 	 *            insert file name, where syllables are located
-	 * @throws IOException
+	 * @throws IOException When there are problems reading or writing the syllable file.
 	 */
 	public AbstractNameGenerator(String fileName) throws IOException {
 		InputStream inputStream = AbstractNameGenerator.class.getResourceAsStream(fileName);
@@ -115,8 +115,10 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 	 * changing the file during the operation of program, as this method is
 	 * called every time file name is changed or new NameGenerator object
 	 * created.
-	 * 
-	 * @throws IOException
+	 *
+	 * @param reader reader for the syllable file
+	 *
+	 * @throws IOException On problems reading from the reader.
 	 */
 	public void refresh(BufferedReader reader) throws IOException {
 		String line = "";
@@ -133,6 +135,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 				}
 			}
 		}
+		// TODO: open and close should be within the same code block.
 		reader.close();
 	}
 
