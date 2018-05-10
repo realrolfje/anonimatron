@@ -134,9 +134,18 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
-                        <descriptor>/src/main/assembly/anonimatronbin.xml</descriptor>
+                        <descriptor>${basedir}/src/main/assembly/anonimatronbin.xml</descriptor>
                     </descriptors>
                 </configuration>
+                <executions>
+                    <!-- Create distribution when executing "mvn package" -->
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assembly</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
