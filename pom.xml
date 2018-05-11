@@ -31,6 +31,20 @@
         <url>https://github.com/realrolfje/anonimatron</url>
     </scm>
 
+    <distributionManagement>
+        <!-- Distribution management urls as described in
+         https://issues.sonatype.org/browse/OSSRH-39766?focusedCommentId=480509&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-480509
+         -->
+        <snapshotRepository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-release</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
