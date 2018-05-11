@@ -137,6 +137,7 @@
                     <descriptors>
                         <descriptor>${basedir}/src/main/assembly/anonimatronbin.xml</descriptor>
                     </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <!-- Create distribution when executing "mvn package" -->
