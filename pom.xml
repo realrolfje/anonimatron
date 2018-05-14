@@ -34,6 +34,8 @@
     <distributionManagement>
         <!-- Distribution management urls as described in
          https://issues.sonatype.org/browse/OSSRH-39766?focusedCommentId=480509&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-480509
+         and
+         http://central.sonatype.org/pages/apache-maven.html#performing-a-snapshot-deployment
          -->
         <snapshotRepository>
             <id>sonatype-snapshots</id>

@@ -13,3 +13,18 @@ If you already figured out how to fix the bug you've found, or added a great fea
 ## Publishing to mavenrepo (experimental)
 
 The `pom.xml` file adheres to http://central.sonatype.org/pages/requirements.html. Release to mavenrepo is based on https://medium.com/pleo/deploying-to-mavens-central-repository-835253a119db
+
+In order to run `mvn clean deploy` to release to the sonatype Maven Repository, please create a security token at your [sonatype Nexus profile page](https://oss.sonatype.org/#profile;User%20Token) and add it to your settings xml:
+
+```xml
+<servers>
+    <server>
+        <id>ossrh</id>
+        <username>YOUR_SONATYPE_TOKEN</username>
+        <password>YOUR_SONATYPE_TOKENPASS</password>
+    </server>
+  </servers>
+</settings>
+```
+
+After doing this, running `maven deploy` on a SNAPSHOT release should release to the snapshot repository, and on a non-snapshot release it should promote to the central maven repo. Be careful with your powers.
