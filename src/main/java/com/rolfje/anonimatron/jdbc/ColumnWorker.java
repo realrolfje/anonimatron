@@ -29,8 +29,10 @@ public interface ColumnWorker {
 	 *         worker does not want to see more data for this column. If all
 	 *         workers report <code>false</code> for all columns in a row, the
 	 *         AnonimizerService will stop processing the rest of the resultset.
-	 * @throws SQLException
+	 * @throws SQLException On database access or SQL errors.
 	 */
-	boolean processColumn(ResultSet results, Column column, String columnType, Object databaseColumnValue, int columnDisplaySize) throws SQLException;
+	boolean processColumn(ResultSet results, Column column,
+						  String columnType, Object databaseColumnValue,
+						  int columnDisplaySize) throws SQLException;
 
 }
