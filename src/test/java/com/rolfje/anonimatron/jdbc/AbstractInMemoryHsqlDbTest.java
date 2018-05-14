@@ -55,7 +55,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	protected void tearDown() throws Exception {
 		int sessionsWithTransaction = getOpenSessions();
 
-		assertEquals("Some sessions still have running transactions.", 1, sessionsWithTransaction);
+		assertEquals("Some sessions still have running transactions.", 0, sessionsWithTransaction);
 
 		// Drop all tables in the database
 		executeSql("DROP SCHEMA PUBLIC CASCADE");
@@ -73,6 +73,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		ResultSet resultset = statement.getResultSet();
 		int sessionsWithTransaction = 0;
 		while (resultset.next()) {
+			logCurrentRow(resultset);
 			boolean inTransaction = resultset.getBoolean(2);
 			// LOG.debug("Teardown sesssion: "resultset.getInt(1)+", "+inTransaction+", "+resultset.getString(3));
 			if (inTransaction) {
@@ -84,6 +85,16 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		statement.close();
 		connection.commit();
 		return sessionsWithTransaction;
+	}
+
+	private void logCurrentRow(ResultSet resultset) throws SQLException {
+		StringBuilder b = new StringBuilder(resultset.getRow());
+		b.append(": ");
+		for (int i=1; i<= resultset.getMetaData().getColumnCount(); i++){
+			b.append(resultset.getObject(i));
+			b.append(" | ");
+		}
+		LOG.debug(b.toString());
 	}
 
 	/**
