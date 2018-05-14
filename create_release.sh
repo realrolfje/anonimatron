@@ -10,28 +10,34 @@ fi
 # Exit when a command fails.
 set -e
 
+# Set the new versions
 echo $1 > src/main/java/com/rolfje/anonimatron/version.txt
 mvn versions:set -DnewVersion=$1
-mvn clean assembly:assembly
-mvn versions:commit
 
+# Deploy the release to mavenrepo
+mvn clean deploy -P release
+
+# Commit the release and tag it.
+mvn versions:commit
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Release $1"
 git tag "v$1"
 
+# Set the version to the new SNAPSHOT version
 echo $2 > src/main/java/com/rolfje/anonimatron/version.txt
 mvn versions:set -DnewVersion=$2
 mvn versions:commit
 
+# Commit the SNAPSHOT version to git
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Update version to $2"
 
+git push --follow-tags
+
 echo "The file to upload for this release is:"
 echo
-ls -l target/*bin.zip
+ls -l target/anonimatron*.zip
 echo
 echo "When creating a release, github automatically adds src zip"
-echo "files, you only need to upload the binary. Remove the bin"
-echo "in the filename for a more user-friendly release name."
+echo "files, you only need to upload the binary."
 echo
-echo "Don't forget to push incuding tags."
