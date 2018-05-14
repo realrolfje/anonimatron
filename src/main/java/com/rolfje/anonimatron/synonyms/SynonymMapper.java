@@ -2,8 +2,7 @@ package com.rolfje.anonimatron.synonyms;
 
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.*;
 
 import java.io.*;
 import java.net.URL;
@@ -19,7 +18,7 @@ import java.util.List;
 public class SynonymMapper {
 
 	@SuppressWarnings("unchecked")
-	public static List<Synonym> readFromFile(String filename) throws Exception {
+	public static List<Synonym> readFromFile(String filename) throws IOException, XMLException, MappingException {
 		Mapping mapping = getMapping();
 		Unmarshaller unmarshaller = new Unmarshaller(ArrayList.class);
 		unmarshaller.setMapping(mapping);
@@ -38,8 +37,7 @@ public class SynonymMapper {
 		return (List<Synonym>) unmarshaller.unmarshal(reader);
 	}
 
-	public static void writeToFile(List<Synonym> synonyms, String filename)
-			throws Exception {
+	public static void writeToFile(List<Synonym> synonyms, String filename) throws IOException, MappingException, XMLException {
 		Mapping mapping = getMapping();
 
 		Writer writer = new FileWriter(new File(filename));
