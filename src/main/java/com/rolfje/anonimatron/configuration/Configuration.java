@@ -51,11 +51,13 @@ public class Configuration {
 	}
 
 	private void sanityCheck(){
-		for (DataFile dataFile : getFiles()) {
-			if (dataFile.getColumns() == null || dataFile.getColumns().isEmpty()) {
-				LOG.info(
-						String.format("No column definitions for input %s, lines will be passed through.",
-								dataFile.getInFile()));
+		if (getFiles() != null) {
+			for (DataFile dataFile : getFiles()) {
+				if (dataFile.getColumns() == null || dataFile.getColumns().isEmpty()) {
+					LOG.info(
+							String.format("No column definitions for input %s, lines will be passed through.",
+									dataFile.getInFile()));
+				}
 			}
 		}
 	}
