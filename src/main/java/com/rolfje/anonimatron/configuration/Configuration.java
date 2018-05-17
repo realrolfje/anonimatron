@@ -45,7 +45,21 @@ public class Configuration {
 		Reader reader = new FileReader(file);
 		Configuration configuration = (Configuration)unmarshaller.unmarshal(reader);
 		LOG.info("Configuration read from " + file.getAbsoluteFile());
+
+		configuration.sanityCheck();
 		return configuration;
+	}
+
+	private void sanityCheck(){
+		if (getFiles() != null) {
+			for (DataFile dataFile : getFiles()) {
+				if (dataFile.getColumns() == null || dataFile.getColumns().isEmpty()) {
+					LOG.info(
+							String.format("No column definitions for input %s, lines will be passed through.",
+									dataFile.getInFile()));
+				}
+			}
+		}
 	}
 
 	private static Mapping getMapping() throws IOException, MappingException {
@@ -152,6 +166,7 @@ public class Configuration {
 		List<DataFile> dataFiles = new ArrayList<DataFile>();
 		dataFiles.add(getDataFile("mydatafile.in.csv", "mydatafile.out.csv", getFileColumns()));
 		dataFiles.add(getDataFile("default_types.in.csv", "default_types.out.csv", getDefaultColumns()));
+		dataFiles.add(getDataFile("nocolumns.in.csv","nocolumns.out.csv", null));
 
 		conf.setFiles(dataFiles);
 

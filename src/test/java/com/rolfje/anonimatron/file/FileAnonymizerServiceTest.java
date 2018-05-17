@@ -41,6 +41,21 @@ public class FileAnonymizerServiceTest extends TestCase {
 		assertFalse(record.getValues()[0].equals(anonymize.getValues()[0]));
 	}
 
+	public void testNoExceptionOnEmptyConfig() throws Exception {
+		fileAnonymizerService.anonymize();
+	}
+
+	public void testPassThroughAnonymization() throws Exception {
+		Record record = new Record(new String[]{"passthroughColumn"}, new String[]{"passthroughValue"});
+
+		HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+
+		Record anonymize = fileAnonymizerService.anonymize(record, nameTypeMap);
+
+		assertEquals(record.getNames()[0], anonymize.getNames()[0]);
+		assertEquals(record.getValues()[0], anonymize.getValues()[0]);
+	}
+
 	public void testAnonymizeRecords() throws Exception {
 		String[] names = new String[]{
 				new DutchBSNAnononymizer().getType(),
@@ -122,11 +137,9 @@ public class FileAnonymizerServiceTest extends TestCase {
 		String tempOutput = tempInput.getAbsoluteFile() + ".out.csv";
 
 		List<Column> columns = Arrays.asList(
-				new Column[]{
-						new Column("1", "STRING", 50),
-						new Column("3", "STRING", 50),
-						new Column("4", "STRING", 50),
-				});
+				new Column("1", "STRING", 50),
+				new Column("3", "STRING", 50),
+				new Column("4", "STRING", 50));
 
 		DataFile dataFile = new DataFile();
 		dataFile.setInFile(tempInput.getAbsolutePath());
