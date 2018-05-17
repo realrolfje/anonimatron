@@ -43,7 +43,6 @@ public class FileAnonymizerService {
 
 		List<FileFilter> fileFilters = getFileFilters();
 
-
 		long totalBytes = 0;
 		for (DataFile file : files) {
 			totalBytes += new File(file.getInFile()).length();
@@ -113,6 +112,10 @@ public class FileAnonymizerService {
 
 	private List<DataFile> expandDirectories(List<DataFile> files) {
 		ArrayList<DataFile> allFiles = new ArrayList<DataFile>();
+
+		if (files == null || files.isEmpty()) {
+			return allFiles;
+		}
 
 		for (DataFile file : files) {
 
@@ -216,6 +219,11 @@ public class FileAnonymizerService {
 
 	private Map<String, Column> toMap(List<Column> columns) {
 		HashMap<String, Column> map = new HashMap<String, Column>();
+
+		if (columns == null || columns.isEmpty()) {
+			return map;
+		}
+
 		for (Column column : columns) {
 			map.put(column.getName(), column);
 		}
