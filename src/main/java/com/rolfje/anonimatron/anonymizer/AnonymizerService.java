@@ -28,6 +28,7 @@ public class AnonymizerService {
 		registerAnonymizer(new EmailAddressAnonymizer());
 		registerAnonymizer(new DutchBSNAnononymizer());
 		registerAnonymizer(new DutchBankAccountAnononymizer());
+		registerAnonymizer(new DutchZipCodeAnonymizer());
 		registerAnonymizer(new DigitStringAnonymizer());
 		registerAnonymizer(new CharacterStringAnonymizer());
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
