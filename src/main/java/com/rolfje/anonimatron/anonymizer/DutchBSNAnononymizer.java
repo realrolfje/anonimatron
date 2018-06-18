@@ -1,5 +1,9 @@
 package com.rolfje.anonimatron.anonymizer;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import com.rolfje.anonimatron.synonyms.NumberSynonym;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
@@ -24,21 +28,59 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
 	public Synonym anonymize(Object from, int size) {
 		if (size < LENGTH) {
 			throw new UnsupportedOperationException(
-					"Can not generate a BSN that fits in a "
-							+ size
-							+ " character string. Must be " + LENGTH + " characters or more.");
+					"Cannot generate a BSN that fits in a " + size + " character string. Must be " + LENGTH
+							+ " characters or more.");
 		}
 
-		StringSynonym s = new StringSynonym();
-		s.setType(getType());
-		s.setFrom(from);
+		Synonym result;
+
+		if (from instanceof Number) {
+			result = new NumberSynonym();
+			((NumberSynonym) result).setFrom((Number) from);
+			((NumberSynonym) result).setType(getType());
+
+		} else if (from instanceof String) {
+			result = new StringSynonym();
+			((StringSynonym) result).setFrom(from);
+			((StringSynonym) result).setType(getType());
+
+		} else {
+			throw new IllegalArgumentException(
+					"Type " + from.getClass().getSimpleName() + " is not supported for " + this.getType());
+
+		}
+
+		String value;
+		String originalValue = from.toString();
 
 		do {
 			// Never generate identical number
-			s.setTo(generateBSN(LENGTH));
-		} while (s.getFrom().equals(s.getTo()));
+			value = generateBSN(LENGTH);
+		} while (originalValue.equals(value));
 
-		return s;
+		if (result instanceof NumberSynonym) {
+			((NumberSynonym) result).setTo(asNumber(value, (Number) from));
+
+		} else {
+			((StringSynonym) result).setTo(value);
+
+		}
+
+		return result;
+	}
+
+	private Number asNumber(String value, Number from) {
+		if (from instanceof Integer) {
+			return Integer.parseInt(value);
+		} else if (from instanceof Long) {
+			return Long.parseLong(value);
+		} else if (from instanceof BigDecimal) {
+			return new BigDecimal(value);
+		} else if (from instanceof BigInteger) {
+			return new BigInteger(value);
+		} else {
+			throw new IllegalArgumentException(from.getClass().getSimpleName() + " is not supported for " + this.getType());
+		}
 	}
 
 	String generateBSN(int numberOfDigits) {
@@ -48,12 +90,9 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
 		do {
 			bsnnumber = generate11ProofNumber(numberOfDigits);
 
-			// SOFI numbers can not start with 3 zeroes, left digit digit van
-			// not be >3
+			// BSN cannot start with 3 zeroes, left digit digit cannot be > 3
 		} while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
 
-		// Return the BSN
-		String result = digitsAsNumber(bsnnumber);
-		return result;
+		return digitsAsNumber(bsnnumber);
 	}
 }
