@@ -7,6 +7,7 @@ public class HashedFromSynonym implements Synonym {
 	private String from;
 	private Object to;
 	private String type;
+	private boolean shortLived = false;
 
 	public HashedFromSynonym() {
 	}
@@ -30,6 +31,11 @@ public class HashedFromSynonym implements Synonym {
 	@Override
 	public Object getTo() {
 		return to;
+	}
+
+	@Override
+	public boolean isShortLived() {
+		return shortLived;
 	}
 
 	public void setFrom(String from) {

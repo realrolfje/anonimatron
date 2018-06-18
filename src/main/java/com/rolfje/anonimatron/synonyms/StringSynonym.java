@@ -9,6 +9,7 @@ public class StringSynonym implements Synonym {
 	private String type;
 	private String from;
 	private String to;
+	private boolean shortlived = false;
 
 	public StringSynonym() {
 	}
@@ -41,6 +42,11 @@ public class StringSynonym implements Synonym {
 
 	public void setFrom(Object from) {
 		this.from = (String) from;
+	}
+
+	@Override
+	public boolean isShortLived() {
+		return shortlived;
 	}
 
 	@Override

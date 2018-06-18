@@ -1,10 +1,20 @@
 package com.rolfje.anonimatron.anonymizer;
 
+import com.rolfje.anonimatron.synonyms.NullSynonym;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import junit.framework.TestCase;
 
 public class SynonymCacheTest extends TestCase {
+
+	public void testNoStorageOfShortLivedSynonyms() {
+		SynonymCache synonymCache = new SynonymCache();
+
+		NullSynonym n = new NullSynonym("null");
+		synonymCache.put(n);
+
+		assertNull(synonymCache.get(n.getType(), n.getFrom()));
+	}
 
 	public void testNoHashing() throws Exception {
 		SynonymCache synonymCache = new SynonymCache();

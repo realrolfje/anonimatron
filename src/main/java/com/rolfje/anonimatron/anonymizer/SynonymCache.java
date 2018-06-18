@@ -67,7 +67,18 @@ public class SynonymCache {
 				.writeToFile(allSynonyms, synonymXMLfile.getAbsolutePath());
 	}
 
+	/**
+	 * Stores the given {@link Synonym} in the synonym cache, except when the
+	 * given synonym is short-lived. Short-lived synonyms are not stored or
+	 * re-used.
+	 *
+	 * @param synonym
+	 */
 	public void put(Synonym synonym) {
+		if (synonym.isShortLived()) {
+			return;
+		}
+
 		Map<Object, Synonym> map = synonymCache.get(synonym.getType());
 		if (map == null) {
 			map = new HashMap<Object, Synonym>();
