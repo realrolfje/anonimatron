@@ -196,12 +196,8 @@ public class FileAnonymizerService {
 			Object value = record.getValues()[i];
 
 			if (columns.containsKey(name)) {
-
 				Column column = columns.get(name);
-				String type = column.getType();
-				int size = column.getSize();
-
-				Synonym synonym = anonymizerService.anonymize(type, value, size);
+				Synonym synonym = anonymizerService.anonymize(column, value);
 				values[i] = synonym.getTo();
 			} else {
 				values[i] = value;

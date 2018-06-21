@@ -1,5 +1,6 @@
 package com.rolfje.anonimatron.anonymizer;
 
+import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.synonyms.NullSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
@@ -78,24 +79,33 @@ public class AnonymizerService {
 		return Collections.unmodifiableSet(defaultTypeMapping.keySet());
 	}
 
-	public Synonym anonymize(String type, Object from, int size) {
+	public Synonym anonymize(Column c, Object from) {
 		if (from == null) {
-			return new NullSynonym(type);
+			return new NullSynonym(c.getType());
 		}
 
 		// Hash from here.
 		String hashedFrom = new Hasher("secretsalt").base64Hash(from);
 
 		// Find for regular type
-		Synonym synonym = synonymCache.get(type, from);
-		if (synonym == null) {
-			// Fallback for default type
-			synonym = synonymCache.get(defaultTypeMapping.get(type), from);
-		}
+		Synonym synonym = getSynonym(c, from);
 
 		if (synonym == null) {
-			synonym = getAnonymizer(type).anonymize(from, size);
+			synonym = getAnonymizer(c.getType()).anonymize(from, c.getSize());
 			synonymCache.put(synonym);
+		}
+		return synonym;
+	}
+
+	private Synonym getSynonym(Column c, Object from) {
+		if (c.isShortLived()){
+			return null;
+		}
+
+		Synonym synonym = synonymCache.get(c.getType(), from);
+		if (synonym == null) {
+			// Fallback for default type
+			synonym = synonymCache.get(defaultTypeMapping.get(c.getType()), from);
 		}
 		return synonym;
 	}

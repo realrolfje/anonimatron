@@ -122,9 +122,9 @@ public class JdbcAnonymizerService {
 	private void preScanTable(Table table) throws SQLException {
 		ColumnWorker worker = new ColumnWorker() {
 			@Override
-			public boolean processColumn(ResultSet results, Column column, String columnType,
-					Object databaseColumnValue, int columnDisplaySize) throws SQLException {
-				return anonymizerService.prepare(columnType,
+			public boolean processColumn(ResultSet results, Column column,
+					Object databaseColumnValue) throws SQLException {
+				return anonymizerService.prepare(column.getType(),
 					databaseColumnValue);
 			}
 		};
@@ -135,11 +135,10 @@ public class JdbcAnonymizerService {
 	private void anonymizeTableInPlace(Table table) throws SQLException {
 		ColumnWorker worker = new ColumnWorker() {
 			@Override
-			public boolean processColumn(ResultSet results, Column column, String columnType,
-					Object databaseColumnValue, int columnDisplaySize) throws SQLException {
-				Synonym synonym = anonymizerService.anonymize(columnType,
-					databaseColumnValue,
-					columnDisplaySize);
+			public boolean processColumn(ResultSet results, Column column,
+					Object databaseColumnValue) throws SQLException {
+				Synonym synonym = anonymizerService.anonymize(column,
+					databaseColumnValue);
 
 				if (results.getConcurrency() == ResultSet.CONCUR_UPDATABLE) {
 					// Update the contents of this row with the given Synonym
@@ -199,15 +198,18 @@ public class JdbcAnonymizerService {
 					String columnType = column.getType();
 					if (columnType == null) {
 						columnType = resultsMetaData.getColumnClassName(results.findColumn(column.getName()));
+						column.setType(columnType);
 					}
 
 					NDC.push("Type '" + columnType + "'");
 
-					Object databaseColumnValue = results.getObject(column.getName());
 					int columnDisplaySize = resultsMetaData.getColumnDisplaySize(results.findColumn(column.getName()));
+					column.setSize(columnDisplaySize);
+
+					Object databaseColumnValue = results.getObject(column.getName());
 
 					/* If any call returns true, process the next record. */
-					processNextRecord = columnWorker.processColumn(results, column, columnType, databaseColumnValue, columnDisplaySize)
+					processNextRecord = columnWorker.processColumn(results, column, databaseColumnValue)
 							|| processNextRecord;
 
 					NDC.pop(); // type
