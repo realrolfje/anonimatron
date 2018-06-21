@@ -52,7 +52,7 @@ public class IbanAnonymizerTest {
 	}
 
 	private void testInternal(int size, String from, CountryCode countryCode) {
-		Synonym synonym = anonymizer.anonymize(from, size);
+		Synonym synonym = anonymizer.anonymize(from, size, false);
 		assertThat(synonym.getType(), sameInstance(anonymizer.getType()));
 
 		String value = (String) synonym.getTo();

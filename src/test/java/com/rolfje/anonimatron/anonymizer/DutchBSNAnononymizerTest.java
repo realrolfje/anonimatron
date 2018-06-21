@@ -19,7 +19,7 @@ public class DutchBSNAnononymizerTest extends TestCase {
 		for (int i = 0; i < 1000; i++) {
 			String from = bsnAnonymizer.generateBSN(9);
 
-			Synonym s = bsnAnonymizer.anonymize(from, 12);
+			Synonym s = bsnAnonymizer.anonymize(from, 12, false);
 
 			assertEquals(from, s.getFrom());
 			assertFalse(s.getFrom().equals(s.getTo()));
@@ -30,11 +30,11 @@ public class DutchBSNAnononymizerTest extends TestCase {
 	}
 
 	public void testLength() throws Exception {
-		bsnAnonymizer.anonymize("dummy", 10000);
-		bsnAnonymizer.anonymize("dummy", 9);
+		bsnAnonymizer.anonymize("dummy", 10000, false);
+		bsnAnonymizer.anonymize("dummy", 9, false);
 
 		try {
-			bsnAnonymizer.anonymize("dummy", 8);
+			bsnAnonymizer.anonymize("dummy", 8, false);
 			fail("should throw exception");
 		} catch (UnsupportedOperationException e) {
 			// ok

@@ -37,6 +37,10 @@ public class DateSynonym implements Synonym {
 		this.from = (Date) from;
 	}
 
+	public void setShortlived(boolean shortlived) {
+		this.shortlived = shortlived;
+	}
+
 	@Override
 	public boolean isShortLived() {
 		return shortlived;

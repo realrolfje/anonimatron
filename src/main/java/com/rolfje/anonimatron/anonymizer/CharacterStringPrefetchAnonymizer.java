@@ -32,12 +32,12 @@ public class CharacterStringPrefetchAnonymizer extends CharacterStringAnonymizer
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 		if (CHARS.length() < 1) {
 			LOG.warn("No characters were collected during prefetch. Using the default set '" + getDefaultCharacterString() + "'.");
 			CHARS = getDefaultCharacterString();
 		}
-		return super.anonymize(from, size);
+		return super.anonymize(from, size, shortlived);
 	}
 
 	@Override

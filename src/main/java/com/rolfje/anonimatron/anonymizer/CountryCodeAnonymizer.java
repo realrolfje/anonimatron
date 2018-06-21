@@ -23,7 +23,7 @@ public class CountryCodeAnonymizer implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 
 		if (size < 2) {
 			throw new UnsupportedOperationException("Can not produce country codes of one character.");
@@ -50,10 +50,9 @@ public class CountryCodeAnonymizer implements Anonymizer {
 		return new StringSynonym(
 				getType(),
 				from.toString(),
-				country
+				country,
+				shortlived
 		);
-
-
 	}
 
 	public static String padRight(String s, int n) {

@@ -14,20 +14,24 @@ public class StringSynonym implements Synonym {
 	public StringSynonym() {
 	}
 
-	public StringSynonym(String type, String from, String to) {
+	public StringSynonym(String type, String from, String to, boolean shortlived) {
 		this.type = type;
 		this.from = from;
 		this.to = to;
+		this.shortlived = shortlived;
 	}
 
+	@Override
 	public String getType() {
 		return type;
 	}
 
+	@Override
 	public Object getFrom() {
 		return from;
 	}
 
+	@Override
 	public Object getTo() {
 		return to;
 	}
@@ -36,12 +40,16 @@ public class StringSynonym implements Synonym {
 		this.type = type;
 	}
 
-	public void setTo(Object to) {
-		this.to = (String) to;
+	public void setFrom(String from) {
+		this.from = from;
 	}
 
-	public void setFrom(Object from) {
-		this.from = (String) from;
+	public void setTo(String to) {
+		this.to = to;
+	}
+
+	public void setShortlived(boolean shortlived) {
+		this.shortlived = shortlived;
 	}
 
 	@Override

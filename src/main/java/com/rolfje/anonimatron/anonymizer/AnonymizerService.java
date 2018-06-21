@@ -79,16 +79,17 @@ public class AnonymizerService {
 		return Collections.unmodifiableSet(defaultTypeMapping.keySet());
 	}
 
-	public Synonym anonymize(Column c, Object from) {
+	public Synonym anonymize(Column column, Object from) {
 		if (from == null) {
-			return new NullSynonym(c.getType());
+			return new NullSynonym(column.getType());
 		}
 
 		// Find for regular type
-		Synonym synonym = getSynonym(c, from);
+		Synonym synonym = getSynonym(column, from);
 
 		if (synonym == null) {
-			synonym = getAnonymizer(c.getType()).anonymize(from, c.getSize());
+            Anonymizer anonymizer = getAnonymizer(column.getType());
+            synonym = anonymizer.anonymize(from, column.getSize(), column.isShortLived());
 
 			synonymCache.put(synonym);
 		}

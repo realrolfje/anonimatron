@@ -13,47 +13,52 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * See http://nl.wikipedia.org/wiki/Rekeningnummer
  */
 public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
-	private static int LENGTH = 9;
+    private static int LENGTH = 9;
 
-	@Override
-	public String getType() {
-		return "BURGERSERVICENUMMER";
-	}
+    @Override
+    public String getType() {
+        return "BURGERSERVICENUMMER";
+    }
 
-	@Override
-	public Synonym anonymize(Object from, int size) {
-		if (size < LENGTH) {
-			throw new UnsupportedOperationException(
-					"Can not generate a BSN that fits in a "
-							+ size
-							+ " character string. Must be " + LENGTH + " characters or more.");
-		}
+    @Override
+    public Synonym anonymize(Object from, int size, boolean shortlived) {
+        if (size < LENGTH) {
+            throw new UnsupportedOperationException(
+                    "Can not generate a BSN that fits in a "
+                            + size
+                            + " character string. Must be " + LENGTH + " characters or more.");
+        }
 
-		StringSynonym s = new StringSynonym();
-		s.setType(getType());
-		s.setFrom(from);
+        String fromString = (String) from;
+        String toString = fromString;
 
-		do {
-			// Never generate identical number
-			s.setTo(generateBSN(LENGTH));
-		} while (s.getFrom().equals(s.getTo()));
+        do {
+            // Never generate identical number
+            toString = generateBSN(LENGTH);
+        } while (fromString.equals(toString));
 
-		return s;
-	}
 
-	String generateBSN(int numberOfDigits) {
-		// Generate random BSN number
-		int[] bsnnumber;
+        return new StringSynonym(
+                getType(),
+                fromString,
+                toString,
+                shortlived
+        );
+    }
 
-		do {
-			bsnnumber = generate11ProofNumber(numberOfDigits);
+    String generateBSN(int numberOfDigits) {
+        // Generate random BSN number
+        int[] bsnnumber;
 
-			// SOFI numbers can not start with 3 zeroes, left digit digit van
-			// not be >3
-		} while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
+        do {
+            bsnnumber = generate11ProofNumber(numberOfDigits);
 
-		// Return the BSN
-		String result = digitsAsNumber(bsnnumber);
-		return result;
-	}
+            // SOFI numbers can not start with 3 zeroes, left digit digit van
+            // not be >3
+        } while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
+
+        // Return the BSN
+        String result = digitsAsNumber(bsnnumber);
+        return result;
+    }
 }

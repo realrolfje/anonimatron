@@ -23,10 +23,11 @@ public class CharacterStringAnonymizer implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
-		int length = from.toString().length();
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
+		String fromString = from.toString();
 		Random r = new Random();
 
+		int length = fromString.length();
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			sb.append(CHARS.charAt(r.nextInt(CHARS.length())));
@@ -34,10 +35,12 @@ public class CharacterStringAnonymizer implements Anonymizer {
 
 		String to = sb.toString();
 
-		StringSynonym stringSynonym = new StringSynonym();
-		stringSynonym.setFrom(from);
-		stringSynonym.setType(getType());
-		stringSynonym.setTo(to);
+		StringSynonym stringSynonym = new StringSynonym(
+				getType(),
+				fromString,
+				to,
+				shortlived
+		);
 
 		return stringSynonym;
 	}

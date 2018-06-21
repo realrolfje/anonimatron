@@ -15,7 +15,7 @@ public class RomanNameGeneratorTest extends TestCase {
 		Set<String> names = new HashSet<String>();
 
 		for (int i = 0; i < 10000; i++) {
-			String name = (String) r.anonymize("fakename", 100).getTo();
+			String name = (String) r.anonymize("fakename", 100, false).getTo();
 			assertFalse("The name " + name
 					+ " was already generated. This is iteration " + i,
 					names.contains(name));
@@ -25,7 +25,7 @@ public class RomanNameGeneratorTest extends TestCase {
 	
 	public void testNullFrom() throws Exception {
 		RomanNameGenerator r = new RomanNameGenerator();
-		assertNull(r.anonymize(null, 100).getTo());
+		assertNull(r.anonymize(null, 100, false).getTo());
 	}
 
 	// commented out for speed reasons
@@ -38,7 +38,7 @@ public class RomanNameGeneratorTest extends TestCase {
 			String name;
 			boolean wasInSet = false;
 			do {
-				name = (String) r.anonymize("fakename", 100).getTo();
+				name = (String) r.anonymize("fakename", 100, false).getTo();
 				wasInSet = names.contains(name);
 				names.add(name);
 			} while (!wasInSet);
