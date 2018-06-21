@@ -84,14 +84,12 @@ public class AnonymizerService {
 			return new NullSynonym(c.getType());
 		}
 
-		// Hash from here.
-		String hashedFrom = new Hasher("secretsalt").base64Hash(from);
-
 		// Find for regular type
 		Synonym synonym = getSynonym(c, from);
 
 		if (synonym == null) {
 			synonym = getAnonymizer(c.getType()).anonymize(from, c.getSize());
+
 			synonymCache.put(synonym);
 		}
 		return synonym;

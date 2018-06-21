@@ -17,8 +17,6 @@ public class CharacterStringAnonymizer implements Anonymizer {
 		return "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	}
 	
-	
-
 	@Override
 	public String getType() {
 		return "RANDOMCHARACTERS";
