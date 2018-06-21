@@ -18,6 +18,7 @@ public class CountryCodeAnonymizerTest extends TestCase {
 		assertEquals(from, nld.getFrom());
 		assertFalse(from.equals(nld.getTo()));
 		assertEquals(size, ((String) nld.getTo()).length());
+		assertFalse(nld.isShortLived());
 	}
 
 }

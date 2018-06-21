@@ -97,6 +97,9 @@
 		<field name="size" type="int">
 			<bind-xml name="size" node="attribute" />
 		</field>
+		<field name="shortlived" type="boolean" required="false" handler="com.rolfje.anonimatron.configuration.ColumnShortLivedFieldHandler">
+			<bind-xml name="shortlived" node="attribute" />
+		</field>
 	</class>
 
 	<class name="com.rolfje.anonimatron.configuration.Discriminator">
