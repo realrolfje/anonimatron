@@ -21,7 +21,10 @@ public class ConfigurationTest extends TestCase {
 		String demoxml = Configuration.getDemoConfiguration();
 		assertNotNull(demoxml);
 		assertTrue(demoxml.length()>10);
-		
+
+		// For convenience and visual checking.
+		System.out.println(demoxml);
+
 		// See if all anonymizer types are represented in the demo xml
 		AnonymizerService as = new AnonymizerService();
 		Set<String> customtypes = as.getCustomAnonymizerTypes();
@@ -34,11 +37,12 @@ public class ConfigurationTest extends TestCase {
 			assertTrue("Demo xml does not contain "+type,demoxml.indexOf(type.toUpperCase().replace('.','_'))>0);
 		}
 
+		assertTrue(demoxml.indexOf("A_SHORTLIVED_COLUMN") > 0);
+		assertTrue(demoxml.indexOf("shortlived") > 0);
+
 		// See if we have File records in the configuration.
 		assertTrue(demoxml.contains("<file inFile=\"mydatafile.in.csv\""));
 
-		// For convenience and visual checking.
-		System.out.println(demoxml);
 	}
 
 }

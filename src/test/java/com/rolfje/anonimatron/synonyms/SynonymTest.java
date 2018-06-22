@@ -4,21 +4,25 @@ import junit.framework.TestCase;
 
 public class SynonymTest extends TestCase {
 
-	public void testEqualsHashcode() throws Exception {
+    public void testEqualsHashcode() throws Exception {
 
-		StringSynonym a = new StringSynonym();
-		a.setType("Bunk");
-		a.setFrom("Foo");
-		a.setTo("Bar");
+        StringSynonym a = new StringSynonym(
+                "Bunk",
+                "Fpp",
+                "Bar",
+                false
+        );
 
-		StringSynonym b = new StringSynonym();
-		b.setType("Bunk");
-		b.setFrom("Foo");
-		b.setTo("Bar");
+        StringSynonym b = new StringSynonym(
+                "Bunk",
+                "Fpp",
+                "Bar",
+                false
+        );
 
-		assertNotSame(a, b);
-		assertEquals(a, b);
+        assertNotSame(a, b);
+        assertEquals(a, b);
 
-	}
+    }
 
 }
