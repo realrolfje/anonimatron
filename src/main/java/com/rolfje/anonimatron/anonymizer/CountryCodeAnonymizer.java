@@ -36,6 +36,9 @@ public class CountryCodeAnonymizer implements Anonymizer {
 			try {
 				if (size > 2) {
 					country = l.getISO3Country();
+					if(country.length()==0) {
+						continue;
+					}
 					country = padRight(country, size);
 				}
 				else if (size == 2) {
