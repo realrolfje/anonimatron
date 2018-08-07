@@ -2,6 +2,7 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,7 @@ public class CountryCodeAnonymizer implements Anonymizer {
 			try {
 				if (size > 2) {
 					country = l.getISO3Country();
-					if(country.length()==0) {
+					if(StringUtils.isEmpty(country)) {
 						continue;
 					}
 					country = padRight(country, size);
