@@ -43,14 +43,14 @@ public class CsvFileReader implements RecordReader, Closeable {
 		// Super simple implementation, not taking quotes into account.
 		// The CSVReader library is no longer supporting Java 1.6, we need
 		// to figure out if we want to switch to a newer Java.
-		StringTokenizer stringTokenizer = new StringTokenizer(s, ",");
+		StringTokenizer stringTokenizer = new StringTokenizer(s, ",;\t");
 
 		ArrayList<String> names = new ArrayList<String>();
 		ArrayList<String> strings = new ArrayList<String>();
 		int i = 1;
 		while (stringTokenizer.hasMoreTokens()) {
 			names.add(String.valueOf(i));
-			strings.add(stringTokenizer.nextToken());
+			strings.add(stringTokenizer.nextToken().replaceAll("^\"|\"$", ""));
 			i++;
 		}
 
