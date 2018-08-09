@@ -2,12 +2,11 @@ package com.rolfje.anonimatron.synonyms;
 
 
 /**
- * Represents a synonym for a null value of any type.
+ * Represents a transient synonym for a null value of any type.
  * 
  */
 public class NullSynonym implements Synonym {
 	private String type;
-	
 	
 	public NullSynonym(String type) {
 		this.type=type;
@@ -23,6 +22,11 @@ public class NullSynonym implements Synonym {
 
 	public Object getTo() {
 		return null;
+	}
+
+	@Override
+	public boolean isShortLived() {
+		return true;
 	}
 
 	@Override

@@ -4,34 +4,35 @@ import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 
 public class StringAnonymizer implements Anonymizer {
-	private static final String TYPE = "STRING";
+    private static final String TYPE = "STRING";
 
-	@Override
-	public Synonym anonymize(Object from, int size) {
-		StringSynonym s = new StringSynonym();
-		s.setType(TYPE);
-		s.setFrom(from);
+    @Override
+    public Synonym anonymize(Object from, int size, boolean shortlived) {
+        String randomHexString = null;
 
-		if (from == null) {
-			s.setTo(null);
-		} else if (from instanceof String) {
-			String randomHexString = Long.toHexString(Double.doubleToLongBits(Math.random()));
-			
-			if (randomHexString.length() > size){
-				throw new UnsupportedOperationException("Can not generate a random hex string with length "+size
-					+". Generated String size is "+randomHexString.length()+" characters.");
-			}
-			
-			s.setTo(randomHexString);
-		} else {
-			throw new UnsupportedOperationException("Can not anonymize objects of type " + from.getClass());
-		}
+        if (from == null) {
+            randomHexString = null;
+        } else if (from instanceof String) {
+            randomHexString = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
-		return s;
-	}
+            if (randomHexString.length() > size) {
+                throw new UnsupportedOperationException("Can not generate a random hex string with length " + size
+                        + ". Generated String size is " + randomHexString.length() + " characters.");
+            }
+        } else {
+            throw new UnsupportedOperationException("Can not anonymize objects of type " + from.getClass());
+        }
 
-	@Override
-	public String getType() {
-		return TYPE;
-	}
+        return new StringSynonym(
+                getType(),
+                (String) from,
+                randomHexString,
+                shortlived
+        );
+    }
+
+    @Override
+    public String getType() {
+        return TYPE;
+    }
 }

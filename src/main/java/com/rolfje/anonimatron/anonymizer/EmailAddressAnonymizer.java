@@ -8,15 +8,10 @@ public class EmailAddressAnonymizer implements Anonymizer {
 	private static final String TYPE = "EMAIL_ADDRESS";
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
-		StringSynonym s = new StringSynonym();
-		s.setType(TYPE);
-		s.setFrom(from);
-
-		if (from == null) {
-			s.setTo(null);
-		} else if (from instanceof String) {
-			String randomHexString = Long.toHexString(Double
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
+		String randomHexString = null;
+		if (from instanceof String) {
+			randomHexString = Long.toHexString(Double
 					.doubleToLongBits(Math.random()));
 			randomHexString += EMAIL_DOMAIN;
 
@@ -26,13 +21,17 @@ public class EmailAddressAnonymizer implements Anonymizer {
 								+ ".");
 			}
 
-			s.setTo(randomHexString);
 		} else {
 			throw new UnsupportedOperationException(
 					"Can not anonymize objects of type " + from.getClass());
 		}
 
-		return s;
+		return new StringSynonym(
+				getType(),
+				(String) from,
+				randomHexString,
+				shortlived
+		);
 	}
 
 	@Override

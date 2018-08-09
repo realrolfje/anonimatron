@@ -1,10 +1,13 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import junit.framework.TestCase;
+import org.apache.log4j.Logger;
 
 import java.sql.Date;
 
 public class HasherTest extends TestCase {
+	private Logger LOG = Logger.getLogger(HasherTest.class);
+
 	public void testBase64HashHappy() throws Exception {
 		assertEquals(
 				new Hasher("salt").base64Hash("piep"),
@@ -37,13 +40,15 @@ public class HasherTest extends TestCase {
 
 	public void testHashSpeed() throws Exception {
 		long start = System.nanoTime();
+		long iterations = 2000;
 		long size = 0;
-		for (int i = 0; i < 2000; i++) {
+		for (int i = 0; i < iterations; i++) {
 			size += new Hasher("salt").base64Hash("piep").length();
 		}
 
 		long durationMillis = (System.nanoTime() - start) / 1_000_000;
-		assertTrue("Hashing took " + durationMillis + " mS and generated "
-				+ size + " characters.", durationMillis < 1000);
+		LOG.info(String.format("%d hashes took %d milliseconds.", iterations, durationMillis));
+		assertTrue("Hashing "+iterations+ " times took " + durationMillis
+				+ " ms and generated " + size + " characters.", durationMillis < 1000);
 	}
 }

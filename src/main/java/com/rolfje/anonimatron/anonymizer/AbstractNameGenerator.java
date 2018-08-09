@@ -407,17 +407,13 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
-
-		StringSynonym synonym = new StringSynonym();
-		synonym.setFrom(from);
-		
-		if (from != null){
-			synonym.setTo(getName(size));
-		}
-		
-		synonym.setType(getType());
-		return synonym;
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
+		return new StringSynonym(
+				getType(),
+				(String) from,
+				from == null ? null : getName(size),
+				shortlived
+		);
 	}
 
 	private String getName(int size) {

@@ -2,6 +2,7 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class CountryCodeAnonymizer implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 
 		if (size < 2) {
 			throw new UnsupportedOperationException("Can not produce country codes of one character.");
@@ -36,6 +37,9 @@ public class CountryCodeAnonymizer implements Anonymizer {
 			try {
 				if (size > 2) {
 					country = l.getISO3Country();
+					if(StringUtils.isEmpty(country)) {
+						continue;
+					}
 					country = padRight(country, size);
 				}
 				else if (size == 2) {
@@ -50,10 +54,9 @@ public class CountryCodeAnonymizer implements Anonymizer {
 		return new StringSynonym(
 				getType(),
 				from.toString(),
-				country
+				country,
+				shortlived
 		);
-
-
 	}
 
 	public static String padRight(String s, int n) {

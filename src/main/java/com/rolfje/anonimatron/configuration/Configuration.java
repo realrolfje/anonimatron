@@ -1,8 +1,10 @@
 package com.rolfje.anonimatron.configuration;
 
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.file.CsvFileReader;
 import com.rolfje.anonimatron.file.CsvFileWriter;
+import com.rolfje.anonimatron.synonyms.StringSynonym;
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
@@ -259,6 +261,15 @@ public class Configuration {
 			c.setType(type);
 			columns.add(c);
 		}
+
+		// Add a demo configuration for a shortlived (non-stored) column.
+		Column c = new Column();
+		c.setName("A_SHORTLIVED_COLUMN");
+		c.setType(new StringAnonymizer().getType());
+		c.setShortlived(true);
+		columns.add(c);
+
+
 		return columns;
 	}
 

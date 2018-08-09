@@ -11,6 +11,7 @@ public class DateSynonym implements Synonym {
 	private String type;
 	private Date from;
 	private Date to;
+	private boolean shortlived = false;
 
 	public String getType() {
 		return type;
@@ -34,6 +35,15 @@ public class DateSynonym implements Synonym {
 
 	public void setFrom(Object from) {
 		this.from = (Date) from;
+	}
+
+	public void setShortlived(boolean shortlived) {
+		this.shortlived = shortlived;
+	}
+
+	@Override
+	public boolean isShortLived() {
+		return shortlived;
 	}
 
 	@Override

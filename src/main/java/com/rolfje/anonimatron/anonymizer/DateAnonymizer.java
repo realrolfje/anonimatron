@@ -14,9 +14,10 @@ class DateAnonymizer implements Anonymizer {
 	private Set<Date> generatedDates = new HashSet<Date>();
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 		DateSynonym s = new DateSynonym();
 		s.setType(TYPE);
+		s.setShortlived(shortlived);
 
 		if (from == null) {
 			s.setFrom(null);

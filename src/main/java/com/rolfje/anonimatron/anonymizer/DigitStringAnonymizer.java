@@ -11,16 +11,18 @@ public class DigitStringAnonymizer extends AbstractElevenProofAnonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 		int length = from.toString().length();
 
 		int[] digits = getRandomDigits(length);
 		String to = digitsAsNumber(digits);
 
-		StringSynonym stringSynonym = new StringSynonym();
-		stringSynonym.setFrom(from);
-		stringSynonym.setType(getType());
-		stringSynonym.setTo(to);
+		StringSynonym stringSynonym = new StringSynonym(
+				getType(),
+				(String) from,
+				to,
+				shortlived
+		);
 
 		return stringSynonym;
 	}

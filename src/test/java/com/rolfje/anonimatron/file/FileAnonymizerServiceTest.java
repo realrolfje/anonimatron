@@ -19,12 +19,13 @@ import java.util.List;
 public class FileAnonymizerServiceTest extends TestCase {
 
 	private FileAnonymizerService fileAnonymizerService;
+	private AnonymizerService anonymizerService;
 
 	public void setUp() throws Exception {
 		super.setUp();
 
 		Configuration config = new Configuration();
-		AnonymizerService anonymizerService = new AnonymizerService();
+		anonymizerService = new AnonymizerService();
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 		fileAnonymizerService = new FileAnonymizerService(config, anonymizerService);
 	}
@@ -39,6 +40,8 @@ public class FileAnonymizerServiceTest extends TestCase {
 
 		assertEquals(record.getNames()[0], anonymize.getNames()[0]);
 		assertFalse(record.getValues()[0].equals(anonymize.getValues()[0]));
+
+		assertEquals(1, anonymizerService.getSynonymCache().size());
 	}
 
 	public void testNoExceptionOnEmptyConfig() throws Exception {
@@ -54,6 +57,8 @@ public class FileAnonymizerServiceTest extends TestCase {
 
 		assertEquals(record.getNames()[0], anonymize.getNames()[0]);
 		assertEquals(record.getValues()[0], anonymize.getValues()[0]);
+
+		assertEquals(0, anonymizerService.getSynonymCache().size());
 	}
 
 	public void testAnonymizeRecords() throws Exception {
@@ -124,14 +129,16 @@ public class FileAnonymizerServiceTest extends TestCase {
 				assertNotNull(target.getNames()[j]);
 			}
 		}
+
+		assertEquals(2, anonymizerService.getSynonymCache().size());
 	}
 
 	public void testIntegrationTest() throws Exception {
 		// Create testfile
 		File tempInput = File.createTempFile("tempInput", ".csv");
 		PrintWriter printWriter = new PrintWriter(tempInput);
-		printWriter.write("test1,notouch,test2,test3\n");
-		printWriter.write("test3,notouch,test2,test1\n");
+		printWriter.write("test1,notouch,test2,test3,transient\n");
+		printWriter.write("test3,notouch,test2,test1,transient\n");
 		printWriter.close();
 
 		String tempOutput = tempInput.getAbsoluteFile() + ".out.csv";
@@ -139,7 +146,8 @@ public class FileAnonymizerServiceTest extends TestCase {
 		List<Column> columns = Arrays.asList(
 				new Column("1", "STRING", 50),
 				new Column("3", "STRING", 50),
-				new Column("4", "STRING", 50));
+				new Column("4", "STRING", 50),
+				new Column("5", "STRING", 50, true));
 
 		DataFile dataFile = new DataFile();
 		dataFile.setInFile(tempInput.getAbsolutePath());
@@ -169,7 +177,14 @@ public class FileAnonymizerServiceTest extends TestCase {
 		assertEquals(outputRecord1.getValues()[2], outputRecord2.getValues()[2]);
 		assertEquals(outputRecord1.getValues()[3], outputRecord2.getValues()[0]);
 
+		// The fifth column is transient, so anonymization will not be consistent,
+		// as the value is not stored in the cache.
+		assertFalse(outputRecord1.getValues()[4].equals(outputRecord2.getValues()[4]));
+		assertFalse("transient".equals(outputRecord2.getValues()[4]));
+
 		assertEquals("notouch", outputRecord1.getValues()[1]);
 		assertEquals("notouch", outputRecord2.getValues()[1]);
+
+		assertEquals(3, anonymizerService.getSynonymCache().size());
 	}
 }

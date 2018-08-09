@@ -54,17 +54,17 @@ public class IbanAnonymizer implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 
 		CountryCode countryCode = getCountryCode(from);
 		String result = generateIban(countryCode);
 
-		StringSynonym stringSynonym = new StringSynonym();
-		stringSynonym.setFrom(from);
-		stringSynonym.setType(TYPE);
-		stringSynonym.setTo(result);
-
-		return stringSynonym;
+		return new StringSynonym(
+				getType(),
+				(String) from,
+				result,
+				shortlived
+		);
 	}
 
 	String generateIban(CountryCode countryCode) {

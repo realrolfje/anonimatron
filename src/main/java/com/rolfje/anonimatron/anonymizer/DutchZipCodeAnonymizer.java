@@ -37,13 +37,9 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean shortlived) {
 		String result = buildZipCode();
-
-		StringSynonym stringSynonym = new StringSynonym();
-		stringSynonym.setFrom(from);
-		stringSynonym.setType(TYPE);
-		stringSynonym.setTo(result);
+		StringSynonym stringSynonym = new StringSynonym(TYPE, (String) from, result, shortlived);
 
 		return stringSynonym;
 	}

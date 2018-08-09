@@ -20,9 +20,7 @@ public interface ColumnWorker {
 	 * @param results the resultset in which this worker runs. Can be used to
 	 *            update the column value when anonymizing.
 	 * @param column The column which was fetched from the configuration.
-	 * @param columnType Overrides the column type from the configuration.
 	 * @param databaseColumnValue The current value for this column.
-	 * @param columnDisplaySize The displaysize according to the database for
 	 *            this column.
 	 * @return <code>true</code> if the columnworker is ready to process the
 	 *         next value after this one, or <code>false</code> if the column
@@ -32,7 +30,6 @@ public interface ColumnWorker {
 	 * @throws SQLException On database access or SQL errors.
 	 */
 	boolean processColumn(ResultSet results, Column column,
-						  String columnType, Object databaseColumnValue,
-						  int columnDisplaySize) throws SQLException;
+						  Object databaseColumnValue) throws SQLException;
 
 }

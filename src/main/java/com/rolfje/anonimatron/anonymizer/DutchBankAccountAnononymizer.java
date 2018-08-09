@@ -1,11 +1,10 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.security.SecureRandom;
-
-import org.apache.log4j.Logger;
-
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+import org.apache.log4j.Logger;
+
+import java.security.SecureRandom;
 
 /**
  * Generates valid Dutch Bank Account number with the same length as the given
@@ -18,217 +17,220 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * See http://nl.wikipedia.org/wiki/Elfproef
  */
 public class DutchBankAccountAnononymizer extends AbstractElevenProofAnonymizer implements BankAccountAnonymizer {
-	private static Logger LOG = Logger.getLogger(DutchBankAccountAnononymizer.class);
+    private static Logger LOG = Logger.getLogger(DutchBankAccountAnononymizer.class);
 
-	private static int LENGTH = 9;
+    private static int LENGTH = 9;
 
-	private final SecureRandom random = new SecureRandom();
+    private final SecureRandom random = new SecureRandom();
 
-	@Override
-	public String getType() {
-		return "DUTCHBANKACCOUNT";
-	}
+    @Override
+    public String getType() {
+        return "DUTCHBANKACCOUNT";
+    }
 
-	@Override
-	public Synonym anonymize(Object from, int size) {
-		if (size < LENGTH) {
-			throw new UnsupportedOperationException(
-					"Can not generate a Dutch Bank Account number that fits in a " + size + " character string. Must be " + LENGTH
-							+ " characters or more.");
-		}
+    @Override
+    public Synonym anonymize(Object from, int size, boolean shortlived) {
+        if (size < LENGTH) {
+            throw new UnsupportedOperationException(
+                    "Can not generate a Dutch Bank Account number that fits in a " + size + " character string. Must be " + LENGTH
+                            + " characters or more.");
+        }
 
-		int originalLength = ((String) from).length();
-		if (originalLength > LENGTH) {
-			LOG.warn("Original bank account number had more than " + LENGTH
-					+ " digits. The resulting anonymous bank account number with the same length will not be a valid account number.");
+        String fromString = (String) from;
 
-		}
+        int originalLength = (fromString).length();
+        if (originalLength > LENGTH) {
+            LOG.warn("Original bank account number had more than " + LENGTH
+                    + " digits. The resulting anonymous bank account number with the same length will not be a valid account number.");
 
-		StringSynonym s = new StringSynonym();
-		s.setType(getType());
-		s.setFrom(from);
+        }
 
-		do {
-			// Never generate identical number
-			s.setTo(generateBankAccount(originalLength));
-		} while (s.getFrom().equals(s.getTo()));
+        String toString = fromString;
+        do {
+            toString = generateBankAccount(originalLength);
+        } while (fromString.equals(toString));
 
-		return s;
-	}
+        return new StringSynonym(
+                getType(),
+                fromString,
+                toString,
+                shortlived
+        );
+    }
 
-	@Override
-	public String generateBankAccount(int numberOfDigits) {
-		if (numberOfDigits == LENGTH) {
-			// Generate 11-proof bank account number
-			int[] elevenProof = generate11ProofNumber(numberOfDigits);
-			return digitsAsNumber(elevenProof);
-		} else {
-			// Generate non-11 proof bank account number
-			int[] randomnumber = getRandomDigits(numberOfDigits);
-			return digitsAsNumber(randomnumber);
-		}
-	}
+    @Override
+    public String generateBankAccount(int numberOfDigits) {
+        if (numberOfDigits == LENGTH) {
+            // Generate 11-proof bank account number
+            int[] elevenProof = generate11ProofNumber(numberOfDigits);
+            return digitsAsNumber(elevenProof);
+        } else {
+            // Generate non-11 proof bank account number
+            int[] randomnumber = getRandomDigits(numberOfDigits);
+            return digitsAsNumber(randomnumber);
+        }
+    }
 
-	@Override
-	public String generateBankCode() {
-		DutchBankCode bankCode = DutchBankCode.values()[random.nextInt(DutchBankCode.values().length)];
+    @Override
+    public String generateBankCode() {
+        DutchBankCode bankCode = DutchBankCode.values()[random.nextInt(DutchBankCode.values().length)];
 
-		return bankCode.bankCode;
-	}
+        return bankCode.bankCode;
+    }
 
-	/**
-	 * Enumeration of the Dutch bank codes, used to generate valid IBAN for Dutch bank accounts.
-	 *
-	 * @see <a href="Bank Identifier Codes">https://www.betaalvereniging.nl/aandachtsgebieden/giraal-betalingsverkeer/bic-sepa-transacties/</a>
-	 */
-	private enum DutchBankCode {
+    /**
+     * Enumeration of the Dutch bank codes, used to generate valid IBAN for Dutch bank accounts.
+     *
+     * @see <a href="Bank Identifier Codes">https://www.betaalvereniging.nl/aandachtsgebieden/giraal-betalingsverkeer/bic-sepa-transacties/</a>
+     */
+    private enum DutchBankCode {
 
-		ABNA("ABNANL2A", "ABNA", "ABN AMRO"),
+        ABNA("ABNANL2A", "ABNA", "ABN AMRO"),
 
-		FTSB("ABNANL2A", "FTSB", "ABN AMRO (ex FORTIS)"),
+        FTSB("ABNANL2A", "FTSB", "ABN AMRO (ex FORTIS)"),
 
-		ADYB("ADYBNL2A", "ADYB", "ADYEN"),
+        ADYB("ADYBNL2A", "ADYB", "ADYEN"),
 
-		AEGO("AEGONL2U", "AEGO", "AEGON BANK"),
+        AEGO("AEGONL2U", "AEGO", "AEGON BANK"),
 
-		ANAA("ANAANL21", "ANAA", "BRAND NEW DAY (ex ALLIANZ)"),
+        ANAA("ANAANL21", "ANAA", "BRAND NEW DAY (ex ALLIANZ)"),
 
-		ANDL("ANDLNL2A", "ANDL", "ANADOLUBANK"),
+        ANDL("ANDLNL2A", "ANDL", "ANADOLUBANK"),
 
-		ARBN("ARBNNL22", "ARBN", "ACHMEA BANK"),
+        ARBN("ARBNNL22", "ARBN", "ACHMEA BANK"),
 
-		ARSN("ARSNNL21", "ARSN", "ARGENTA SPAARBANK"),
+        ARSN("ARSNNL21", "ARSN", "ARGENTA SPAARBANK"),
 
-		ASNB("ASNBNL21", "ASNB", "ASN BANK"),
+        ASNB("ASNBNL21", "ASNB", "ASN BANK"),
 
-		ATBA("ATBANL2A", "ATBA", "AMSTERDAM TRADE BANK"),
+        ATBA("ATBANL2A", "ATBA", "AMSTERDAM TRADE BANK"),
 
-		BCDM("BCDMNL22", "BCDM", "BANQUE CHAABI DU MAROC"),
+        BCDM("BCDMNL22", "BCDM", "BANQUE CHAABI DU MAROC"),
 
-		BCIT("BCITNL2A", "BCIT", "INTESA SANPAOLO"),
+        BCIT("BCITNL2A", "BCIT", "INTESA SANPAOLO"),
 
-		BICK("BICKNL2A", "BICK", "BINCKBANK"),
+        BICK("BICKNL2A", "BICK", "BINCKBANK"),
 
-		BINK("BINKNL21", "BINK", "BINCKBANK, PROF"),
+        BINK("BINKNL21", "BINK", "BINCKBANK, PROF"),
 
-		BKCH("BKCHNL2R", "BKCH", "BANK OF CHINA"),
+        BKCH("BKCHNL2R", "BKCH", "BANK OF CHINA"),
 
-		BKMG("BKMGNL2A", "BKMG", "BANK MENDES GANS"),
+        BKMG("BKMGNL2A", "BKMG", "BANK MENDES GANS"),
 
-		BLGW("BLGWNL21", "BLGW", "BLG WONEN"),
+        BLGW("BLGWNL21", "BLGW", "BLG WONEN"),
 
-		BMEU("BMEUNL21", "BMEU", "BMCE EUROSERVICES"),
+        BMEU("BMEUNL21", "BMEU", "BMCE EUROSERVICES"),
 
-		BNDA("BNDANL2A", "BNDA", "BRAND NEW DAY BANK"),
+        BNDA("BNDANL2A", "BNDA", "BRAND NEW DAY BANK"),
 
-		BNGH("BNGHNL2G", "BNGH", "BANK NEDERLANDSE GEMEENTEN"),
+        BNGH("BNGHNL2G", "BNGH", "BANK NEDERLANDSE GEMEENTEN"),
 
-		BNPA("BNPANL2A", "BNPA", "BNP PARIBAS"),
+        BNPA("BNPANL2A", "BNPA", "BNP PARIBAS"),
 
-		BOFA("BOFANLNX", "BOFA", "BANK OF AMERICA"),
+        BOFA("BOFANLNX", "BOFA", "BANK OF AMERICA"),
 
-		BOFS("BOFSNL21002", "BOFS", "BANK OF SCOTLAND, AMSTERDAM"),
+        BOFS("BOFSNL21002", "BOFS", "BANK OF SCOTLAND, AMSTERDAM"),
 
-		BOTK("BOTKNL2X", "BOTK", "MUFG BANK"),
+        BOTK("BOTKNL2X", "BOTK", "MUFG BANK"),
 
-		BUNQ("BUNQNL2A", "BUNQ", "BUNQ"),
+        BUNQ("BUNQNL2A", "BUNQ", "BUNQ"),
 
-		CHAS("CHASNL2X", "CHAS", "JPMORGAN CHASE"),
+        CHAS("CHASNL2X", "CHAS", "JPMORGAN CHASE"),
 
-		CITC("CITCNL2A", "CITC", "CITCO BANK"),
+        CITC("CITCNL2A", "CITC", "CITCO BANK"),
 
-		CITI("CITINL2X", "CITI", "CITIBANK INTERNATIONAL"),
+        CITI("CITINL2X", "CITI", "CITIBANK INTERNATIONAL"),
 
-		COBA("COBANL2X", "COBA", "COMMERZBANK"),
+        COBA("COBANL2X", "COBA", "COMMERZBANK"),
 
-		DEUT("DEUTNL2A", "DEUT", "DEUTSCHE BANK (bij alle SEPA transacties)"),
+        DEUT("DEUTNL2A", "DEUT", "DEUTSCHE BANK (bij alle SEPA transacties)"),
 
-		DHBN("DHBNNL2R", "DHBN", "DEMIR-HALK BANK"),
+        DHBN("DHBNNL2R", "DHBN", "DEMIR-HALK BANK"),
 
-		DLBK("DLBKNL2A", "DLBK", "DELTA LLOYD BANK"),
+        DLBK("DLBKNL2A", "DLBK", "DELTA LLOYD BANK"),
 
-		DNIB("DNIBNL2G", "DNIB", "NIBC"),
+        DNIB("DNIBNL2G", "DNIB", "NIBC"),
 
-		EBUR("EBURNL21", "EBUR", "EBURY NETHERLANDS"),
+        EBUR("EBURNL21", "EBUR", "EBURY NETHERLANDS"),
 
-		FBHL("FBHLNL2A", "FBHL", "CREDIT EUROPE BANK"),
+        FBHL("FBHLNL2A", "FBHL", "CREDIT EUROPE BANK"),
 
-		FLOR("FLORNL2A", "FLOR", "DE NEDERLANDSCHE BANK"),
+        FLOR("FLORNL2A", "FLOR", "DE NEDERLANDSCHE BANK"),
 
-		FRGH("FRGHNL21", "FRGH", "FGH BANK"),
+        FRGH("FRGHNL21", "FRGH", "FGH BANK"),
 
-		FRNX("FRNXNL2A", "FRNX", "FRANX"),
+        FRNX("FRNXNL2A", "FRNX", "FRANX"),
 
-		FVLB("FVLBNL22", "FVLB", "VAN LANSCHOT"),
+        FVLB("FVLBNL22", "FVLB", "VAN LANSCHOT"),
 
-		GILL("GILLNL2A", "GILL", "INSINGERGILISSEN"),
+        GILL("GILLNL2A", "GILL", "INSINGERGILISSEN"),
 
-		HAND("HANDNL2A", "HAND", "SVENSKA HANDELSBANKEN"),
+        HAND("HANDNL2A", "HAND", "SVENSKA HANDELSBANKEN"),
 
-		HHBA("HHBANL22", "HHBA", "HOF HOORNEMAN BANKIERS"),
+        HHBA("HHBANL22", "HHBA", "HOF HOORNEMAN BANKIERS"),
 
-		HSBC("HSBCNL2A", "HSBC", "HSBC BANK"),
+        HSBC("HSBCNL2A", "HSBC", "HSBC BANK"),
 
-		ICBK("ICBKNL2A", "ICBK", "INDUSTRIAL & COMMERCIAL BANK OF CHINA"),
+        ICBK("ICBKNL2A", "ICBK", "INDUSTRIAL & COMMERCIAL BANK OF CHINA"),
 
-		INGB("INGBNL2A", "INGB", "ING"),
+        INGB("INGBNL2A", "INGB", "ING"),
 
-		ISAE("ISAENL2A", "ISAE", "CACEIS BANK, Netherlands Branch"),
+        ISAE("ISAENL2A", "ISAE", "CACEIS BANK, Netherlands Branch"),
 
-		ISBK("ISBKNL2A", "ISBK", "ISBANK"),
+        ISBK("ISBKNL2A", "ISBK", "ISBANK"),
 
-		KABA("KABANL2A", "KABA", "YAPI KREDI BANK"),
+        KABA("KABANL2A", "KABA", "YAPI KREDI BANK"),
 
-		KASA("KASANL2A", "KASA", "KAS BANK"),
+        KASA("KASANL2A", "KASA", "KAS BANK"),
 
-		KNAB("KNABNL2H", "KNAB", "KNAB"),
+        KNAB("KNABNL2H", "KNAB", "KNAB"),
 
-		KOEX("KOEXNL2A", "KOEX", "KOREA EXCHANGE BANK"),
+        KOEX("KOEXNL2A", "KOEX", "KOREA EXCHANGE BANK"),
 
-		KRED("KREDNL2X", "KRED", "KBC BANK"),
+        KRED("KREDNL2X", "KRED", "KBC BANK"),
 
-		LOCY("LOCYNL2A", "LOCY", "LOMBARD ODIER DARIER HENTSCH & CIE"),
+        LOCY("LOCYNL2A", "LOCY", "LOMBARD ODIER DARIER HENTSCH & CIE"),
 
-		LOYD("LOYDNL2A", "LOYD", "LLOYDS TSB BANK"),
+        LOYD("LOYDNL2A", "LOYD", "LLOYDS TSB BANK"),
 
-		LPLN("LPLNNL2F", "LPLN", "LEASEPLAN CORPORATION"),
+        LPLN("LPLNNL2F", "LPLN", "LEASEPLAN CORPORATION"),
 
-		MHCB("MHCBNL2A", "MHCB", "MIZUHO BANK EUROPE"),
+        MHCB("MHCBNL2A", "MHCB", "MIZUHO BANK EUROPE"),
 
-		MOYO("MOYONL21", "MOYO", "MONEYOU"),
+        MOYO("MOYONL21", "MOYO", "MONEYOU"),
 
-		NNBA("NNBANL2G", "NNBA", "NATIONALE-NEDERLANDEN BANK"),
+        NNBA("NNBANL2G", "NNBA", "NATIONALE-NEDERLANDEN BANK"),
 
-		NWAB("NWABNL2G", "NWAB", "NEDERLANDSE WATERSCHAPSBANK"),
+        NWAB("NWABNL2G", "NWAB", "NEDERLANDSE WATERSCHAPSBANK"),
 
-		PCBC("PCBCNL2A", "PCBC", "CHINA CONSTRUCTION BANK, AMSTERDAM BRANCH"),
+        PCBC("PCBCNL2A", "PCBC", "CHINA CONSTRUCTION BANK, AMSTERDAM BRANCH"),
 
-		RABO("RABONL2U", "RABO", "RABOBANK"),
+        RABO("RABONL2U", "RABO", "RABOBANK"),
 
-		RBRB("RBRBNL21", "RBRB", "REGIOBANK"),
+        RBRB("RBRBNL21", "RBRB", "REGIOBANK"),
 
-		SOGE("SOGENL2A", "SOGE", "SOCIETE GENERALE"),
+        SOGE("SOGENL2A", "SOGE", "SOCIETE GENERALE"),
 
-		TEBU("TEBUNL2A", "TEBU", "THE ECONOMY BANK"),
+        TEBU("TEBUNL2A", "TEBU", "THE ECONOMY BANK"),
 
-		TRIO("TRIONL2U", "TRIO", "TRIODOS BANK"),
+        TRIO("TRIONL2U", "TRIO", "TRIODOS BANK"),
 
-		UBSW("UBSWNL2A", "UBSW", "UBS EUROPE SE, NETHERLANDS BRANCH"),
+        UBSW("UBSWNL2A", "UBSW", "UBS EUROPE SE, NETHERLANDS BRANCH"),
 
-		UGBI("UGBINL2A", "UGBI", "GARANTIBANK INTERNATIONAL"),
+        UGBI("UGBINL2A", "UGBI", "GARANTIBANK INTERNATIONAL"),
 
-		VOWA("VOWANL21", "VOWA", "VOLKSWAGEN BANK"),
+        VOWA("VOWANL21", "VOWA", "VOLKSWAGEN BANK"),
 
-		ZWLB("ZWLBNL21", "ZWLB", "SNS (ex ZWITSERLEVENBANK)");
+        ZWLB("ZWLBNL21", "ZWLB", "SNS (ex ZWITSERLEVENBANK)");
 
-		private final String bic;
-		private final String bankCode;
-		private final String bankNaam;
+        private final String bic;
+        private final String bankCode;
+        private final String bankNaam;
 
-		DutchBankCode(String bic, String bankCode, String bankNaam) {
-			this.bic = bic;
-			this.bankCode = bankCode;
-			this.bankNaam = bankNaam;
-		}
-	}
+        DutchBankCode(String bic, String bankCode, String bankNaam) {
+            this.bic = bic;
+            this.bankCode = bankCode;
+            this.bankNaam = bankNaam;
+        }
+    }
 }

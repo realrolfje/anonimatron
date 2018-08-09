@@ -25,7 +25,6 @@ public class DutchBSNAnononymizerTest {
 
 			Synonym synonym = bsnAnonymizer.anonymize(from, 12);
 			assertThat(from, is(synonym.getFrom()));
-
 			validate(synonym);
 		}
 	}
@@ -65,11 +64,11 @@ public class DutchBSNAnononymizerTest {
 
 	@Test
 	public void testLength() throws Exception {
-		bsnAnonymizer.anonymize("dummy", 10000);
-		bsnAnonymizer.anonymize("dummy", 9);
+		bsnAnonymizer.anonymize("dummy", 10000, false);
+		bsnAnonymizer.anonymize("dummy", 9, false);
 
 		try {
-			bsnAnonymizer.anonymize("dummy", 8);
+			bsnAnonymizer.anonymize("dummy", 8, false);
 			fail("should throw exception");
 		} catch (UnsupportedOperationException e) {
 			// ok
