@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	Logger LOG = Logger.getLogger(IntegrationTest.class);
@@ -31,6 +32,8 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 
 	public void testAnonimatron() throws Exception {
 		runAnonimatron(configFile.getAbsolutePath(), synonymFile.getAbsolutePath());
+		resultSetIsAnonymized("TABLE1", "COL1");
+		resultSetIsAnonymized("TESTSCHEMA.TABLE2", "COL1");
 	}
 
 	private void createDatabase() throws Exception {
@@ -42,7 +45,30 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 			p.execute();
 		}
 
+		executeSql("create schema TESTSCHEMA authorization DBA");
+		executeSql("create table TESTSCHEMA.TABLE2 (COL1 VARCHAR(200), ID IDENTITY)");
+		p = connection
+				.prepareStatement("insert into TESTSCHEMA.TABLE2 (COL1) values (?)");
+		for (int i = 0; i < 100; i++) {
+			p.setString(1, "varcharstring-" + i);
+			p.execute();
+		}
+
 		LOG.info("Created test database.");
+	}
+
+	private void resultSetIsAnonymized(String table, String column) throws Exception {
+		PreparedStatement preparedStatement = connection.prepareStatement("select * from " + table);
+		preparedStatement.execute();
+		ResultSet resultSet = preparedStatement.getResultSet();
+		int rowcount = 0;
+		while (resultSet.next()) {
+			rowcount++;
+			String value = resultSet.getString(column);
+			assertFalse(value.startsWith("varcharstring-"));
+			assertTrue(value.endsWith("@example.com"));
+		}
+		assertEquals("Not all rows accounted for", 100, rowcount);
 	}
 
 	/**

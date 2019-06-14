@@ -342,21 +342,8 @@ public class JdbcAnonymizerService {
 			}
 		}
 
-		ResultSet results = connection.getMetaData().getPrimaryKeys(null, null, table.getName());
-		String primaryKeys = "";
-		while (results.next()) {
-			String columnName = results.getString("COLUMN_NAME");
-			if (!columnNames.contains(columnName)) {
-				primaryKeys += columnName + ", ";
-			}
-		}
-		results.close();
 
-		if (primaryKeys.length() < 1) {
-			String msg = "Table " + table.getName() + " does not contain a primary key and can not be anonymyzed.";
-			LOG.error(msg);
-			throw new RuntimeException(msg);
-		}
+		String primaryKeys = getPrimaryKeys(table, columnNames);
 
 		String select = "select " + primaryKeys;
 
@@ -367,6 +354,35 @@ public class JdbcAnonymizerService {
 		select = select.substring(0, select.lastIndexOf(", "));
 		select += " from " + table.getName();
 		return select;
+	}
+
+	private String getPrimaryKeys(Table table, Set<String> columnNames) throws SQLException {
+
+		String schema = null;
+		String tablename = table.getName();
+		String[] split = table.getName().split("\\.");
+		if (split.length == 2) {
+			schema = split[0];
+			tablename = split[1];
+		}
+
+		ResultSet resultset = connection.getMetaData().getPrimaryKeys(null, schema, tablename);
+		String primaryKeys = "";
+		while (resultset.next()) {
+			String columnName = resultset.getString("COLUMN_NAME");
+			if (!columnNames.contains(columnName)) {
+				primaryKeys += columnName + ", ";
+			}
+		}
+		resultset.close();
+
+		if (primaryKeys.length() < 1) {
+			String msg = "Table " + table.getName() + " does not contain a primary key and can not be anonymyzed.";
+			LOG.error(msg);
+			throw new RuntimeException(msg);
+		}
+
+		return primaryKeys;
 	}
 
 	/**
@@ -405,6 +421,9 @@ public class JdbcAnonymizerService {
 		drivers.put(
 			"jdbc:microsoft:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
 			"com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        drivers.put(
+                "jdbc:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
+                "com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		drivers.put("jdbc:mysql://[HOST]:[PORT]/[DB]",
 			"org.gjt.mm.mysql.Driver");
 		drivers.put("jdbc:oracle:oci8:@[SID]",
