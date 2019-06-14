@@ -421,6 +421,9 @@ public class JdbcAnonymizerService {
 		drivers.put(
 			"jdbc:microsoft:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
 			"com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        drivers.put(
+                "jdbc:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
+                "com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		drivers.put("jdbc:mysql://[HOST]:[PORT]/[DB]",
 			"org.gjt.mm.mysql.Driver");
 		drivers.put("jdbc:oracle:oci8:@[SID]",

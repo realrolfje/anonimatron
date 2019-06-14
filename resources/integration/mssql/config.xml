@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration jdbcurl="jdbc:sqlserver://localhost:1433;DatabaseName=mydb"
+               userid="test" password="Test.1234">
+    <table name="TABLE1">
+        <column name="COL1" type="EMAIL_ADDRESS"/>
+    </table>
+    <table name="SCHEMA2.TABLE2">
+        <column name="COL1" type="EMAIL_ADDRESS"/>
+    </table>
+</configuration>
