@@ -203,7 +203,8 @@
                                 </goals>
                                 <configuration>
                                     <!-- realrolfje@users.noreply.github.com -->
-                                    <keyname>D6584B937338F123</keyname>
+                                    <!-- new key, replaces the old key -->
+                                    <keyname>45E2A5E085182DC26EFEF6E796BB2760490D54DD</keyname>
                                 </configuration>
                             </execution>
                         </executions>
