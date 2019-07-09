@@ -131,8 +131,14 @@ usage: java -jar anonimatron.jar
                    anonymize.
  -configexample    Prints out a demo/template configuration file.
  -dryrun           Do not make changes to the database.
- -synonyms    The XML file to read/write synonyms to. If the file
+ -jdbcurl          The JDBC URL to connect to. If provided, overrides the
+                   value in the config file.
+ -password         The password for the database connection. If provided,
+                   overrides the value in the config file.
+ -synonyms <arg>   The XML file to read/write synonyms to. If the file
                    does not exist it will be created.
+ -userid           The user id for the database connection. If provided,
+                   overrides the value in the config file.
 ```
 
 Victory! You’ve installed Anonimatron. Yes, life can really be that easy.
@@ -178,7 +184,8 @@ In this example, we have just created a MySQL database, so we’ll use that URL 
 
 This simple configuration file will tell Anonimatron the following things:
 
-+ How to connect to the mydb database
++ How to connect to the mydb database. The user id, the password, and even the URL can be set 
+  with the corresponding command line parameters.
 + The values in `username.firstname` should be processed with the `ROMAN_NAME` Anonymizer.
   Anonymizers are little plugins which are able to generate data with certain properties, 
   sometimes based on the original data. This particular Anonymizer generates Roman Names 
