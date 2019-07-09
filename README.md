@@ -4,6 +4,8 @@ No patience? Visit the [Anonimatron official homepage](https://realrolfje.github
 
 [Travis build status for master branch: ![Build Status](https://travis-ci.org/realrolfje/anonimatron.svg?branch=master)](https://travis-ci.org/realrolfje/anonimatron)
 
+[![Latest version on Maven Central](https://img.shields.io/maven-central/v/com.rolfje.anonimatron/anonimatron.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.rolfje.anonimatron%22%20AND%20a:%22anonimatron%22)
+
 ### Table of contents
 
 + [How Anonimatron Works](#how-anonimatron-works)
