@@ -89,7 +89,12 @@ public class AnonymizerService {
 
 		if (synonym == null) {
             Anonymizer anonymizer = getAnonymizer(column.getType());
-            synonym = anonymizer.anonymize(from, column.getSize(), column.isShortLived());
+            if (anonymizer instanceof ParameterizedAnonymizer) {
+                synonym = ((ParameterizedAnonymizer) anonymizer)
+                        .anonymize(from, column.getSize(), column.isShortLived(), column.getParameters());
+            } else {
+                synonym = anonymizer.anonymize(from, column.getSize(), column.isShortLived());
+            }
 
 			synonymCache.put(synonym);
 		}
