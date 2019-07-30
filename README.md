@@ -119,7 +119,7 @@ To anonymize your data, [download Anonimatron](https://github.com/realrolfje/ano
 ```
 $ ./anonimatron.sh
  
-This is Anonimatron 1.7, a command line tool to consistently
+This is Anonimatron 1.10, a command line tool to consistently
 replace live data in your database with data data which
 can not be traced back to the original data.
 You can use this tool to transform a dump from a production
@@ -135,12 +135,12 @@ usage: java -jar anonimatron.jar
  -dryrun           Do not make changes to the database.
  -jdbcurl          The JDBC URL to connect to. If provided, overrides the
                    value in the config file.
+ -userid           The user id for the database connection. If provided,
+                   overrides the value in the config file.
  -password         The password for the database connection. If provided,
                    overrides the value in the config file.
  -synonyms <arg>   The XML file to read/write synonyms to. If the file
                    does not exist it will be created.
- -userid           The user id for the database connection. If provided,
-                   overrides the value in the config file.
 ```
 
 Victory! You’ve installed Anonimatron. Yes, life can really be that easy.
