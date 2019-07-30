@@ -35,7 +35,7 @@ git commit -m "Update version to $2"
 git push --follow-tags
 
 # Sign the zip file
-gpg -ab --default-key D6584B937338F123 target/anonimatron*.zip
+gpg -ab --default-key 45E2A5E085182DC26EFEF6E796BB2760490D54DD target/anonimatron*.zip
 
 echo "The file to upload for this release is:"
 echo

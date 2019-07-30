@@ -1,8 +1,10 @@
 # Anonimatron
 
-No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`.
+No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`. You can also include anonimatron in your own project as a library, see [![Latest version on Maven Central](https://img.shields.io/maven-central/v/com.rolfje.anonimatron/anonimatron.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.rolfje.anonimatron%22%20AND%20a:%22anonimatron%22).
 
 [Travis build status for master branch: ![Build Status](https://travis-ci.org/realrolfje/anonimatron.svg?branch=master)](https://travis-ci.org/realrolfje/anonimatron)
+
+
 
 ### Table of contents
 

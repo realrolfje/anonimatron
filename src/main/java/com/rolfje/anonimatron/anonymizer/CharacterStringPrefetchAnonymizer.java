@@ -6,7 +6,9 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 
 /**
  * Provides the same functionality as {@link CharacterStringAnonymizer}, but
- * uses the prefetch cycle to collect its output character set.
+ * uses the prefetch cycle to collect its output character set. This causes
+ * the anonymized dataset to contain the same characters as used the input set,
+ * enabling debugging/reproduction of strange character set issues.
  * 
  * @author rolf
  */

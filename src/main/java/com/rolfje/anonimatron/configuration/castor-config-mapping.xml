@@ -100,6 +100,18 @@
 		<field name="shortlived" type="boolean" required="false" handler="com.rolfje.anonimatron.configuration.ColumnShortLivedFieldHandler">
 			<bind-xml name="shortlived" node="attribute" />
 		</field>
+		<field name="parameters" collection="map">
+			<bind-xml name="parameter">
+				<class name="org.exolab.castor.mapping.MapItem">
+					<field name="key" type="java.lang.String">
+						<bind-xml name="id" node="attribute"/>
+					</field>
+					<field name="value" type="java.lang.String">
+						<bind-xml name="value" node="text"/>
+					</field>
+				</class>
+			</bind-xml>
+		</field>
 	</class>
 
 	<class name="com.rolfje.anonimatron.configuration.Discriminator">
