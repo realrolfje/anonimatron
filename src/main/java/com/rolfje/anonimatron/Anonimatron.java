@@ -26,6 +26,9 @@ import org.castor.core.util.StringUtil;
  */
 public class Anonimatron {
 	public static String VERSION="UNKNOWN";
+	private static final String OPT_JDBCURL = "jdbcurl";
+	private static final String OPT_USERID = "userid";
+	private static final String OPT_PASSWORD = "password";
 	private static final String OPT_CONFIGFILE = "config";
 	private static final String OPT_SYNONYMFILE = "synonyms";
 	private static final String OPT_DRYRUN = "dryrun";
@@ -46,6 +49,15 @@ public class Anonimatron {
 
 	public static void main(String[] args) throws Exception {
 		Options options = new Options();
+		options.addOption(OPT_JDBCURL, false,
+				"The JDBC URL to connect to. " +
+						"If provided, overrides the value in the config file.");
+		options.addOption(OPT_USERID, false,
+				"The user id for the database connection. " +
+						"If provided, overrides the value in the config file.");
+		options.addOption(OPT_PASSWORD, false,
+				"The password for the database connection. " +
+						"If provided, overrides the value in the config file.");
 		options.addOption(OPT_CONFIGFILE, true,
 				"The XML Configuration file describing what to anonymize.");
 		options.addOption(OPT_SYNONYMFILE, true,
@@ -59,12 +71,15 @@ public class Anonimatron {
 
 		try {
 			CommandLine commandline = parser.parse(options, args);
+			String jdbcurl = commandline.getOptionValue(OPT_JDBCURL);
+			String userid = commandline.getOptionValue(OPT_USERID);
+			String password = commandline.getOptionValue(OPT_PASSWORD);
 			String configfileName = commandline.getOptionValue(OPT_CONFIGFILE);
 			String synonymfileName = commandline.getOptionValue(OPT_SYNONYMFILE);
 			boolean dryrun = commandline.hasOption(OPT_DRYRUN);
 
 			if (configfileName != null) {
-				anonymize(configfileName, synonymfileName, dryrun);
+				anonymize(jdbcurl, userid, password, configfileName, synonymfileName, dryrun);
 			} else if (commandline.hasOption("configexample")) {
 				printDemoConfiguration();
 			} else {
@@ -76,9 +91,18 @@ public class Anonimatron {
 		}
 	}
 
-	private static void anonymize(String configFile, String synonymFile, boolean dryrun)
+	private static void anonymize(String jdbcurl, String userid, String password, String configFile, String synonymFile, boolean dryrun)
 			throws Exception, SQLException {
 		Configuration config = Configuration.readFromFile(configFile);
+		if (jdbcurl != null) {
+			config.setJdbcurl(jdbcurl);
+		}
+		if (userid != null) {
+			config.setUserid(userid);
+		}
+		if (password != null) {
+			config.setPassword(password);
+		}
 		config.setDryrun(dryrun);
 
 		// Load Synonyms from disk if present.
