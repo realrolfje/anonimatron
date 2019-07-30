@@ -1,10 +1,13 @@
 package com.rolfje.anonimatron.configuration;
 
+import java.util.Map;
+
 public class Column {
     private String name;
     private String type;
     private int size = -1;
     private boolean shortlived;
+    private Map<String, String> parameters;
 
     public Column() {
 
@@ -26,6 +29,10 @@ public class Column {
         this.shortlived = shortlived;
     }
 
+    public Column(String name, String type, int size, boolean shortlived, Map<String, String> parameters) {
+        this(name, type, size, shortlived);
+        this.parameters = parameters;
+    }
 
     public String getName() {
         return name;
@@ -59,4 +66,11 @@ public class Column {
         this.shortlived = shortlived;
     }
 
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
 }
