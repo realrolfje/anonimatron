@@ -1,11 +1,11 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
 import com.rolfje.anonimatron.synonyms.NumberSynonym;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Generates valid Dutch "Burger Service Nummer" or "SOFI Nummer",a social
@@ -25,62 +25,61 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
 	}
 
 	@Override
-	public Synonym anonymize(Object from, int size) {
+	public Synonym anonymize(Object from, int size, boolean isShortLived) {
 		if (size < LENGTH) {
 			throw new UnsupportedOperationException(
 					"Cannot generate a BSN that fits in a " + size + " character string. Must be " + LENGTH
 							+ " characters or more.");
 		}
 
-		Synonym result;
+		String newBSN = generateNonIdenticalBSN(from);
 
 		if (from instanceof Number) {
-			result = new NumberSynonym();
-			((NumberSynonym) result).setFrom((Number) from);
-			((NumberSynonym) result).setType(getType());
-
+			return new NumberSynonym(
+					getType(),
+					(Number) from,
+					asNumber(newBSN, (Number) from),
+					isShortLived);
 		} else if (from instanceof String) {
-			result = new StringSynonym();
-			((StringSynonym) result).setFrom(from);
-			((StringSynonym) result).setType(getType());
-
+			return new StringSynonym(
+					getType(),
+					from.toString(),
+					newBSN,
+					isShortLived);
 		} else {
 			throw new IllegalArgumentException(
 					"Type " + from.getClass().getSimpleName() + " is not supported for " + this.getType());
-
 		}
-
-		String value;
-		String originalValue = from.toString();
-
-		do {
-			// Never generate identical number
-			value = generateBSN(LENGTH);
-		} while (originalValue.equals(value));
-
-		if (result instanceof NumberSynonym) {
-			((NumberSynonym) result).setTo(asNumber(value, (Number) from));
-
-		} else {
-			((StringSynonym) result).setTo(value);
-
-		}
-
-		return result;
 	}
+
 
 	private Number asNumber(String value, Number from) {
 		if (from instanceof Integer) {
 			return Integer.parseInt(value);
-		} else if (from instanceof Long) {
+		}
+		else if (from instanceof Long) {
 			return Long.parseLong(value);
-		} else if (from instanceof BigDecimal) {
+		}
+		else if (from instanceof BigDecimal) {
 			return new BigDecimal(value);
-		} else if (from instanceof BigInteger) {
+		}
+		else if (from instanceof BigInteger) {
 			return new BigInteger(value);
-		} else {
+		}
+		else {
 			throw new IllegalArgumentException(from.getClass().getSimpleName() + " is not supported for " + this.getType());
 		}
+	}
+
+	String generateNonIdenticalBSN(Object from) {
+		String newBSN;
+		String oldBSN = from.toString();
+
+		do {
+			// Never generate identical number
+			newBSN = generateBSN(LENGTH);
+		} while (oldBSN.equals(newBSN));
+		return newBSN;
 	}
 
 	String generateBSN(int numberOfDigits) {

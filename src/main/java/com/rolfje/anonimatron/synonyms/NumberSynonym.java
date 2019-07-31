@@ -7,14 +7,21 @@ public class NumberSynonym implements Synonym {
 	private String type;
 	private Number from;
 	private Number to;
+	private boolean shortLived = false;
 
 	public NumberSynonym() {
 	}
 
-	public NumberSynonym(String type, Number from, Number to) {
+	public NumberSynonym(String type, Number from, Number to, boolean shortLived) {
 		this.type = type;
 		this.from = from;
 		this.to = to;
+		this.shortLived = shortLived;
+	}
+
+	@Override
+	public boolean isShortLived() {
+		return shortLived;
 	}
 
 	@Override
@@ -32,6 +39,7 @@ public class NumberSynonym implements Synonym {
 		return to;
 	}
 
+
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -42,6 +50,10 @@ public class NumberSynonym implements Synonym {
 
 	public void setFrom(Number from) {
 		this.from = from;
+	}
+
+	public void setShortLived(boolean shortLived) {
+		this.shortLived = shortLived;
 	}
 
 	@Override

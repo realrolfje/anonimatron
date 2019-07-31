@@ -1,17 +1,14 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import com.rolfje.anonimatron.synonyms.Synonym;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.junit.Test;
-
-import com.rolfje.anonimatron.synonyms.Synonym;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class DutchBSNAnononymizerTest {
 
@@ -23,7 +20,7 @@ public class DutchBSNAnononymizerTest {
 		for (int i = 0; i < 1000; i++) {
 			String from = bsnAnonymizer.generateBSN(9);
 
-			Synonym synonym = bsnAnonymizer.anonymize(from, 12);
+			Synonym synonym = bsnAnonymizer.anonymize(from, 12, false);
 			assertThat(from, is(synonym.getFrom()));
 			validate(synonym);
 		}
@@ -38,25 +35,25 @@ public class DutchBSNAnononymizerTest {
 
 		// Validate Integer
 		number = Integer.parseInt(original);
-		synonym = bsnAnonymizer.anonymize(number, 9);
+		synonym = bsnAnonymizer.anonymize(number, 9, false);
 		assertThat(number, is(synonym.getFrom()));
 		validate(synonym);
 
 		// Validate Long
 		number = Long.parseLong(original);
-		synonym = bsnAnonymizer.anonymize(number, 10);
+		synonym = bsnAnonymizer.anonymize(number, 10, false);
 		assertThat(number, is(synonym.getFrom()));
 		validate(synonym);
 
 		// Validate BigDecimal
 		number = new BigDecimal(original);
-		synonym = bsnAnonymizer.anonymize(number, 12);
+		synonym = bsnAnonymizer.anonymize(number, 12, false);
 		assertThat(number, is(synonym.getFrom()));
 		validate(synonym);
 
 		// Validate BigInteger
 		number = new BigInteger(original);
-		synonym = bsnAnonymizer.anonymize(number, 12);
+		synonym = bsnAnonymizer.anonymize(number, 12, false);
 		assertThat(number, is(synonym.getFrom()));
 		validate(synonym);
 
