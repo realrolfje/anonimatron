@@ -17,13 +17,13 @@
 		<field name="salt" type="string">
 			<bind-xml name="salt" node="attribute" />
 		</field>
-		<field name="jdbcurl" type="string">
+		<field name="jdbcurl" type="string" required="false">
 			<bind-xml name="jdbcurl" node="attribute" />
 		</field>
-		<field name="userid" type="string">
+		<field name="userid" type="string" required="false">
 			<bind-xml name="userid" node="attribute" />
 		</field>
-		<field name="password" type="string">
+		<field name="password" type="string" required="false">
 			<bind-xml name="password" node="attribute" />
 		</field>
 
