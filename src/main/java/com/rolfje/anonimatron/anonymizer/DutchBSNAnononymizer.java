@@ -52,7 +52,6 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
 		}
 	}
 
-
 	private Number asNumber(String value, Number from) {
 		if (from instanceof Integer) {
 			return Integer.parseInt(value);
@@ -89,9 +88,12 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
 		do {
 			bsnnumber = generate11ProofNumber(numberOfDigits);
 
+			// See https://nl.wikipedia.org/wiki/Burgerservicenummer
 			// BSN cannot start with 3 zeroes, left digit digit cannot be > 3
+			// When the number of digits is 8, the it may be pre-padded with 0 to make it
+			// 9 digits long.
 		} while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
 
-		return digitsAsNumber(bsnnumber);
+		return digitsAsString(bsnnumber);
 	}
 }

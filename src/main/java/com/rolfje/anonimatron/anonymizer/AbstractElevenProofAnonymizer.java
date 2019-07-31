@@ -9,13 +9,20 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 		return numberAsDigits(intValue, digits.length);
 	}
 
+
+	@Deprecated
 	protected String digitsAsNumber(int[] digits) {
+		return digitsAsString(digits);
+	}
+
+	protected String digitsAsString(int[] digits) {
 		String result = "";
 		for (int i : digits) {
 			result += String.valueOf(i);
 		}
 		return result;
 	}
+
 
 	private int[] numberAsDigits(int number, int digits) {
 		String s = String.valueOf(number);

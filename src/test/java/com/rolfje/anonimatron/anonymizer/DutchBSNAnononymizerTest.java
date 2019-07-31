@@ -1,6 +1,8 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -14,50 +16,37 @@ public class DutchBSNAnononymizerTest {
 
 	private DutchBSNAnononymizer bsnAnonymizer = new DutchBSNAnononymizer();
 
+	private String original;
+	boolean shortlived = true;
+
+
+	@Before
+	public void setUp() throws Exception {
+		original = bsnAnonymizer.generateBSN(9);
+	}
+
 	@Test
-	public void testAnonymize() {
+	public void testAnonymizeNumbers() {
+		Object[] originals = {
+				Integer.valueOf(original),
+				Long.valueOf(original),
+				new BigDecimal(original),
+				new Integer(original)
+		};
 
-		for (int i = 0; i < 1000; i++) {
-			String from = bsnAnonymizer.generateBSN(9);
-
-			Synonym synonym = bsnAnonymizer.anonymize(from, 12, false);
-			assertThat(from, is(synonym.getFrom()));
-			validate(synonym);
+		for (Object originalAsNumber : originals) {
+			Synonym synonym = bsnAnonymizer.anonymize(originalAsNumber, 9, shortlived);
+			assertThat(originalAsNumber, is(synonym.getFrom()));
+			assertThat(original, not(is(synonym.getTo())));
+			assertThat(synonym.getTo(), is(instanceOf(originalAsNumber.getClass())));
+			assertThat(
+					"BSN " + synonym.getTo().toString() + " is invalid",
+					isValidBSN(synonym.getTo().toString()), is(true)
+			);
+			assertThat(synonym.isShortLived(), is(shortlived));
 		}
 	}
 
-	@Test
-	public void testAnonymizeNumber() {
-		Number number;
-		Synonym synonym;
-
-		String original = bsnAnonymizer.generateBSN(9);
-
-		// Validate Integer
-		number = Integer.parseInt(original);
-		synonym = bsnAnonymizer.anonymize(number, 9, false);
-		assertThat(number, is(synonym.getFrom()));
-		validate(synonym);
-
-		// Validate Long
-		number = Long.parseLong(original);
-		synonym = bsnAnonymizer.anonymize(number, 10, false);
-		assertThat(number, is(synonym.getFrom()));
-		validate(synonym);
-
-		// Validate BigDecimal
-		number = new BigDecimal(original);
-		synonym = bsnAnonymizer.anonymize(number, 12, false);
-		assertThat(number, is(synonym.getFrom()));
-		validate(synonym);
-
-		// Validate BigInteger
-		number = new BigInteger(original);
-		synonym = bsnAnonymizer.anonymize(number, 12, false);
-		assertThat(number, is(synonym.getFrom()));
-		validate(synonym);
-
-	}
 
 	@Test
 	public void testLength() throws Exception {
@@ -99,25 +88,31 @@ public class DutchBSNAnononymizerTest {
 			stringValue = value.toString();
 		}
 
-		assertThat("BSN " + stringValue + " is invalid", isValidBSN(stringValue), is(true));
 	}
 
 	private boolean isValidBSN(String burgerServiceNummer) {
-		if (burgerServiceNummer == null || burgerServiceNummer.length() != 9) {
+		// Number must be at least 7 at maximum 9 characters in length,
+		if (burgerServiceNummer == null
+				|| burgerServiceNummer.length() > 9
+				|| burgerServiceNummer.length() < 7) {
 			return false;
 		}
 
-		int[] digits = new int[9];
-		for (int i = 0; i < digits.length; i++) {
-			digits[i] = Integer.valueOf("" + burgerServiceNummer.charAt(i));
+		// Numbers shorter than 9 characters are padded with zeroes.
+		burgerServiceNummer = StringUtils.leftPad(burgerServiceNummer, 9, "0");
+
+		// The leftmost character dan not be higher than 3
+		if (burgerServiceNummer.charAt(0) > '3') {
+			return false;
 		}
 
+		// Check the digits to be 11 Proof
 		int check = 0;
-		for (int i = 0; i < digits.length; i++) {
-			check += digits[i] * (digits.length - i);
+		for (int i = 0; i < burgerServiceNummer.length(); i++) {
+			int digit = Integer.valueOf("" + burgerServiceNummer.charAt(i));
+			check += digit * (burgerServiceNummer.length() - i);
 		}
 
 		return (check % 11) == 0;
 	}
-
 }
