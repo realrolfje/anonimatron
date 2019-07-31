@@ -37,7 +37,7 @@ public class DutchBSNAnononymizerTest {
 		for (Object originalAsNumber : originals) {
 			Synonym synonym = bsnAnonymizer.anonymize(originalAsNumber, 9, shortlived);
 			assertThat(originalAsNumber, is(synonym.getFrom()));
-			assertThat(original, not(is(synonym.getTo())));
+			assertThat(originalAsNumber, not(is(synonym.getTo())));
 			assertThat(synonym.getTo(), is(instanceOf(originalAsNumber.getClass())));
 			assertThat(
 					"BSN " + synonym.getTo().toString() + " is invalid",
