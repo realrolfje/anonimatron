@@ -40,16 +40,12 @@ public class Anonimatron {
 			CommandLine commandLine = new CommandLine(args);
 
 			if (commandLine.getConfigfileName() != null) {
-				anonymize(
-						commandLine.getJdbcurl(),
-						commandLine.getUserid(),
-						commandLine.getPassword(),
-						commandLine.getConfigfileName(),
-						commandLine.getSynonymfileName(),
-						commandLine.isDryrun());
-			}
-			else if (commandLine.isConfigExample()) {
+				Configuration config = getConfiguration(commandLine);
+				anonymize(config, commandLine.getSynonymfileName());
+
+			} else if (commandLine.isConfigExample()) {
 				printDemoConfiguration();
+
 			} else {
 				CommandLine.printHelp();
 			}
@@ -59,23 +55,20 @@ public class Anonimatron {
 		}
 	}
 
-	private static void anonymize(String jdbcurl, String userid, String password, String configFile, String synonymFile, boolean dryrun)
-			throws Exception {
-
+	private static Configuration getConfiguration(CommandLine commandLine) throws Exception {
 		// Load configuration
-		Configuration config = Configuration.readFromFile(configFile);
-		if (jdbcurl != null) {
-			config.setJdbcurl(jdbcurl);
+		Configuration config = Configuration.readFromFile(commandLine.getConfigfileName());
+		if (commandLine.getJdbcurl() != null) {
+			config.setJdbcurl(commandLine.getJdbcurl());
 		}
-		if (userid != null) {
-			config.setUserid(userid);
+		if (commandLine.getUserid() != null) {
+			config.setUserid(commandLine.getUserid());
 		}
-		if (password != null) {
-			config.setPassword(password);
+		if (commandLine.getPassword() != null) {
+			config.setPassword(commandLine.getPassword());
 		}
-		config.setDryrun(dryrun);
-
-		anonymize(config, synonymFile);
+		config.setDryrun(commandLine.isDryrun());
+		return config;
 	}
 
 	private static void anonymize(Configuration config, String synonymFile) throws Exception {
