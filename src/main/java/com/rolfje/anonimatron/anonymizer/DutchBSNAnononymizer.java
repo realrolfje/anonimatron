@@ -1,7 +1,11 @@
 package com.rolfje.anonimatron.anonymizer;
 
+import com.rolfje.anonimatron.synonyms.NumberSynonym;
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * Generates valid Dutch "Burger Service Nummer" or "SOFI Nummer",a social
@@ -13,52 +17,83 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * See http://nl.wikipedia.org/wiki/Rekeningnummer
  */
 public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
-    private static int LENGTH = 9;
+	private static int LENGTH = 9;
 
-    @Override
-    public String getType() {
-        return "BURGERSERVICENUMMER";
-    }
+	@Override
+	public String getType() {
+		return "BURGERSERVICENUMMER";
+	}
 
-    @Override
-    public Synonym anonymize(Object from, int size, boolean shortlived) {
-        if (size < LENGTH) {
-            throw new UnsupportedOperationException(
-                    "Can not generate a BSN that fits in a "
-                            + size
-                            + " character string. Must be " + LENGTH + " characters or more.");
-        }
+	@Override
+	public Synonym anonymize(Object from, int size, boolean isShortLived) {
+		if (size < LENGTH) {
+			throw new UnsupportedOperationException(
+					"Cannot generate a BSN that fits in a " + size + " character string. Must be " + LENGTH
+							+ " characters or more.");
+		}
 
-        String fromString = (String) from;
-        String toString = fromString;
+		String newBSN = generateNonIdenticalBSN(from);
 
-        do {
-            // Never generate identical number
-            toString = generateBSN(LENGTH);
-        } while (fromString.equals(toString));
+		if (from instanceof Number) {
+			return new NumberSynonym(
+					getType(),
+					(Number) from,
+					asNumber(newBSN, (Number) from),
+					isShortLived);
+		} else if (from instanceof String) {
+			return new StringSynonym(
+					getType(),
+					from.toString(),
+					newBSN,
+					isShortLived);
+		} else {
+			throw new IllegalArgumentException(
+					"Type " + from.getClass().getSimpleName() + " is not supported for " + this.getType());
+		}
+	}
 
+	private Number asNumber(String value, Number from) {
+		if (from instanceof Integer) {
+			return Integer.parseInt(value);
+		}
+		else if (from instanceof Long) {
+			return Long.parseLong(value);
+		}
+		else if (from instanceof BigDecimal) {
+			return new BigDecimal(value);
+		}
+		else if (from instanceof BigInteger) {
+			return new BigInteger(value);
+		}
+		else {
+			throw new IllegalArgumentException(from.getClass().getSimpleName() + " is not supported for " + this.getType());
+		}
+	}
 
-        return new StringSynonym(
-                getType(),
-                fromString,
-                toString,
-                shortlived
-        );
-    }
+	String generateNonIdenticalBSN(Object from) {
+		String newBSN;
+		String oldBSN = from.toString();
 
-    String generateBSN(int numberOfDigits) {
-        // Generate random BSN number
-        int[] bsnnumber;
+		do {
+			// Never generate identical number
+			newBSN = generateBSN(LENGTH);
+		} while (oldBSN.equals(newBSN));
+		return newBSN;
+	}
 
-        do {
-            bsnnumber = generate11ProofNumber(numberOfDigits);
+	String generateBSN(int numberOfDigits) {
+		// Generate random BSN number
+		int[] bsnnumber;
 
-            // SOFI numbers can not start with 3 zeroes, left digit digit van
-            // not be >3
-        } while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
+		do {
+			bsnnumber = generate11ProofNumber(numberOfDigits);
 
-        // Return the BSN
-        String result = digitsAsNumber(bsnnumber);
-        return result;
-    }
+			// See https://nl.wikipedia.org/wiki/Burgerservicenummer
+			// BSN cannot start with 3 zeroes, left digit digit cannot be > 3
+			// When the number of digits is 8, the it may be pre-padded with 0 to make it
+			// 9 digits long.
+		} while ((bsnnumber[0] > 3) && (0 != (bsnnumber[0] + bsnnumber[1] + bsnnumber[2])));
+
+		return digitsAsString(bsnnumber);
+	}
 }
