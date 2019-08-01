@@ -20,7 +20,10 @@ public class NumberAnonymizerTest {
                 Integer.valueOf(r.nextInt()),
                 Long.valueOf(r.nextLong()),
                 new BigDecimal(r.nextDouble()),
-                new Integer(r.nextInt())
+                new Integer(r.nextInt()),
+                new Double(r.nextDouble()),
+                new Float(r.nextFloat()),
+                Short.valueOf((short) r.nextInt(Short.MAX_VALUE))
         };
 
         for (Object originalAsNumber : originals) {

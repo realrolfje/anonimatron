@@ -26,8 +26,18 @@ public class NumberAnonymizer implements Anonymizer {
             return null;
         } else if (from instanceof Integer) {
             return new Integer(r.nextInt());
+        } else if (from instanceof Byte) {
+            byte[] bytes = {0};
+            r.nextBytes(bytes);
+            return new Byte(bytes[0]);
+        } else if (from instanceof Double) {
+            return new Double(r.nextDouble());
+        } else if (from instanceof Float) {
+            return new Float(r.nextFloat());
         } else if (from instanceof Long) {
             return new Long(r.nextLong());
+        } else if (from instanceof Short) {
+            return Short.valueOf((short) r.nextInt(Short.MAX_VALUE));
         } else if (from instanceof BigDecimal) {
             return new BigDecimal(r.nextGaussian());
         } else if (from instanceof BigInteger) {
