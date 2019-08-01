@@ -1,0 +1,8 @@
+title: Anonimatron
+description: "Welcome to the new home of anonimatron, the free, extendable, open source database anonymization tool. "
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
