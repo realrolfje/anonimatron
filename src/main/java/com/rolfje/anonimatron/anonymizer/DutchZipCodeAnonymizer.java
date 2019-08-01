@@ -30,6 +30,8 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 
 	private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String CHARS_WITHOUT_ADS = "BCEFGHIJKLMNOPQRTUVWXYZ";
+	Random random = new Random();
+
 
 	@Override
 	public String getType() {
@@ -45,16 +47,12 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 	}
 
 	String buildZipCode() {
-		Random random = new Random();
-
 		// generate a random integer from 0000 to 8999, then add 1000
 		Integer pcNum = random.nextInt(9000) + 1000;
 		return pcNum + buildPcAlpha();
 	}
 
 	private String buildPcAlpha() {
-		Random random = new Random();
-
 		char a1 = getCharacter(random, CHARS);
 		char a2;
 

@@ -69,27 +69,6 @@ public class DutchBSNAnononymizerTest {
 		}
 	}
 
-	private void validate(Synonym synonym) {
-		assertThat(synonym.getFrom(), is(not(synonym.getTo())));
-		assertThat(synonym.getType(), notNullValue());
-
-		Object value = synonym.getTo();
-		String stringValue;
-
-		if (value instanceof Integer) {
-			stringValue = String.format("%09d", (Integer) value);
-		} else if (value instanceof Long) {
-			stringValue = String.format("%09d", (Long) value);
-		} else if (value instanceof BigInteger) {
-			stringValue = String.format("%09d", ((BigInteger) value).longValue());
-		} else if (value instanceof BigDecimal) {
-			stringValue = String.format("%09d", ((BigDecimal) value).longValue());
-		} else {
-			stringValue = value.toString();
-		}
-
-	}
-
 	private boolean isValidBSN(String burgerServiceNummer) {
 		// Number must be at least 7 at maximum 9 characters in length,
 		if (burgerServiceNummer == null
