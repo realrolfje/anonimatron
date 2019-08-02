@@ -1,2 +1,6 @@
 .idea
 /anonimatron.iml
+/_site
+/.bundle
+/ruby
+/Gemfile.lock
