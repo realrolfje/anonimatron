@@ -4,21 +4,21 @@
 @import "{{ site.theme }}";
 
 .btn.github {
-    background-image: url(/images/octocat-icon.png);
+    background-image: url(images/octocat-icon.png);
     background-repeat: no-repeat;
     background-position: left;
     padding-left: 30px;
 }
 
 .btn.zip {
-    background-image: url(/images/zip-icon.png);
+    background-image: url(images/zip-icon.png);
     background-repeat: no-repeat;
     background-position: left;
     padding-left: 33px;
 }
 
 .logo {
-    background-image: url(/images/anonimatron-logo-a.png);
+    background-image: url(images/anonimatron-logo-a.png);
     background-repeat: no-repeat;
     background-position: top right;
     background-size: 100px;
