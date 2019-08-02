@@ -1,8 +1,7 @@
+&nbsp;
 # GDPR compliant testing.
 
 Did you ever have that problem where you needed "production data" to find a bug or do performance tests outside of the client’s production environment? Are you worried about protecting that data? Do you add screenshots to your bug reports? Can you live with surrogate data with the same properties? Then this tool is for you.
-
-
 
 # Features
 
