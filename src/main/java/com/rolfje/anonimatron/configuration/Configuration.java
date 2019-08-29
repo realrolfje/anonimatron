@@ -1,10 +1,10 @@
 package com.rolfje.anonimatron.configuration;
 
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.CharacterStringAnonymizer;
 import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.file.CsvFileReader;
 import com.rolfje.anonimatron.file.CsvFileWriter;
-import com.rolfje.anonimatron.synonyms.StringSynonym;
 import org.apache.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
@@ -14,6 +14,7 @@ import org.exolab.castor.xml.Unmarshaller;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class Configuration {
 
 		StringWriter stringWriter = new StringWriter();
 		Marshaller marshaller = new Marshaller(stringWriter);
-		// I have no idea why this does not work, so I added a castor.propeties
+		// I have no idea why this does not work, so I added a castor.properties
 		// file in the root as workaround.
 		// marshaller.setProperty("org.exolab.castor.indent", "true");
 		marshaller.setMapping(mapping);
@@ -263,11 +264,26 @@ public class Configuration {
 		}
 
 		// Add a demo configuration for a shortlived (non-stored) column.
-		Column c = new Column();
-		c.setName("A_SHORTLIVED_COLUMN");
-		c.setType(new StringAnonymizer().getType());
-		c.setShortlived(true);
-		columns.add(c);
+		{
+			Column c = new Column();
+			c.setName("A_SHORTLIVED_COLUMN");
+			c.setType(new StringAnonymizer().getType());
+			c.setShortlived(true);
+			columns.add(c);
+		}
+
+		// Add a demo configuration for a column with configuration parameters
+		{
+			Column c = new Column();
+			c.setName("A_PARAMETERIZED_COLUMN");
+			c.setType(new CharacterStringAnonymizer().getType());
+			c.setParameters(
+					new HashMap<String, String>(){{
+						put(CharacterStringAnonymizer.PARAMETER, "ABC123!*&");
+					}}
+			);
+			columns.add(c);
+		}
 
 
 		return columns;

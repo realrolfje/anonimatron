@@ -1,34 +1,25 @@
 package com.rolfje.anonimatron;
 
+import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.Hasher;
+import com.rolfje.anonimatron.anonymizer.SynonymCache;
+import com.rolfje.anonimatron.commandline.CommandLine;
+import com.rolfje.anonimatron.configuration.Configuration;
+import com.rolfje.anonimatron.file.FileAnonymizerService;
+import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
+import org.apache.commons.cli.UnrecognizedOptionException;
+
 import java.io.*;
-import java.sql.SQLException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.rolfje.anonimatron.anonymizer.Hasher;
-import com.rolfje.anonimatron.anonymizer.SynonymCache;
-import com.rolfje.anonimatron.file.FileAnonymizerService;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.UnrecognizedOptionException;
-
-import com.rolfje.anonimatron.anonymizer.AnonymizerService;
-import com.rolfje.anonimatron.configuration.Configuration;
-import com.rolfje.anonimatron.jdbc.JdbcAnonymizerService;
-import org.castor.core.util.StringUtil;
 
 /**
  * Start of a beautiful anonymized new world.
  *
  */
 public class Anonimatron {
-	public static String VERSION="UNKNOWN";
-	private static final String OPT_CONFIGFILE = "config";
-	private static final String OPT_SYNONYMFILE = "synonyms";
-	private static final String OPT_DRYRUN = "dryrun";
+	public static String VERSION = "UNKNOWN";
 
 	static {
 		try {
@@ -45,42 +36,42 @@ public class Anonimatron {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Options options = new Options();
-		options.addOption(OPT_CONFIGFILE, true,
-				"The XML Configuration file describing what to anonymize.");
-		options.addOption(OPT_SYNONYMFILE, true,
-				"The XML file to read/write synonyms to. "
-						+ "If the file does not exist it will be created.");
-		options.addOption("configexample", false,
-				"Prints out a demo/template configuration file.");
-		options.addOption(OPT_DRYRUN, false, "Do not make changes to the database.");
-
-		BasicParser parser = new BasicParser();
-
 		try {
-			CommandLine commandline = parser.parse(options, args);
-			String configfileName = commandline.getOptionValue(OPT_CONFIGFILE);
-			String synonymfileName = commandline.getOptionValue(OPT_SYNONYMFILE);
-			boolean dryrun = commandline.hasOption(OPT_DRYRUN);
+			CommandLine commandLine = new CommandLine(args);
 
-			if (configfileName != null) {
-				anonymize(configfileName, synonymfileName, dryrun);
-			} else if (commandline.hasOption("configexample")) {
+			if (commandLine.getConfigfileName() != null) {
+				Configuration config = getConfiguration(commandLine);
+				anonymize(config, commandLine.getSynonymfileName());
+
+			} else if (commandLine.isConfigExample()) {
 				printDemoConfiguration();
+
 			} else {
-				printHelp(options);
+				CommandLine.printHelp();
 			}
 		} catch (UnrecognizedOptionException e) {
 			System.err.println(e.getMessage());
-			printHelp(options);
+			CommandLine.printHelp();
 		}
 	}
 
-	private static void anonymize(String configFile, String synonymFile, boolean dryrun)
-			throws Exception, SQLException {
-		Configuration config = Configuration.readFromFile(configFile);
-		config.setDryrun(dryrun);
+	private static Configuration getConfiguration(CommandLine commandLine) throws Exception {
+		// Load configuration
+		Configuration config = Configuration.readFromFile(commandLine.getConfigfileName());
+		if (commandLine.getJdbcurl() != null) {
+			config.setJdbcurl(commandLine.getJdbcurl());
+		}
+		if (commandLine.getUserid() != null) {
+			config.setUserid(commandLine.getUserid());
+		}
+		if (commandLine.getPassword() != null) {
+			config.setPassword(commandLine.getPassword());
+		}
+		config.setDryrun(commandLine.isDryrun());
+		return config;
+	}
 
+	private static void anonymize(Configuration config, String synonymFile) throws Exception {
 		// Load Synonyms from disk if present.
 		SynonymCache synonymCache = getSynonymCache(synonymFile);
 
@@ -128,23 +119,6 @@ public class Anonimatron {
 		}
 
 		return synonymCache;
-	}
-
-	private static void printHelp(Options options) {
-		System.out
-				.println("\nThis is Anonimatron "+VERSION+", a command line tool to consistently \n"
-						+ "replace live data in your database or data files with data data which \n"
-						+ "can not easily be traced back to the original data.\n"
-						+ "You can use this tool to transform a dump from a production \n"
-						+ "database into a large representative dataset you can \n"
-						+ "share with your development and test team.\n"
-						+ "The tool can also read files with sensitive data and write\n"
-						+ "consistently anonymized versions of those files to a different location.\n"
-						+ "Use the -configexample command line option to get an idea of\n"
-						+ "what your configuration file needs to look like.\n\n");
-
-		HelpFormatter helpFormatter = new HelpFormatter();
-		helpFormatter.printHelp("java -jar anonimatron.jar", options);
 	}
 
 	private static void printDemoConfiguration() throws Exception {

@@ -1,5 +1,41 @@
-*** Version 1.7
+*** Version 1.11
+- Add numeric BSN support, closes issue #31
+- Ability to provide database connection parameters through
+  the command line, closes issue #53
+- Ability to pass parameters to Anonymizers through the
+  column configuration. Closes issue #54
+- Bumped up the versions of some maven plugins and dependencies
+  thanks to dependabot.
 
+*** Version 1.10.1
+- Implements (rudamentary) support for MSSQL Schemas
+
+*** Version 1.10
+- Warning: Breaks code which relies on 1.9.3 and earlier as a library.
+- New feature: Short lived synonyms. These values are not stored,
+  and not consistent between runs. Used to fill unimportant fields
+  and reduce the number of stored synonyms. Use with care.
+
+*** Version 1.9.3
+- Anonimatron now available as library in maven central, see
+  https://search.maven.org/search?q=g:com.rolfje.anonimatron
+
+*** Version 1.9.2
+- New Synonym: HashedSynonym, where the "from" is hashed so that your
+  synonym file no longer contains source data.
+
+*** Version 1.9
+- New feature: Anonymize files.
+- Bumped to Java 1.7
+- Implemented suggestions, bugfixes and improvements.
+
+*** Version 1.8
+- Moved to Github
+- Added release scripts
+- Changed versioning to support the new release scripts
+- Added SyBase drivers
+
+*** Version 1.7
 - Implemented "Dryrun", feature request #3.
   There is now a new command line option "-dryrun" which will make
   Anonimatron go through all it's paces, but without any writes to your

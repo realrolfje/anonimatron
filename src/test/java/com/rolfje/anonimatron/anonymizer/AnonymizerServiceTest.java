@@ -6,13 +6,19 @@ import junit.framework.TestCase;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnonymizerServiceTest extends TestCase {
     AnonymizerService anonService;
 
     protected void setUp() throws Exception {
         anonService = new AnonymizerService();
+        anonService.registerAnonymizers(
+                Collections.singletonList(
+                        FixedValueAnonymizer.class.getName()));
     }
 
     public void testStringAnonymizer() throws Exception {
@@ -51,10 +57,24 @@ public class AnonymizerServiceTest extends TestCase {
         testAnonymizer(fromList, type, "DATE");
     }
 
+    public void testParameterizedAnonymizer() {
+        List<Object> fromList = new ArrayList<Object>();
+        fromList.add("String 1");
+        fromList.add("String 2");
+        fromList.add("String 3");
+
+        String type = new FixedValueAnonymizer().getType();
+
+        testAnonymizer(fromList, type, type);
+    }
+
     private void testAnonymizer(List<Object> fromList, String lookupType, String synonymType) {
         List<Object> toList = new ArrayList<Object>();
 
-        Column column = new Column("Testcolumn", lookupType, 100);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("value", "testValue");
+
+        Column column = new Column("Testcolumn", lookupType, 100, false, parameters);
 
         // First pass
         for (Object from : fromList) {
