@@ -148,7 +148,7 @@ public class FileAnonymizerService {
 					outFile = new File(outFile, inFile.getName());
 				}
 				else if (outFile.exists()) {
-					throw new RuntimeException("Output file exists: " + inFile.getAbsolutePath());
+					throw new RuntimeException("Output file exists: " + outFile.getAbsolutePath());
 				}
 
 				DataFile dataFile = new DataFile();
