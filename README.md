@@ -1,4 +1,4 @@
-# Anonimatron
+Ω# Anonimatron
 
 No patience? Visit the [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/ "Anonimatron"), download the latest version, unzip it and run `anonimatron.sh` or `anonimatron.bat`. You can also include anonimatron in your own project as a library, see [![Latest version on Maven Central](https://img.shields.io/maven-central/v/com.rolfje.anonimatron/anonimatron.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.rolfje.anonimatron%22%20AND%20a:%22anonimatron%22).
 
@@ -114,7 +114,7 @@ Let’s pretend that this is a copy of a production database, and you want to de
 
 ### Installing Anonimatron
 
-To anonymize your data, [download Anonimatron](https://github.com/realrolfje/anonimatron/zipball/master) and unzip it in a directory of your choice. You should find an “anonimatron.sh” and “anonimatron.bat” file there. Depending on your system, run it without arguments. If you have java installed on your system you should see something like this:
+To anonymize your data, [download Anonimatron](https://github.com/realrolfje/anonimatron/releases/latest) and unzip it in a directory of your choice. You should find an “anonimatron.sh” and “anonimatron.bat” file there. Depending on your system, run it without arguments. If you have java installed on your system you should see something like this:
 
 ```
 $ ./anonimatron.sh
