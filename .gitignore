@@ -3,3 +3,7 @@
 anonimatron.log
 anonimatron.iml
 target
+/docs/ruby/
+/docs/.bundle/
+/docs/Gemfile.lock
+/docs/.env
