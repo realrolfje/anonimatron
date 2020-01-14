@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+
+# Two lines below are a workaround for an octokit/faraday issue,
+# see https://github.com/github/pages-gem/issues/665
+gem "faraday", "~> 0.17"
+gem "octokit", github: "octokit/octokit.rb", ref: "ae5838a"
+
+gem 'dotenv-rails', groups: [:development, :test]
+gem 'github-pages', group: :jekyll_plugins
