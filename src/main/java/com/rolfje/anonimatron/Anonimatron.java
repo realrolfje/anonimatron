@@ -20,6 +20,7 @@ import java.util.Set;
  */
 public class Anonimatron {
 	public static String VERSION = "UNKNOWN";
+	private static String format;
 
 	static {
 		try {
@@ -85,11 +86,11 @@ public class Anonimatron {
 		AnonymizerService anonymizerService = new AnonymizerService(synonymCache);
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
-		if (config.getTables() != null && config.getTables().size() > 0) {
+		if (config.getTables() != null && !config.getTables().isEmpty()) {
 			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
 			jdbcService.anonymize();
 
-		} else if (config.getFiles() != null && config.getFiles().size() > 0) {
+		} else if (config.getFiles() != null && !config.getFiles().isEmpty()) {
 			FileAnonymizerService fileService = new FileAnonymizerService(config, anonymizerService);
 			fileService.anonymize();
 
@@ -126,13 +127,13 @@ public class Anonimatron {
 		JdbcAnonymizerService s = new JdbcAnonymizerService();
 
 		Map<String, String> supportedJdbc = s.getSupportedDriverURLs();
-		int col1width = getTextWidth(supportedJdbc.keySet()) + 2;
-		System.out.println(String.format("%1$-" + col1width + "s",
-				"Jdbc URL format") + "By Driver");
+		int col1width = getTextWidth(supportedJdbc.keySet());
+
+		String twoColumnFormat = "%-" + col1width + "s %s";
+		System.out.println(String.format(twoColumnFormat, "Jdbc URL format", "By Driver"));
+
 		for (Entry<String, String> entry : supportedJdbc.entrySet()) {
-			String col1 = String.format("%1$-" + col1width + "s",
-					entry.getKey());
-			System.out.println(col1 + entry.getValue());
+			System.out.println(String.format(twoColumnFormat, entry.getKey(), entry.getValue()));
 		}
 
 		System.out

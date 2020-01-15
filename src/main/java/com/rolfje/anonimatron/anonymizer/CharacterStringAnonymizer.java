@@ -16,6 +16,8 @@ public class CharacterStringAnonymizer implements Anonymizer {
 
 	protected String CHARS;
 
+	protected static final Random RANDOM = new Random();
+
 	public CharacterStringAnonymizer() {
 		CHARS = getDefaultCharacterString();
 	}
@@ -44,12 +46,11 @@ public class CharacterStringAnonymizer implements Anonymizer {
 
 	private Synonym anonymize(Object from, int size, boolean shortlived, String characters) {
 		String fromString = from.toString();
-		Random r = new Random();
 
 		int length = fromString.length();
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
-			sb.append(characters.charAt(r.nextInt(characters.length())));
+			sb.append(characters.charAt(RANDOM.nextInt(characters.length())));
 		}
 
 		String to = sb.toString();

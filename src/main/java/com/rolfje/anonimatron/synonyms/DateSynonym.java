@@ -48,7 +48,7 @@ public class DateSynonym implements Synonym {
 
 	@Override
 	public boolean equals(Object obj) {
-		return this.hashCode() == obj.hashCode();
+		return obj != null && this.hashCode() == obj.hashCode();
 	}
 
 	@Override

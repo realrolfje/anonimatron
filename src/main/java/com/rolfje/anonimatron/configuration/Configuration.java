@@ -277,11 +277,11 @@ public class Configuration {
 			Column c = new Column();
 			c.setName("A_PARAMETERIZED_COLUMN");
 			c.setType(new CharacterStringAnonymizer().getType());
-			c.setParameters(
-					new HashMap<String, String>(){{
-						put(CharacterStringAnonymizer.PARAMETER, "ABC123!*&");
-					}}
-			);
+
+			HashMap<String, String> parameters = new HashMap<String, String>();
+			parameters.put(CharacterStringAnonymizer.PARAMETER, "ABC123!*&");
+			c.setParameters(parameters);
+
 			columns.add(c);
 		}
 
