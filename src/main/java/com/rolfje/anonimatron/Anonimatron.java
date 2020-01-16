@@ -20,7 +20,6 @@ import java.util.Set;
  */
 public class Anonimatron {
 	public static String VERSION = "UNKNOWN";
-	private static String format;
 
 	static {
 		try {
