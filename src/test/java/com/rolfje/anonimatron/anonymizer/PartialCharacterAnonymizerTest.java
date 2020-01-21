@@ -5,9 +5,12 @@ import junit.framework.TestCase;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-import static com.rolfje.anonimatron.anonymizer.PartialCharacterAnonymizer.NUMBER_OF_SKIPPED_CHARACTERS;
+/**
+ * Tests for {@link PartialCharacterAnonymizer}.
+ *
+ * @author Bartłomiej Komendarczuk
+ */
 
 public class PartialCharacterAnonymizerTest extends TestCase {
 
@@ -19,28 +22,35 @@ public class PartialCharacterAnonymizerTest extends TestCase {
         partialCharacterAnonymizer = new PartialCharacterAnonymizer();
     }
 
-    public void shouldAnonymizeCharactersAfterSkippingCharacters() {
-        String from = "TEST1";
-        String characters = "#$%";
+    public void testShouldAnonymizeCharactersAfterSkippingCharacters(){
+
+        String from = "TEST_ANONYMIZER";
+        String characters = "ABCDEFGHIJKLMNOPRSTUWVXYZ";
+        partialCharacterAnonymizer.NUMBER_OF_SKIPPED_CHARACTERS = 5;
 
         Map<String, String> m = new HashMap<>();
         m.put(PartialCharacterAnonymizer.PARAMETER, characters);
         Synonym synonym = partialCharacterAnonymizer.anonymize(from, 5, false, m);
 
-        int length = from.length();
-//        StringBuilder sb = new StringBuilder();
-//
-//        for (int i = 0; i < length; i++) {
-//            for (int k = NUMBER_OF_SKIPPED_CHARACTERS; k < length; k++) {
-//                sb.append(characters.charAt(r.nextInt(characters.length())));
-//            }
-//        }
+        String to = (String) synonym.getTo();
 
+        System.out.println(from);
+        System.out.println(to);
+    }
 
-//        String to = (String) synonym.getTo();
-//        for (int i = 0; i < to.length(); i++) {
-//            assertTrue("'to' string contained characters which were not in the parameter."
-//                    , characters.indexOf(to.charAt(i)) > -1);
-//        }
+    public void testShouldAnonymizeCharactersAfterSkippingCharactersUsingDigitals(){
+
+        String from = "3551085";
+        String digitals = "1234567890";
+        partialCharacterAnonymizer.NUMBER_OF_SKIPPED_CHARACTERS = 3;
+
+        Map<String, String> m = new HashMap<>();
+        m.put(PartialCharacterAnonymizer.PARAMETER, digitals);
+        Synonym synonym = partialCharacterAnonymizer.anonymize(from, 5, false, m);
+
+        String to = (String) synonym.getTo();
+
+        System.out.println(from);
+        System.out.println(to);
     }
 }

@@ -6,13 +6,20 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Generates an output string based on the configured characters
+ * omitting the specified number of initial characters.
+ *
+ * @author Bartłomiej Komendarczuk
+ */
+
 public class PartialCharacterAnonymizer implements Anonymizer {
 
     public static String PARAMETER = "characters";
 
     protected String CHARS;
 
-    public static int NUMBER_OF_SKIPPED_CHARACTERS;
+    public int NUMBER_OF_SKIPPED_CHARACTERS;
 
     public PartialCharacterAnonymizer() {
         CHARS = getDefaultCharacterString();
@@ -45,11 +52,9 @@ public class PartialCharacterAnonymizer implements Anonymizer {
         Random r = new Random();
 
         int length = fromString.length();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            for (int k = NUMBER_OF_SKIPPED_CHARACTERS; k < length; k++) {
+        StringBuilder sb = new StringBuilder(fromString.substring(0, NUMBER_OF_SKIPPED_CHARACTERS));
+        for (int i = NUMBER_OF_SKIPPED_CHARACTERS; i < length; i++) {
                 sb.append(characters.charAt(r.nextInt(characters.length())));
-            }
         }
 
         String to = sb.toString();
