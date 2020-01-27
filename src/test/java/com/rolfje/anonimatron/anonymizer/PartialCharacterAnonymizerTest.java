@@ -2,6 +2,7 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,32 +26,30 @@ public class PartialCharacterAnonymizerTest extends TestCase {
     public void testShouldAnonymizeCharactersAfterSkippingCharacters(){
 
         String from = "TEST_ANONYMIZER";
-        String characters = "ABCDEFGHIJKLMNOPRSTUWVXYZ";
+        String CHARS = "ABCDEFGHIJKLMNOPRSTUWVXYZ";
         partialCharacterAnonymizer.NUMBER_OF_SKIPPED_CHARACTERS = 5;
 
         Map<String, String> m = new HashMap<>();
-        m.put(PartialCharacterAnonymizer.PARAMETER, characters);
+        m.put(PartialCharacterAnonymizer.PARAMETER, CHARS);
         Synonym synonym = partialCharacterAnonymizer.anonymize(from, 5, false, m);
 
         String to = (String) synonym.getTo();
 
-        System.out.println(from);
-        System.out.println(to);
+        Assert.assertNotSame(to.substring(5) +" is not different than " + from.substring(5), to.substring(5) ,from.substring(5));
     }
 
     public void testShouldAnonymizeCharactersAfterSkippingCharactersUsingDigitals(){
 
         String from = "3551085";
-        String digitals = "1234567890";
+        String CHARS = "1234567890";
         partialCharacterAnonymizer.NUMBER_OF_SKIPPED_CHARACTERS = 3;
 
         Map<String, String> m = new HashMap<>();
-        m.put(PartialCharacterAnonymizer.PARAMETER, digitals);
+        m.put(PartialCharacterAnonymizer.PARAMETER, CHARS);
         Synonym synonym = partialCharacterAnonymizer.anonymize(from, 5, false, m);
 
         String to = (String) synonym.getTo();
 
-        System.out.println(from);
-        System.out.println(to);
+        Assert.assertNotSame(to.substring(3) +" is not different than " + from.substring(3), to.substring(3) ,from.substring(3));
     }
 }

@@ -23,11 +23,14 @@ public class PartialCharacterAnonymizer implements Anonymizer {
 
     public PartialCharacterAnonymizer() {
         CHARS = getDefaultCharacterString();
+        NUMBER_OF_SKIPPED_CHARACTERS = getNumberOfSkippedCharacters();
     }
 
     protected String getDefaultCharacterString() {
         return "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     }
+
+    protected int getNumberOfSkippedCharacters() { return 5;}
 
     @Override
     public String getType() {
