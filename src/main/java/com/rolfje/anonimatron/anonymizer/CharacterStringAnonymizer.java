@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class CharacterStringAnonymizer implements Anonymizer {
 
-	public static String PARAMETER = "characters";
+	public static final String PARAMETER = "characters";
 
 	protected String CHARS;
 
