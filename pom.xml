@@ -253,12 +253,16 @@
                     </plugin>
                     <plugin>
                         <!--
-                        In order for sonar to work you need a profile in your .m2/setting.xml
-                        with the id anonimatron-sonar and the proprties:
-                                <sonar.projectKey>realrolfje_anonimatron</sonar.projectKey>
-                                <sonar.organization>realrolfje</sonar.organization>
-                                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-                                <sonar.login>****KEY****</sonar.login>
+                            In order for sonar to work you need a profile in your .m2/setting.xml
+                            with the id anonimatron-sonar and the proprties:
+                                    <sonar.projectKey>realrolfje_anonimatron</sonar.projectKey>
+                                    <sonar.organization>realrolfje</sonar.organization>
+                                    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                                    <sonar.login>****KEY****</sonar.login>
+
+                             Then run:  mvn verify sonar:sonar -Panonimatron-sonar
+
+                             Access the report at: https://sonarcloud.io/dashboard?id=realrolfje_anonimatron
                         -->
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
