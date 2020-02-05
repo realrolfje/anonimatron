@@ -7,7 +7,7 @@ public class RomanNameGenerator extends AbstractNameGenerator {
 	private static final String TYPE = "ROMAN_NAME";
 	private static final String SYLABLE_FILE = "roman-names.syl";
 
-	private Random r = new Random();
+	private static final Random r = new Random();
 
 	@Override
 	public String getType() {
