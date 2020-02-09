@@ -15,7 +15,7 @@ import java.util.MissingResourceException;
 public class CountryCodeAnonymizer implements Anonymizer {
 
 	private static String TYPE = "COUNTRY_CODE";
-	public static final Locale[] AVAILABLE_LOCALES = SimpleDateFormat.getAvailableLocales();
+	protected static final Locale[] AVAILABLE_LOCALES = SimpleDateFormat.getAvailableLocales();
 	SecureRandom r = new SecureRandom();
 
 	@Override

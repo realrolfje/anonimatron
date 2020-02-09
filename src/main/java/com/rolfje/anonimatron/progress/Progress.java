@@ -45,7 +45,7 @@ public class Progress {
 		long now = System.currentTimeMillis();
 		long elapsed = now - starttime;
 		long itemstogo = totalitemstodo - totalitemscompleted;
-		long timetogo = Math.round((elapsed * itemstogo) / Math.max(1,totalitemscompleted)) ;
+		long timetogo = Math.round(((float) elapsed * itemstogo) / Math.max(1,totalitemscompleted)) ;
 		return new Date(now + timetogo);
 	}
 	

@@ -10,6 +10,9 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 	}
 
 
+	/**
+	 * @deprecated Use the more correctly named {@link #digitsAsString(int[])}
+	 */
 	@Deprecated
 	protected String digitsAsNumber(int[] digits) {
 		return digitsAsString(digits);
