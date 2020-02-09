@@ -232,4 +232,40 @@ public class FileAnonymizerServiceTest extends TestCase {
             assertTrue(Files.deleteIfExists(file_a));
         }
     }
+
+    public void testPreventCollisions() {
+        try {
+            fileAnonymizerService.preventDataFileCollisions(Arrays.asList(
+                    createDataFile("a", "a")
+            ));
+        } catch (RuntimeException e) {
+            assertEquals("File used as both input and output: a.", e.getMessage());
+        }
+
+        try {
+            fileAnonymizerService.preventDataFileCollisions(Arrays.asList(
+                    createDataFile("a", "b"),
+                    createDataFile("b", "c")
+            ));
+        } catch (RuntimeException e) {
+            assertEquals("Configuration will overwrite input file b.", e.getMessage());
+        }
+
+        try {
+            fileAnonymizerService.preventDataFileCollisions(Arrays.asList(
+                    createDataFile("a", "c"),
+                    createDataFile("b", "c")
+            ));
+        } catch (RuntimeException e) {
+            assertEquals("Configuration will write twice to the same file c.", e.getMessage());
+        }
+    }
+
+    private DataFile createDataFile(String infile, String outfile) {
+        DataFile dataFile = new DataFile();
+        dataFile.setInFile(infile);
+        dataFile.setOutFile(outfile);
+        return dataFile;
+    }
+
 }

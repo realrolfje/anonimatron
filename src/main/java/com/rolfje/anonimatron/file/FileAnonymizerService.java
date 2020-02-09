@@ -145,6 +145,16 @@ public class FileAnonymizerService {
             }
         }
 
+        preventDataFileCollisions(allFiles);
+        return allFiles;
+    }
+
+    void preventDataFileCollisions(List<DataFile> allFiles) {
+        HashSet<String> inFiles = new HashSet<>();
+        for (DataFile dataFile : allFiles) {
+            inFiles.add(dataFile.getInFile());
+        }
+
         HashSet<String> outFiles = new HashSet<String>();
         for (DataFile dataFile : allFiles) {
             if (dataFile.getOutFile().equals(dataFile.getInFile())) {
@@ -155,10 +165,12 @@ public class FileAnonymizerService {
                 throw new RuntimeException("Configuration will write twice to the same file " + dataFile.getOutFile() + ".");
             }
 
+            if (inFiles.contains(dataFile.getOutFile())) {
+                throw new RuntimeException("Configuration will overwrite input file " + dataFile.getOutFile() + ".");
+            }
+
             outFiles.add(dataFile.getOutFile());
         }
-
-        return allFiles;
     }
 
     List<File> getInputFiles(DataFile dataFile) {
