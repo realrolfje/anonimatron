@@ -19,7 +19,7 @@ public class UkPostCodeAnonymizerTest {
     @Test
     public void testValidFormatOfGeneratedCodes() {
         int numberOfCodes = 10_000;
-        long max_time_ms = 500;
+        long max_time_ms = 1000; // Be forgiving here; not all machines perform equally
 
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10_000; i++) {
