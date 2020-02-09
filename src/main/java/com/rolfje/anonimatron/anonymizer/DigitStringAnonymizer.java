@@ -15,7 +15,7 @@ public class DigitStringAnonymizer extends AbstractElevenProofAnonymizer {
 		int length = from.toString().length();
 
 		int[] digits = getRandomDigits(length);
-		String to = digitsAsNumber(digits);
+		String to = digitsAsString(digits);
 
 		StringSynonym stringSynonym = new StringSynonym(
 				getType(),
