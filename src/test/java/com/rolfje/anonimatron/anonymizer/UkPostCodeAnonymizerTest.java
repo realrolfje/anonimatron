@@ -23,9 +23,7 @@ public class UkPostCodeAnonymizerTest {
 
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10_000; i++) {
-            String s = ukPostCodeAnonymizer.buildZipCode();
-            System.out.println(s);
-            assertValidPostalCode(s);
+            assertValidPostalCode(ukPostCodeAnonymizer.buildZipCode());
         }
         long stop = System.currentTimeMillis();
         long duration = stop - start;
