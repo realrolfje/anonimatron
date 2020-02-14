@@ -18,7 +18,7 @@ public class PartialDigitsAnonymizer implements Anonymizer {
 
     private static final String DIGITS = "0123456789";
 
-    public static String PARAMETER = "skip";
+    public static final String PARAMETER = "skip";
 
     public PartialDigitsAnonymizer() {
     }

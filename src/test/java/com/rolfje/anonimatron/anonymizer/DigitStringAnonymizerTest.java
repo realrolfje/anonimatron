@@ -1,5 +1,6 @@
 package com.rolfje.anonimatron.anonymizer;
 
+import com.javamonitor.tools.Stopwatch;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +33,26 @@ public class DigitStringAnonymizerTest {
     }
 
     @Test
+    public void testNull() {
+        Synonym synonym = anonymizer.anonymize(null, Integer.MAX_VALUE, false);
+        assertNull(synonym.getFrom());
+        assertNull(synonym.getTo());
+    }
+
+    @Test
+    public void testNullMasked() {
+        Synonym synonym =
+                anonymizer.anonymize(null, Integer.MAX_VALUE,
+                        false, getMaskParameters("11**"));
+
+        assertNull(synonym.getFrom());
+        assertNull(synonym.getTo());
+    }
+
+    @Test
     public void testMaskedAnonymize() {
         String original = "ABCDEFGH";
-        String mask     = "1,1-1*99";
+        String mask = "1,1-1*99";
         String expected = "AxCxExGH";
 
         Synonym synonym = anonymizer.anonymize(
@@ -55,6 +73,25 @@ public class DigitStringAnonymizerTest {
             assertTrue("Character at position " + i + " not what we expected. String is '" + toString + "'",
                     (expectedChars[i] == 'x') == (Character.isDigit(toChars[i])));
         }
+    }
+
+    @Test
+    public void testMaskedDigitsPerformance() {
+        String original = "ABCDEFGH";
+        String mask = "1,1-1*99";
+        Map<String, String> maskParameters = getMaskParameters(mask);
+
+        Stopwatch stopwatchNano = new Stopwatch("Masked performance");
+        for (int i = 0; i < 1_000_000; i++) {
+            Synonym synonym = anonymizer.anonymize(
+                    original, Integer.MAX_VALUE, false,
+                    maskParameters
+            );
+        }
+
+        // On a 2013 MacBook this takes less than 200 ms.
+        boolean fastEnough = stopwatchNano.stop(500);
+        assertTrue(stopwatchNano.getMessage(), fastEnough);
     }
 
     private Map<String, String> getMaskParameters(String mask) {
