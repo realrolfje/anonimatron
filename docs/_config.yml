@@ -9,7 +9,7 @@ exclude: [ruby, Gemfile, Gemfile.lock, serve_local_jekyll_site.sh]
 github:
   zip_url: https://github.com/realrolfje/anonimatron/releases/latest
   repository_url: https://github.com/realrolfje/anonimatron/tree/master
-  documentation_url: /documentation
+  documentation_url: /anonimatron/documentation
 
 plugins:
   - jekyll-mentions
