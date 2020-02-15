@@ -49,7 +49,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.jacoco.reportpath>${build.directory}/site/jacoco/jacoco.xml</sonar.jacoco.reportpath>
+        <sonar.jacoco.reportpath>${project.build.directory}/site/jacoco/jacoco.xml</sonar.jacoco.reportpath>
     </properties>
 
     <dependencies>
