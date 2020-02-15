@@ -1,3 +1,14 @@
+*** Version 1.12
+- Added mask parameter to DigitStringAnonymizer
+  (fixes issue #74, thanks to Balogh Tamás and Bartlomiej Komendarczuk)
+- Added UK Postalcode Anonymizer
+- Optimized Random number generators (less instantiations)
+- Fixed override problem with password, userid and jdbcurl
+  (pull request #69, thanks to Stephan Schrader)
+- Security, performance and readability fixes, as suggested by SonarCube,
+  see https://sonarcloud.io/dashboard?id=realrolfje_anonimatron)
+- Integrated documentation in the main development branch
+
 *** Version 1.11
 - Add numeric BSN support, closes issue #31
 - Ability to provide database connection parameters through
