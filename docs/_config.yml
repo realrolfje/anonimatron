@@ -1,0 +1,16 @@
+title: Anonimatron
+description: "The free, extendable, open source data anonymization tool."
+google_analytics: 
+show_downloads: true
+# https://github.com/pages-themes/cayman
+theme: jekyll-theme-cayman
+exclude: [ruby, Gemfile, Gemfile.lock, serve_local_jekyll_site.sh]
+
+github:
+  zip_url: https://github.com/realrolfje/anonimatron/releases/latest
+  repository_url: https://github.com/realrolfje/anonimatron/tree/master
+  documentation_url: /documentation
+
+plugins:
+  - jekyll-mentions
+

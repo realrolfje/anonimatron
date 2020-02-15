@@ -10,6 +10,9 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 	}
 
 
+	/**
+	 * @deprecated Use the more correctly named {@link #digitsAsString(int[])}
+	 */
 	@Deprecated
 	protected String digitsAsNumber(int[] digits) {
 		return digitsAsString(digits);
@@ -78,10 +81,10 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 	}
 
 	protected int[] getRandomDigits(int numberOfDigits) {
-		int[] elevenProof = new int[numberOfDigits];
-		for (int i = 0; i < elevenProof.length; i++) {
-			elevenProof[i] = (int) Math.floor(Math.random() * 10);
+		int[] randomDigits = new int[numberOfDigits];
+		for (int i = 0; i < randomDigits.length; i++) {
+			randomDigits[i] = (int) Math.floor(Math.random() * 10);
 		}
-		return elevenProof;
+		return randomDigits;
 	}
 }

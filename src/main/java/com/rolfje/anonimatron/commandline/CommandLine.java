@@ -1,6 +1,10 @@
 package com.rolfje.anonimatron.commandline;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 import static com.rolfje.anonimatron.Anonimatron.VERSION;
 
@@ -23,13 +27,13 @@ public class CommandLine {
             .addOption(OPT_CONFIGEXAMPLE, false,
                     "Prints out a demo/template configuration file.")
             .addOption(OPT_DRYRUN, false, "Do not make changes to the database.")
-            .addOption(OPT_JDBCURL, false,
+            .addOption(OPT_JDBCURL, true,
                     "The JDBC URL to connect to. " +
                             "If provided, overrides the value in the config file.")
-            .addOption(OPT_USERID, false,
+            .addOption(OPT_USERID, true,
                     "The user id for the database connection. " +
                             "If provided, overrides the value in the config file.")
-            .addOption(OPT_PASSWORD, false,
+            .addOption(OPT_PASSWORD, true,
                     "The password for the database connection. " +
                             "If provided, overrides the value in the config file.");
 

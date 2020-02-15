@@ -114,7 +114,7 @@ Let’s pretend that this is a copy of a production database, and you want to de
 
 ### Installing Anonimatron
 
-To anonymize your data, [download Anonimatron](https://github.com/realrolfje/anonimatron/zipball/master) and unzip it in a directory of your choice. You should find an “anonimatron.sh” and “anonimatron.bat” file there. Depending on your system, run it without arguments. If you have java installed on your system you should see something like this:
+To anonymize your data, [download Anonimatron](https://github.com/realrolfje/anonimatron/releases/latest) and unzip it in a directory of your choice. You should find an “anonimatron.sh” and “anonimatron.bat” file there. Depending on your system, run it without arguments. If you have java installed on your system you should see something like this:
 
 ```
 $ ./anonimatron.sh

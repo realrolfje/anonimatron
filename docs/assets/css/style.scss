@@ -1,0 +1,38 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.btn.github {
+    background-image: url(octocat-icon.png);
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 44px;
+}
+
+.btn.zip {
+    background-image: url(zip-icon.png);
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 47px;
+}
+
+.btn.documentation {
+    background-image: url(book-flat-30.png);
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 47px;
+}
+
+.logo {
+    background-image: url(anonimatron-logo-a.png);
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 100px;
+    background-clip: border-box;
+    padding-right: 100px;
+}
+
+.page-header {
+    padding: 1rem 2rem;
+}

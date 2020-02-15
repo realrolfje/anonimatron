@@ -71,7 +71,7 @@ public class SynonymCache {
      * given synonym is short-lived. Short-lived synonyms are not stored or
      * re-used.
      *
-     * @param synonym
+     * @param synonym to store
      */
     public void put(Synonym synonym) {
         if (synonym.isShortLived()) {

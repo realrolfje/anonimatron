@@ -64,6 +64,7 @@ public class ProgressPrinter implements Runnable {
 			Thread.sleep(printIntervalMillis);
 		} catch (InterruptedException e) {
 			// ignore and continue
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -85,6 +86,7 @@ public class ProgressPrinter implements Runnable {
 				thread.join();
 			} catch (InterruptedException e) {
 				// ignore, retry
+				Thread.currentThread().interrupt();
 			}
 		}
 		print(); // Make sure 100% is printed
