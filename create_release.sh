@@ -37,9 +37,9 @@ git push --follow-tags
 # Sign the zip file
 gpg -ab --default-key 45E2A5E085182DC26EFEF6E796BB2760490D54DD target/anonimatron*.zip
 
-echo "The file to upload for this release is:"
+echo "The files to upload for this release are:"
 echo
-ls -l target/anonimatron*.zip
+ls -l target/anonimatron*.zip*
 echo
 echo "When creating a release, github automatically adds src zip"
 echo "files, you only need to upload the binary."
