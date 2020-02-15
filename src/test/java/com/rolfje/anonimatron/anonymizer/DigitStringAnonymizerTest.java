@@ -90,7 +90,8 @@ public class DigitStringAnonymizerTest {
         }
 
         // On a 2013 MacBook this takes less than 200 ms.
-        boolean fastEnough = stopwatchNano.stop(500);
+        // On the Travis build server this takes roughly 750 ms.
+        boolean fastEnough = stopwatchNano.stop(1000);
         assertTrue(stopwatchNano.getMessage(), fastEnough);
     }
 
