@@ -1,9 +1,9 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.util.Random;
-
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.util.Random;
 
 /**
  * Generates valid Dutch zip codes.
@@ -30,6 +30,7 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 
 	private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String CHARS_WITHOUT_ADS = "BCEFGHIJKLMNOPQRTUVWXYZ";
+	protected static final Random RANDOM = new Random();
 
 	@Override
 	public String getType() {
@@ -45,23 +46,21 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 	}
 
 	String buildZipCode() {
-		Random random = new Random();
 
 		// generate a random integer from 0000 to 8999, then add 1000
-		Integer pcNum = random.nextInt(9000) + 1000;
+		Integer pcNum = RANDOM.nextInt(9000) + 1000;
 		return pcNum + buildPcAlpha();
 	}
 
 	private String buildPcAlpha() {
-		Random random = new Random();
 
-		char a1 = getCharacter(random, CHARS);
+		char a1 = getCharacter(RANDOM, CHARS);
 		char a2;
 
 		if (a1 == 'S') {
-			a2 = getCharacter(random, CHARS_WITHOUT_ADS);
+			a2 = getCharacter(RANDOM, CHARS_WITHOUT_ADS);
 		} else {
-			a2 = getCharacter(random, CHARS);
+			a2 = getCharacter(RANDOM, CHARS);
 		}
 
 		return new StringBuilder().append(a1).append(a2).toString();

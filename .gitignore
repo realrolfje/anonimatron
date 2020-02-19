@@ -7,3 +7,4 @@ target
 /docs/.bundle/
 /docs/Gemfile.lock
 /docs/.env
+/docs/_site/

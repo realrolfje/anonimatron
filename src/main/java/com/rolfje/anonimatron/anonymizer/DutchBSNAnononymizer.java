@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- * Generates valid Dutch "Burger Service Nummer" or "SOFI Nummer",a social
+ * Generates valid Dutch "Burger Service Nummer" or "SOFI Nummer", a social
  * security number uniquely identifying civilians to the governement.
  * <p>
  * A BSN Number is 9 digits long, can not start with 3 zeroes, the first digit

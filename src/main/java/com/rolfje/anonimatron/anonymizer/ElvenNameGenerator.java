@@ -7,7 +7,7 @@ public class ElvenNameGenerator extends AbstractNameGenerator {
 	private static final String TYPE = "ELVEN_NAME";
 	private static final String SYLABLE_FILE = "elven-names.syl";
 
-	private Random r = new Random();
+	private static final Random r = new Random();
 
 	public ElvenNameGenerator() throws IOException {
 		super(SYLABLE_FILE);

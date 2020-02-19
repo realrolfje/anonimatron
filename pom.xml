@@ -4,7 +4,7 @@
 
     <groupId>com.rolfje.anonimatron</groupId>
     <artifactId>anonimatron</artifactId>
-    <version>1.11.2-SNAPSHOT</version>
+    <version>1.13-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>anonimatron</name>
@@ -49,6 +49,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.jacoco.reportpath>${build.directory}/site/jacoco/jacoco.xml</sonar.jacoco.reportpath>
     </properties>
 
     <dependencies>
@@ -219,6 +220,53 @@
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>anonimatron-sonar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.5</version>
+                        <configuration>
+                            <append>true</append>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>jacoco-initialize</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-site</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <!--
+                            In order for sonar to work you need a profile in your .m2/setting.xml
+                            with the id anonimatron-sonar and the proprties:
+                                    <sonar.projectKey>realrolfje_anonimatron</sonar.projectKey>
+                                    <sonar.organization>realrolfje</sonar.organization>
+                                    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                                    <sonar.login>****KEY****</sonar.login>
+
+                             Then run:  mvn verify sonar:sonar -Panonimatron-sonar
+
+                             Access the report at: https://sonarcloud.io/dashboard?id=realrolfje_anonimatron
+                        -->
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.7.0.1746</version>
                     </plugin>
                 </plugins>
             </build>

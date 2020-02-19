@@ -8,7 +8,11 @@ import org.exolab.castor.xml.XMLException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SynonymCache {
 
@@ -71,7 +75,7 @@ public class SynonymCache {
      * given synonym is short-lived. Short-lived synonyms are not stored or
      * re-used.
      *
-     * @param synonym
+     * @param synonym to store
      */
     public void put(Synonym synonym) {
         if (synonym.isShortLived()) {

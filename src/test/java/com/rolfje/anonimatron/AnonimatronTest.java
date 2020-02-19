@@ -17,83 +17,88 @@ import java.io.PrintWriter;
  */
 public class AnonimatronTest extends TestCase {
 
-	public void testVersion() throws Exception {
-		File pom = new File("pom.xml");
-		assertTrue("Could not find the project pom file.",pom.exists());
+    public void testVersion() throws Exception {
+        File pom = new File("pom.xml");
+        assertTrue("Could not find the project pom file.", pom.exists());
 
-		String versionString = "<version>"+Anonimatron.VERSION+"</version>";
-		
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(pom));
-			while(reader.ready()){
-				String line = reader.readLine();
-				if (line.contains(versionString)){
-					// Version is ok, return
-					return;
-				}
-				
-				if (line.contains("<dependencies>")){
-					fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
-				}
-			}
-		} finally  {
-			reader.close();
-		}
-		fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
-	}
+        String versionString = "<version>" + Anonimatron.VERSION + "</version>";
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(pom));
+            while (reader.ready()) {
+                String line = reader.readLine();
+                if (line.contains(versionString)) {
+                    // Version is ok, return
+                    return;
+                }
+
+                if (line.contains("<dependencies>")) {
+                    fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
+                }
+            }
+        } finally {
+            reader.close();
+        }
+        fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
+    }
 
 
-	public void testIntegrationFileReader() throws Exception {
-		// Create fake input file
-		File inFile = File.createTempFile(this.getClass().getSimpleName(), ".input.csv");
-		CsvFileWriter csvFileWriter = new CsvFileWriter(inFile);
-		Record inputRecords = new Record(
-				new String[]{"colname1", "colname2"},
-				new String[]{"value1", "value2"}
-		);
-		csvFileWriter.write(inputRecords);
-		csvFileWriter.close();
+    public void testIntegrationFileReader() throws Exception {
+        // Create fake input file
+        File inFile = File.createTempFile(this.getClass().getSimpleName(), ".input.csv");
+        CsvFileWriter csvFileWriter = new CsvFileWriter(inFile);
+        Record inputRecords = new Record(
+                new String[]{"colname1", "colname2"},
+                new String[]{"value1", "value2"}
+        );
+        csvFileWriter.write(inputRecords);
+        csvFileWriter.close();
 
-		File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
-		outFile.delete();
+        File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
+        outFile.delete();
 
-		File synonymFile = File.createTempFile(this.getClass().getSimpleName(), "synonyms.xml");
-		synonymFile.delete();
+        File synonymFile = File.createTempFile(this.getClass().getSimpleName(), "synonyms.xml");
+        synonymFile.delete();
 
-		File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
-		PrintWriter printWriter = new PrintWriter(configFile);
-		printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		printWriter.write("<configuration salt=\"testsalt\">\n");
-		printWriter.write("<filefilterclass>com.rolfje.anonimatron.file.AcceptAllFilter</filefilterclass>");
-		printWriter.write("<file " +
-				"inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
-				"outFile=\"" + outFile.getAbsolutePath() + "\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
-				">\n");
-		printWriter.write("<column name=\"1\" type=\"ROMAN_NAME\" size=\"50\"/>\n");
-		printWriter.write("</file>\n");
-		printWriter.write("</configuration>\n");
-		printWriter.close();
+        File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
+        PrintWriter printWriter = new PrintWriter(configFile);
+        printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        printWriter.write("<configuration salt=\"testsalt\">\n");
+        printWriter.write("<filefilterclass>com.rolfje.anonimatron.file.AcceptAllFilter</filefilterclass>");
+        printWriter.write("<file " +
+                "inFile=\"" + inFile.getAbsolutePath() + "\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" " +
+                "outFile=\"" + outFile.getAbsolutePath() + "\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\" " +
+                ">\n");
+        printWriter.write("<column name=\"1\" type=\"ROMAN_NAME\" size=\"50\"/>\n");
+        printWriter.write("</file>\n");
+        printWriter.write("</configuration>\n");
+        printWriter.close();
 
-		String[] arguments = new String[]{
-				"-config", configFile.getAbsolutePath(),
-				"-synonyms", synonymFile.getAbsolutePath()
-		};
+        String[] arguments = new String[]{
+                "-config", configFile.getAbsolutePath(),
+                "-synonyms", synonymFile.getAbsolutePath()
+        };
 
-		Anonimatron.main(arguments);
+        Anonimatron.main(arguments);
 
-		assertEquals(1, AcceptAllFilter.getAcceptCount());
+        assertEquals(1, AcceptAllFilter.getAcceptCount());
 
-		// Check that original data is not present in the synonym file.
-		SynonymCache synonymCache = SynonymCache.fromFile(synonymFile);
-		Object[] inputValues = inputRecords.getValues();
-		for (int i = 0; i < inputValues.length; i++) {
-			assertNull(synonymCache.get("ROMAN_NAME", inputValues[i]));
-		}
+        // Check that original data is not present in the synonym file.
+        SynonymCache synonymCache = SynonymCache.fromFile(synonymFile);
+        Object[] inputValues = inputRecords.getValues();
+        for (int i = 0; i < inputValues.length; i++) {
+            assertNull(synonymCache.get("ROMAN_NAME", inputValues[i]));
+        }
 
-		// Check that we can find the hashed first column value
-		synonymCache.setHasher(new Hasher("testsalt"));
-		assertNotNull("Hashed value not found.", synonymCache.get("ROMAN_NAME", inputValues[0]));
-		assertNull("Hashed value found.", synonymCache.get("ROMAN_NAME", inputValues[1]));
-	}
+        // Check that we can find the hashed first column value
+        synonymCache.setHasher(new Hasher("testsalt"));
+        assertNotNull("Hashed value not found.", synonymCache.get("ROMAN_NAME", inputValues[0]));
+        assertNull("Hashed value found.", synonymCache.get("ROMAN_NAME", inputValues[1]));
+    }
+
+    public void testDemoConfiguration() throws Exception {
+        Anonimatron.main(new String[]{"-configexample"});
+
+    }
 }
