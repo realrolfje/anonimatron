@@ -45,6 +45,10 @@
 			<bind-xml name="name" node="attribute" />
 		</field>
 
+		<field name="fetchSize" type="integer">
+			<bind-xml name="fetchSize" node="attribute" />
+		</field>
+
 		<field name="columns" collection="arraylist"
 			type="com.rolfje.anonimatron.configuration.Column">
 			<bind-xml name="column" />

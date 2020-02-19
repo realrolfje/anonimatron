@@ -1,5 +1,17 @@
 package com.rolfje.anonimatron.jdbc;
 
+import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.Prefetcher;
+import com.rolfje.anonimatron.configuration.Column;
+import com.rolfje.anonimatron.configuration.Configuration;
+import com.rolfje.anonimatron.configuration.Discriminator;
+import com.rolfje.anonimatron.configuration.Table;
+import com.rolfje.anonimatron.progress.Progress;
+import com.rolfje.anonimatron.progress.ProgressPrinter;
+import com.rolfje.anonimatron.synonyms.Synonym;
+import org.apache.log4j.Logger;
+import org.apache.log4j.NDC;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -15,19 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.NDC;
-
-import com.rolfje.anonimatron.anonymizer.AnonymizerService;
-import com.rolfje.anonimatron.anonymizer.Prefetcher;
-import com.rolfje.anonimatron.configuration.Column;
-import com.rolfje.anonimatron.configuration.Configuration;
-import com.rolfje.anonimatron.configuration.Discriminator;
-import com.rolfje.anonimatron.configuration.Table;
-import com.rolfje.anonimatron.progress.Progress;
-import com.rolfje.anonimatron.progress.ProgressPrinter;
-import com.rolfje.anonimatron.synonyms.Synonym;
 
 public class JdbcAnonymizerService {
 	Logger LOG = Logger.getLogger(JdbcAnonymizerService.class);
@@ -173,6 +172,9 @@ public class JdbcAnonymizerService {
 			LOG.debug(select);
 
 			statement = connection.createStatement(resultSetType, resultSetConcurrency);
+			if (table.getFetchSize() != null) {
+				statement.setFetchSize(table.getFetchSize());
+			}
 			statement.execute(select);
 			results = statement.getResultSet();
 			ResultSetMetaData resultsMetaData = results.getMetaData();
