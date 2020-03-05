@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Table {
 	private String name;
+	private Integer fetchSize;
 	private List<Column> columns;
 	private List<Discriminator> discriminators;
 	
@@ -18,6 +19,14 @@ public class Table {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getFetchSize() {
+		return fetchSize;
+	}
+
+	public void setFetchSize(Integer fetchSize) {
+		this.fetchSize = fetchSize;
 	}
 
 	public List<Column> getColumns() {

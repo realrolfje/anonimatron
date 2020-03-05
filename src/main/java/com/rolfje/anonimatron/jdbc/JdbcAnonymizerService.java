@@ -12,8 +12,20 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class JdbcAnonymizerService {
     Logger LOG = Logger.getLogger(JdbcAnonymizerService.class);
@@ -159,6 +171,9 @@ public class JdbcAnonymizerService {
             LOG.debug(select);
 
             statement = connection.createStatement(resultSetType, resultSetConcurrency);
+            if (table.getFetchSize() != null) {
+                statement.setFetchSize(table.getFetchSize());
+            }
             statement.execute(select);
             results = statement.getResultSet();
             ResultSetMetaData resultsMetaData = results.getMetaData();
