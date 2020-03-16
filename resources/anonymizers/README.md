@@ -4,13 +4,14 @@ so that Anonimatron can instantiate them. Examples of an Anonymizer
 and a config below:
 
 This is an example of an anonymizer which returns lower case Strings for
-each String passed in:
+each String passed in. In the root of the unzipped anonimatron project, create a file called `my/package/ToLowerAnonymizer.java`:
 
 ```java
 package my.package;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+import com.rolfje.anonimatron.anonymizer.Anonymizer;
 
 public class ToLowerAnonymizer implements Anonymizer {
 
@@ -29,6 +30,8 @@ public class ToLowerAnonymizer implements Anonymizer {
 }
 ```
 
+Now create a `.class` file with the command: `javac -classpath ./libraries/anonimatron-[version].jar my/package/ToLowerAnonymizer.java`, and a `.jar` file with `jar cvf toloweranonymizer.jar`. Move this `.jar` file into the `anonymizers` folder, and you are ready to user `TO_LOWER_CASE` in your config.xml as seen below.
+
 If you need an anonymizer with parameters, you can define it like so:
 
 ```java
@@ -39,6 +42,7 @@ import java.util.Map;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+import com.rolfje.anonimatron.anonymizer.Anonymizer;
 
 public class FixedValueAnonymizer implements Anonymizer {
     @Override
