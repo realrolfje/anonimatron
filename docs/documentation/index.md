@@ -93,6 +93,7 @@ select * from mydb.userdata;
 | 3  | Ned       | Flanders | 3456         |
 | 4  | Charles   | Burns    | 3456         |
 
+&nbsp;
 ```SQL
 select * from mydb.lastnames;
 ```
