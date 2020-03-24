@@ -1,8 +1,8 @@
 package com.rolfje.anonimatron.progress;
 
-import java.text.DateFormat;
-
 import org.apache.log4j.Logger;
+
+import java.text.DateFormat;
 
 public class ProgressPrinter implements Runnable {
 	private static Logger LOG = Logger.getLogger(ProgressPrinter.class);

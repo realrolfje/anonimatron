@@ -1,9 +1,9 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import java.util.Random;
-
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
+
+import java.util.Random;
 
 /**
  * Generates valid Dutch zip codes.
