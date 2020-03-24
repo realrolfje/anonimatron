@@ -1,3 +1,8 @@
+*** Version 1.13
+- Fixed OutOfMemoryError for tables with BLOBs by adding fetch size,
+  see pull request #83
+- Moved documentation to the Jekyll folder in /docs/documentation
+
 *** Version 1.12
 - Added mask parameter to DigitStringAnonymizer
   (fixes issue #74, thanks to Balogh Tamás and Bartlomiej Komendarczuk)
