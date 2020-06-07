@@ -23,9 +23,9 @@ public class JdbcAnonymizerService {
     private AnonymizerService anonymizerService;
     private Progress progress;
 
-    private Map<String, String> supportedJdbcUrls = new HashMap<String, String>();
+    private Map<String, String> supportedJdbcUrls = new HashMap<>();
 
-    public JdbcAnonymizerService() throws Exception {
+    public JdbcAnonymizerService() {
         registerDrivers();
     }
 
@@ -101,15 +101,12 @@ public class JdbcAnonymizerService {
      * Runs through the table data, feeds it to the Synonyms which implement
      * {@link Prefetcher}, so that they can analyze the source data to base
      * their synonym algorithm on.
-     *
-     * @param table
-     * @throws SQLException
      */
-    private void preScanTable(Table table) throws SQLException {
+    private void preScanTable(Table table) {
         ColumnWorker worker = new ColumnWorker() {
             @Override
             public boolean processColumn(ResultSet results, Column column,
-                                         Object databaseColumnValue) throws SQLException {
+                                         Object databaseColumnValue) {
                 return anonymizerService.prepare(column.getType(),
                         databaseColumnValue);
             }
@@ -118,7 +115,7 @@ public class JdbcAnonymizerService {
         processTableColumns(table, worker, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
     }
 
-    private void anonymizeTableInPlace(Table table) throws SQLException {
+    private void anonymizeTableInPlace(Table table) {
         ColumnWorker worker = new ColumnWorker() {
             @Override
             public boolean processColumn(ResultSet results, Column column,
