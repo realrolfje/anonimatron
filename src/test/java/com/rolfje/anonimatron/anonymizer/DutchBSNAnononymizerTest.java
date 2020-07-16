@@ -109,7 +109,7 @@ public class DutchBSNAnononymizerTest {
 		// Check the digits to be 11 Proof
 		int check = 0;
 		for (int i = 0; i < burgerServiceNummer.length(); i++) {
-			int digit = Integer.valueOf("" + burgerServiceNummer.charAt(i));
+			int digit = Integer.parseInt("" + burgerServiceNummer.charAt(i));
 			check += digit * (burgerServiceNummer.length() - i);
 		}
 
