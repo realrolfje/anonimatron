@@ -8,12 +8,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DigitStringAnonymizerTest {
 
@@ -105,4 +100,29 @@ public class DigitStringAnonymizerTest {
         parameters.put(anonymizer.PARAMETER, mask);
         return parameters;
     }
+
+    @Test
+    public void testIncorrectParamter() {
+        try {
+            anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+                put("PaRaMeTeR", "any");
+            }});
+            fail("Should fail with unsupported operation exception.");
+        } catch (UnsupportedOperationException e) {
+            assertEquals(
+                    "Please provide '" + DigitStringAnonymizer.PARAMETER + "' with a digit mask in the form 111******, where only stars are replaced with random characters.",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCorrectParameter() {
+        Synonym anonymize = anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+            put(DigitStringAnonymizer.PARAMETER, "any");
+        }});
+
+        // Actual anonymization tests done elsewhere
+        assertNotNull(anonymize);
+    }
+
 }
