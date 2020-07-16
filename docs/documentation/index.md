@@ -88,7 +88,6 @@ select * from mydb.userdata;
 | id | firstname | lastname | creditcardnr |
 |----|-----------|----------|--------------|
 | 1  | Homer     | Simpson  | 1234         |
-| 1  | Homer     | Simpson  | 1234         |
 | 2  | Marge     | Simpson  | 5678         |
 | 3  | Ned       | Flanders | 3456         |
 | 4  | Charles   | Burns    | 3456         |
