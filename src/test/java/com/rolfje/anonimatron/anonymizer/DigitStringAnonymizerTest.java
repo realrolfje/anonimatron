@@ -125,4 +125,30 @@ public class DigitStringAnonymizerTest {
         assertNotNull(anonymize);
     }
 
+    @Test
+    public void testNoParameter() {
+        // Actual anonymization tests done elsewhere
+        assertNotNull(
+                anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>())
+        );
+
+        assertNotNull(
+                anonymizer.anonymize("dummy", 0, false, null)
+        );
+    }
+
+    @Test
+    public void testInCorrectParameter() {
+        try {
+            Synonym anonymize = anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+                put("dummy", "any");
+            }});
+            fail("Should result in UnsupportedOperationException with useful message.");
+        } catch (UnsupportedOperationException e) {
+            assertEquals(
+                    "Please provide 'mask' with a digit mask in the form 111******, where only stars are replaced with random characters.",
+                    e.getMessage()
+            );
+        }
+    }
 }
