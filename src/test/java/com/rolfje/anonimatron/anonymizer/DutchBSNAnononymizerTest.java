@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static com.rolfje.anonimatron.anonymizer.DutchBSNAnononymizer.isValidBSN;
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 public class DutchBSNAnononymizerTest {
@@ -37,10 +36,9 @@ public class DutchBSNAnononymizerTest {
             Synonym synonym = bsnAnonymizer.anonymize(originalAsNumber, 9, shortlived);
             assertEquals(originalAsNumber, synonym.getFrom());
             assertNotEquals(originalAsNumber, synonym.getTo());
-
-            // TODO figure out how to do this without the depricated hamcrest lib
-            assertThat(synonym.getTo(), is(instanceOf(originalAsNumber.getClass())));
-
+            Class<?> expectedClass = originalAsNumber.getClass();
+            Object actualClass = synonym.getTo();
+            assertInstanceof(expectedClass, actualClass);
             assertEquals(shortlived, synonym.isShortLived());
             validate(synonym);
         }
@@ -88,7 +86,7 @@ public class DutchBSNAnononymizerTest {
     }
 
     private void validate(Synonym synonym) {
-        assertNotEquals(synonym.getFrom(), not(synonym.getTo()));
+        assertNotEquals(synonym.getFrom(), synonym.getTo());
         assertNotNull(synonym.getType());
         String burgerServiceNummer = toString(synonym.getTo());
         assertTrue(isValidBSN(burgerServiceNummer));
@@ -109,4 +107,24 @@ public class DutchBSNAnononymizerTest {
         }
         return toString;
     }
+
+    private void assertInstanceof(Class<?> expectedClass, Object actualClass) {
+        Class<?> matchable = matchableClass(expectedClass);
+        assertTrue("Class " + actualClass.getClass().getSimpleName() + " is not an instance of " + expectedClass.getSimpleName(),
+                matchable.isInstance(actualClass));
+    }
+
+    private static Class<?> matchableClass(Class<?> expectedClass) {
+        if (boolean.class.equals(expectedClass)) return Boolean.class;
+        if (byte.class.equals(expectedClass)) return Byte.class;
+        if (char.class.equals(expectedClass)) return Character.class;
+        if (double.class.equals(expectedClass)) return Double.class;
+        if (float.class.equals(expectedClass)) return Float.class;
+        if (int.class.equals(expectedClass)) return Integer.class;
+        if (long.class.equals(expectedClass)) return Long.class;
+        if (short.class.equals(expectedClass)) return Short.class;
+        return expectedClass;
+    }
+
+
 }
