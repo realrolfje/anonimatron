@@ -5,7 +5,7 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 
 	protected int[] add(int[] digits, int number) {
 		String numberString = digitsAsNumber(digits);
-		int intValue = Integer.valueOf(numberString) + number;
+		int intValue = Integer.parseInt(numberString) + number;
 		return numberAsDigits(intValue, digits.length);
 	}
 
@@ -36,7 +36,7 @@ public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 	
 		int[] digitarray = new int[digits];
 		for (int i = 0; i < digitarray.length; i++) {
-			digitarray[i] = Integer.valueOf("" + s.charAt(i));
+			digitarray[i] = Integer.parseInt("" + s.charAt(i));
 		}
 	
 		return digitarray;

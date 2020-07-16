@@ -55,14 +55,12 @@ public class CharacterStringAnonymizer implements Anonymizer {
 
         String to = sb.toString();
 
-        StringSynonym stringSynonym = new StringSynonym(
+        return new StringSynonym(
                 getType(),
                 fromString,
                 to,
                 shortlived
         );
-
-        return stringSynonym;
     }
 
 }

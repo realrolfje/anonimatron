@@ -52,7 +52,7 @@ public class LoremIpsum {
 	private static int index = 0;
 
 	static {
-		LOREM = new ArrayList<String>();
+		LOREM = new ArrayList<>();
 		StringTokenizer t = new StringTokenizer(LOREM_IPSUM);
 		while (t.hasMoreElements()) {
 			String word = (String) t.nextElement();

@@ -40,14 +40,12 @@ public class DigitStringAnonymizer extends AbstractElevenProofAnonymizer {
         int[] digits = getRandomDigits(length);
         String to = digitsAsString(digits);
 
-        StringSynonym stringSynonym = new StringSynonym(
+        return new StringSynonym(
                 getType(),
                 (String) from,
                 to,
                 shortlived
         );
-
-        return stringSynonym;
     }
 
     /**

@@ -81,10 +81,10 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * 
  */
 public abstract class AbstractNameGenerator implements Anonymizer {
-	ArrayList<String> pre = new ArrayList<String>();
-	ArrayList<String> mid = new ArrayList<String>();
-	ArrayList<String> sur = new ArrayList<String>();
-	private Set<String> generatedNames = new HashSet<String>();
+	ArrayList<String> pre = new ArrayList<>();
+	ArrayList<String> mid = new ArrayList<>();
+	ArrayList<String> sur = new ArrayList<>();
+	private Set<String> generatedNames = new HashSet<>();
 
 	final private static char[] vocals = {'a', 'e', 'i', 'o', 'u', 'ä', 'ö', 'õ', 'ü', 'y'};
 	final private static char[] consonants = { 'b', 'c', 'd', 'f', 'g', 'h',

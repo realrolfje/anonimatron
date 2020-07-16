@@ -317,7 +317,7 @@ public class JdbcAnonymizerService {
     }
 
     private String getSelectStatement(Table table) throws SQLException {
-        Set<String> columnNames = new HashSet<String>();
+        Set<String> columnNames = new HashSet<>();
         for (Column column : table.getColumns()) {
             columnNames.add(column.getName());
         }
@@ -360,8 +360,7 @@ public class JdbcAnonymizerService {
             tablename = split[1];
         }
 
-        ResultSet resultset = connection.getMetaData().getPrimaryKeys(null, schema, tablename);
-        try {
+        try (ResultSet resultset = connection.getMetaData().getPrimaryKeys(null, schema, tablename)) {
             String primaryKeys = "";
             while (resultset.next()) {
                 String columnName = resultset.getString("COLUMN_NAME");
@@ -382,8 +381,6 @@ public class JdbcAnonymizerService {
             }
 
             return primaryKeys;
-        } finally {
-            resultset.close();
         }
     }
 

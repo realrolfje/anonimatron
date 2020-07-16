@@ -45,8 +45,8 @@ public class CsvFileReader implements RecordReader, Closeable {
 		// to figure out if we want to switch to a newer Java.
 		StringTokenizer stringTokenizer = new StringTokenizer(s, ",;\t");
 
-		ArrayList<String> names = new ArrayList<String>();
-		ArrayList<String> strings = new ArrayList<String>();
+		ArrayList<String> names = new ArrayList<>();
+		ArrayList<String> strings = new ArrayList<>();
 		int i = 1;
 		while (stringTokenizer.hasMoreTokens()) {
 			names.add(String.valueOf(i));

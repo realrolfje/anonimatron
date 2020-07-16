@@ -12,6 +12,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 	private static Logger LOG = Logger.getLogger(JdbcAnonymizerServiceTest.class);
 
@@ -112,7 +114,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 		resultset = statement.getResultSet();
 
 		resultset.next();
-		assertFalse("abcdefghijklmnop".equals(resultset.getString("COL1")));
+		assertNotEquals("abcdefghijklmnop", resultset.getString("COL1"));
 		
 		resultset.close();
 		statement.close();
@@ -130,7 +132,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 		super.addToConfig(config, "TABLE1", "value2", "TO_LOWER_CASE");
 		super.addToConfig(config, "TABLE1", "key", "TO_LOWER_CASE");
 
-		ArrayList<String> anonymizerclasses = new ArrayList<String>();
+		ArrayList<String> anonymizerclasses = new ArrayList<>();
 		anonymizerclasses.add(ToLowerAnonymizer.class.getName());
 		config.setAnonymizerClasses(anonymizerclasses);
 
@@ -141,7 +143,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 		Column emailcol = new Column();
 		emailcol.setName("value1");
 		emailcol.setType("EMAIL_ADDRESS");
-		List<Column> emailcols = new ArrayList<Column>();
+		List<Column> emailcols = new ArrayList<>();
 		emailcols.add(emailcol);
 		discriminator.setColumns(emailcols);
 
@@ -151,11 +153,11 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 		Column uuidcol = new Column();
 		uuidcol.setName("value1");
 		uuidcol.setType("UUID");
-		List<Column> uuidcolscols = new ArrayList<Column>();
+		List<Column> uuidcolscols = new ArrayList<>();
 		uuidcolscols.add(uuidcol);
 		discriminator2.setColumns(uuidcolscols);
 
-		List<Discriminator> discriminators = new ArrayList<Discriminator>();
+		List<Discriminator> discriminators = new ArrayList<>();
 		discriminators.add(discriminator);
 		discriminators.add(discriminator2);
 		config.getTables().get(0).setDiscriminators(discriminators);

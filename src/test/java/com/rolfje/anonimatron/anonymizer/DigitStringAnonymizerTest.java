@@ -70,8 +70,7 @@ public class DigitStringAnonymizerTest {
         char[] expectedChars = expected.toCharArray();
 
         for (int i = 0; i < expectedChars.length; i++) {
-            assertTrue("Character at position " + i + " not what we expected. String is '" + toString + "'",
-                    (expectedChars[i] == 'x') == (Character.isDigit(toChars[i])));
+            assertEquals("Character at position " + i + " not what we expected. String is '" + toString + "'", (expectedChars[i] == 'x'), (Character.isDigit(toChars[i])));
         }
     }
 
@@ -97,7 +96,7 @@ public class DigitStringAnonymizerTest {
 
     private Map<String, String> getMaskParameters(String mask) {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put(anonymizer.PARAMETER, mask);
+        parameters.put(DigitStringAnonymizer.PARAMETER, mask);
         return parameters;
     }
 
@@ -129,7 +128,7 @@ public class DigitStringAnonymizerTest {
     public void testNoParameter() {
         // Actual anonymization tests done elsewhere
         assertNotNull(
-                anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>())
+                anonymizer.anonymize("dummy", 0, false, new HashMap<>())
         );
 
         assertNotNull(

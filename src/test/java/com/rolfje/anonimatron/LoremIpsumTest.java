@@ -4,6 +4,8 @@ import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class LoremIpsumTest extends TestCase {
 
 	public void testGetParagraphs() throws Exception {
@@ -21,7 +23,7 @@ public class LoremIpsumTest extends TestCase {
 		StringTokenizer tokenizer2 = new StringTokenizer(testText2);
 		assertEquals(50, tokenizer2.countTokens());
 
-		assertFalse(testText.equals(testText2));
+        assertNotEquals(testText, testText2);
 	}
 
 }

@@ -51,7 +51,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         try {
             anonimyzer.anonymize("any", 10, false, null);
 
-            anonimyzer.anonymize("any", 10, false, new HashMap<String, String>());
+            anonimyzer.anonymize("any", 10, false, new HashMap<>());
 
             anonimyzer.anonymize("any", 10, false, new HashMap<String, String>() {{
                 put("PaRaMeTeR", "any");
