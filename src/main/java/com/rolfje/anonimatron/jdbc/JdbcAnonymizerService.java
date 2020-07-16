@@ -103,33 +103,23 @@ public class JdbcAnonymizerService {
      * their synonym algorithm on.
      */
     private void preScanTable(Table table) {
-        ColumnWorker worker = new ColumnWorker() {
-            @Override
-            public boolean processColumn(ResultSet results, Column column,
-                                         Object databaseColumnValue) {
-                return anonymizerService.prepare(column.getType(),
-                        databaseColumnValue);
-            }
-        };
+        ColumnWorker worker = (results, column, databaseColumnValue) -> anonymizerService.prepare(column.getType(),
+                databaseColumnValue);
 
         processTableColumns(table, worker, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
     }
 
     private void anonymizeTableInPlace(Table table) {
-        ColumnWorker worker = new ColumnWorker() {
-            @Override
-            public boolean processColumn(ResultSet results, Column column,
-                                         Object databaseColumnValue) throws SQLException {
-                Synonym synonym = anonymizerService.anonymize(column,
-                        databaseColumnValue);
+        ColumnWorker worker = (results, column, databaseColumnValue) -> {
+            Synonym synonym = anonymizerService.anonymize(column,
+                    databaseColumnValue);
 
-                if (results.getConcurrency() == ResultSet.CONCUR_UPDATABLE) {
-                    // Update the contents of this row with the given Synonym
-                    results.updateObject(column.getName(), synonym.getTo());
-                }
-
-                return true;
+            if (results.getConcurrency() == ResultSet.CONCUR_UPDATABLE) {
+                // Update the contents of this row with the given Synonym
+                results.updateObject(column.getName(), synonym.getTo());
             }
+
+            return true;
         };
 
         int resultsetConcurrency = getAnonimizerResultSetConcurrency();
