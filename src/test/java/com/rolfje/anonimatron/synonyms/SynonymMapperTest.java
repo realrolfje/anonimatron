@@ -14,7 +14,7 @@ public class SynonymMapperTest extends TestCase {
             0x15, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x16, 0x17, 0x18, 0x19, 0x7F};
 
     public void testSynonymMapper() throws Exception {
-        List<Synonym> synonyms = new ArrayList<Synonym>();
+        List<Synonym> synonyms = new ArrayList<>();
 
         StringSynonym s = new StringSynonym(
                 "Bunk",

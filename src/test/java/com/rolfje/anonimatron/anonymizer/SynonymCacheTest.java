@@ -5,6 +5,8 @@ import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import junit.framework.TestCase;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class SynonymCacheTest extends TestCase {
 
 	public void testNoStorageOfShortLivedSynonyms() {
@@ -42,7 +44,7 @@ public class SynonymCacheTest extends TestCase {
 		Synonym storedSynonym = synonymCache.get(originalSynonym.getType(), originalSynonym.getFrom());
 
 		// Should not be same
-		assertFalse(originalSynonym.getFrom().equals(storedSynonym.getFrom()));
+        assertNotEquals(originalSynonym.getFrom(), storedSynonym.getFrom());
 
 		// Should be same
 		assertEquals(originalSynonym.getType(), storedSynonym.getType());

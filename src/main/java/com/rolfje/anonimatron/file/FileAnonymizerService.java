@@ -104,7 +104,7 @@ public class FileAnonymizerService {
     }
 
     private List<FileFilter> getFileFilters() throws Exception {
-        List<FileFilter> fileFilters = new ArrayList<FileFilter>();
+        List<FileFilter> fileFilters = new ArrayList<>();
         List<String> fileFilterStrings = config.getFileFilters();
         if (fileFilterStrings != null) {
             for (String fileFilterString : fileFilterStrings) {
@@ -115,7 +115,7 @@ public class FileAnonymizerService {
     }
 
     private List<DataFile> expandDirectories(List<DataFile> files) {
-        ArrayList<DataFile> allFiles = new ArrayList<DataFile>();
+        ArrayList<DataFile> allFiles = new ArrayList<>();
 
         if (files == null || files.isEmpty()) {
             return allFiles;
@@ -159,7 +159,7 @@ public class FileAnonymizerService {
             inFiles.add(dataFile.getInFile());
         }
 
-        HashSet<String> outFiles = new HashSet<String>();
+        HashSet<String> outFiles = new HashSet<>();
         for (DataFile dataFile : allFiles) {
             if (dataFile.getOutFile().equals(dataFile.getInFile())) {
                 throw new RuntimeException("File used as both input and output: " + dataFile.getInFile() + ".");
@@ -184,8 +184,7 @@ public class FileAnonymizerService {
         if (inFile.exists() && inFile.isDirectory()) {
             File[] inputFiles = inFile.listFiles();
 
-            for (int i = 0; i < inputFiles.length; i++) {
-                File inputFile = inputFiles[i];
+            for (File inputFile : inputFiles) {
                 if (inputFile.isFile()) {
                     inFiles.add(inputFile);
                 }
@@ -235,7 +234,7 @@ public class FileAnonymizerService {
     }
 
     private Map<String, Column> toMap(List<Column> columns) {
-        HashMap<String, Column> map = new HashMap<String, Column>();
+        HashMap<String, Column> map = new HashMap<>();
 
         if (columns == null || columns.isEmpty()) {
             return map;

@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 
 import java.sql.Date;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class HasherTest extends TestCase {
 	private Logger LOG = Logger.getLogger(HasherTest.class);
 
@@ -27,7 +29,7 @@ public class HasherTest extends TestCase {
 		String salt1 = new Hasher("salt1").base64Hash(input);
 		String salt2 = new Hasher("salt2").base64Hash(input);
 
-		assertFalse(salt1.equals(salt2));
+        assertNotEquals(salt1, salt2);
 	}
 
 	public void testWrongInput() throws Exception {
@@ -35,7 +37,7 @@ public class HasherTest extends TestCase {
 		String input1 = new Hasher(salt).base64Hash("piep1");
 		String input2 = new Hasher(salt).base64Hash("piep2");
 
-		assertFalse(input1.equals(input2));
+		assertNotEquals(input1, input2);
 	}
 
 	public void testHashSpeed() throws Exception {

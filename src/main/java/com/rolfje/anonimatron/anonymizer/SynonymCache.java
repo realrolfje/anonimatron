@@ -58,7 +58,7 @@ public class SynonymCache {
      * @throws MappingException When there is a problem writing the synonyms to file.
      */
     public void toFile(File synonymXMLfile) throws XMLException, IOException, MappingException {
-        List<Synonym> allSynonyms = new ArrayList<Synonym>();
+        List<Synonym> allSynonyms = new ArrayList<>();
 
         // Flatten the type -> From -> Synonym map.
         Collection<Map<Object, Synonym>> allObjectMaps = synonymCache.values();
@@ -82,11 +82,7 @@ public class SynonymCache {
             return;
         }
 
-        Map<Object, Synonym> map = synonymCache.get(synonym.getType());
-        if (map == null) {
-            map = new HashMap<Object, Synonym>();
-            synonymCache.put(synonym.getType(), map);
-        }
+        Map<Object, Synonym> map = synonymCache.computeIfAbsent(synonym.getType(), k -> new HashMap<>());
 
         if (hasher != null) {
             // Hash sensitive data before storing
