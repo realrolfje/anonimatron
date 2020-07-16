@@ -12,20 +12,8 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.sql.*;
+import java.util.*;
 
 public class JdbcAnonymizerService {
     Logger LOG = Logger.getLogger(JdbcAnonymizerService.class);
@@ -35,9 +23,9 @@ public class JdbcAnonymizerService {
     private AnonymizerService anonymizerService;
     private Progress progress;
 
-    private Map<String, String> supportedJdbcUrls = new HashMap<String, String>();
+    private Map<String, String> supportedJdbcUrls = new HashMap<>();
 
-    public JdbcAnonymizerService() throws Exception {
+    public JdbcAnonymizerService() {
         registerDrivers();
     }
 
@@ -113,15 +101,12 @@ public class JdbcAnonymizerService {
      * Runs through the table data, feeds it to the Synonyms which implement
      * {@link Prefetcher}, so that they can analyze the source data to base
      * their synonym algorithm on.
-     *
-     * @param table
-     * @throws SQLException
      */
-    private void preScanTable(Table table) throws SQLException {
+    private void preScanTable(Table table) {
         ColumnWorker worker = new ColumnWorker() {
             @Override
             public boolean processColumn(ResultSet results, Column column,
-                                         Object databaseColumnValue) throws SQLException {
+                                         Object databaseColumnValue) {
                 return anonymizerService.prepare(column.getType(),
                         databaseColumnValue);
             }
@@ -130,7 +115,7 @@ public class JdbcAnonymizerService {
         processTableColumns(table, worker, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
     }
 
-    private void anonymizeTableInPlace(Table table) throws SQLException {
+    private void anonymizeTableInPlace(Table table) {
         ColumnWorker worker = new ColumnWorker() {
             @Override
             public boolean processColumn(ResultSet results, Column column,
@@ -343,7 +328,6 @@ public class JdbcAnonymizerService {
             }
         }
 
-
         String primaryKeys = getPrimaryKeys(table, columnNames);
 
         String select = "select " + primaryKeys;
@@ -357,6 +341,15 @@ public class JdbcAnonymizerService {
         return select;
     }
 
+    /**
+     * @param table       The table to fetch the primary keys for.
+     * @param columnNames The column names in the configuration that need to be anonimyzed or are
+     *                    used as a discriminator column
+     * @return A comma separated list of primary keys which are not part of any discriminator
+     * or anonimyzation column.
+     * @throws SQLException
+     * @throws RuntimeException When there is a problem with the configuration or precondition.
+     */
     private String getPrimaryKeys(Table table, Set<String> columnNames) throws SQLException {
 
         String schema = null;
@@ -368,22 +361,30 @@ public class JdbcAnonymizerService {
         }
 
         ResultSet resultset = connection.getMetaData().getPrimaryKeys(null, schema, tablename);
-        String primaryKeys = "";
-        while (resultset.next()) {
-            String columnName = resultset.getString("COLUMN_NAME");
-            if (!columnNames.contains(columnName)) {
-                primaryKeys += columnName + ", ";
+        try {
+            String primaryKeys = "";
+            while (resultset.next()) {
+                String columnName = resultset.getString("COLUMN_NAME");
+                if (columnNames.contains(columnName)) {
+                    String msg = "Column " + columnName + " in table " + table.getName()
+                            + " can not be anonimyzed because it is also a primary key.";
+                    LOG.error(msg);
+                    throw new RuntimeException(msg);
+                } else {
+                    primaryKeys += columnName + ", ";
+                }
             }
-        }
-        resultset.close();
 
-        if (primaryKeys.length() < 1) {
-            String msg = "Table " + table.getName() + " does not contain a primary key and can not be anonymyzed.";
-            LOG.error(msg);
-            throw new RuntimeException(msg);
-        }
+            if (primaryKeys.length() < 1) {
+                String msg = "Table " + table.getName() + " does not contain a primary key and can not be anonymyzed.";
+                LOG.error(msg);
+                throw new RuntimeException(msg);
+            }
 
-        return primaryKeys;
+            return primaryKeys;
+        } finally {
+            resultset.close();
+        }
     }
 
     /**
