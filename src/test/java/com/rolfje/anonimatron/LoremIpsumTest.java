@@ -10,6 +10,11 @@ public class LoremIpsumTest extends TestCase {
 
 	public void testGetParagraphs() throws Exception {
 		String test = LoremIpsum.getParagraphs(3);
+
+		assertFalse(test.startsWith(" "));
+		assertFalse(test.startsWith("\n"));
+		assertTrue(test.contains(" "));
+
 		StringTokenizer t = new StringTokenizer(test, "\n");
 		assertEquals(3, t.countTokens());
 	}

@@ -5,10 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import junit.framework.TestCase;
 
@@ -137,9 +134,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 
 		// Build columns
 		List<Column> columnList = new ArrayList<>();
-		for (Column column : columns) {
-			columnList.add(column);
-		}
+		columnList.addAll(Arrays.asList(columns));
 
 		// Build Table
 		Table tab = new Table();
