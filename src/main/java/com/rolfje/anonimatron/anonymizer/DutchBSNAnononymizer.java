@@ -15,7 +15,7 @@ import java.math.BigInteger;
  * A BSN Number is 9 digits long, can not start with 3 zeroes, the first digit
  * must be less than 4, and the whole number passes the "11 proof"
  * <p>
- * See http://nl.wikipedia.org/wiki/Rekeningnummer
+ * See https://nl.wikipedia.org/wiki/Burgerservicenummer
  */
 public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
     private static int LENGTH = 9;
@@ -104,7 +104,6 @@ public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
         if (burgerServiceNummer.charAt(0) > '3') {
             return false;
         }
-
 
         return isBSNElevenProof(burgerServiceNummer);
     }
