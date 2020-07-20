@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
+import com.rolfje.junit.Asserts;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class DutchBSNAnononymizerTest {
             assertNotEquals(originalAsNumber, synonym.getTo());
             Class<?> expectedClass = originalAsNumber.getClass();
             Object actualClass = synonym.getTo();
-            assertInstanceOf(expectedClass, actualClass);
+            Asserts.assertInstanceOf(expectedClass, actualClass);
             assertEquals(shortlived, synonym.isShortLived());
             validate(synonym);
         }
@@ -106,24 +107,6 @@ public class DutchBSNAnononymizerTest {
             toString = value.toString();
         }
         return toString;
-    }
-
-    public static void assertInstanceOf(Class<?> expectedClass, Object actualClass) {
-        Class<?> matchable = matchableClass(expectedClass);
-        assertTrue("Class " + actualClass.getClass().getSimpleName() + " is not an instance of " + expectedClass.getSimpleName(),
-                matchable.isInstance(actualClass));
-    }
-
-    private static Class<?> matchableClass(Class<?> expectedClass) {
-        if (boolean.class.equals(expectedClass)) return Boolean.class;
-        if (byte.class.equals(expectedClass)) return Byte.class;
-        if (char.class.equals(expectedClass)) return Character.class;
-        if (double.class.equals(expectedClass)) return Double.class;
-        if (float.class.equals(expectedClass)) return Float.class;
-        if (int.class.equals(expectedClass)) return Integer.class;
-        if (long.class.equals(expectedClass)) return Long.class;
-        if (short.class.equals(expectedClass)) return Short.class;
-        return expectedClass;
     }
 
 

@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
+import com.rolfje.junit.Asserts;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.bban.BbanStructure;
@@ -43,7 +44,7 @@ public class IbanAnonymizerTest {
         for (int i = 0; i < 1000; i++) {
             String from = anonymizer.generateIban(countryCode);
 
-            assertAnyOf(Iban.valueOf(from).getCountryCode(),
+            Asserts.assertAnyOf(Iban.valueOf(from).getCountryCode(),
                     countryCode,
                     IbanAnonymizer.DEFAULT_COUNTRY_CODE
             );
@@ -52,20 +53,11 @@ public class IbanAnonymizerTest {
         }
     }
 
-    static void assertAnyOf(Object expected, Object... values) {
-        for (Object value : values) {
-            if (expected.equals(value)) {
-                return;
-            }
-        }
-        fail(expected.toString() + " did not match any of " + values.toString());
-    }
-
     private void testInternal(int size, String from, CountryCode countryCode) {
         Synonym synonym = anonymizer.anonymize(from, size, false);
         assertEquals(anonymizer.getType(), synonym.getType());
 
-        assertAnyOf(Iban.valueOf((String) synonym.getTo()).getCountryCode(),
+        Asserts.assertAnyOf(Iban.valueOf((String) synonym.getTo()).getCountryCode(),
                 countryCode,
                 IbanAnonymizer.DEFAULT_COUNTRY_CODE
         );
