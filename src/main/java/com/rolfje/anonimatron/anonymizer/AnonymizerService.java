@@ -9,7 +9,7 @@ import java.sql.Date;
 import java.util.*;
 
 public class AnonymizerService {
-	private static Logger LOG = Logger.getLogger(AnonymizerService.class);
+	private static final Logger LOG = Logger.getLogger(AnonymizerService.class);
 
 	private Map<String, Anonymizer> customAnonymizers = new HashMap<>();
 	private Map<String, String> defaultTypeMapping = new HashMap<>();

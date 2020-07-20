@@ -20,7 +20,7 @@ public class DutchBSNAnononymizerTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         original = bsnAnonymizer.generateBSN(9);
     }
 
@@ -47,7 +47,7 @@ public class DutchBSNAnononymizerTest {
 
 
     @Test
-    public void testLength() throws Exception {
+    public void testLength() {
         bsnAnonymizer.anonymize("dummy", 10000, false);
         bsnAnonymizer.anonymize("dummy", 9, false);
 

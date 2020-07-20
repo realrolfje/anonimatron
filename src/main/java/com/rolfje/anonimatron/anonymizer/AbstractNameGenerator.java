@@ -161,7 +161,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 
 	private boolean allowCons(ArrayList<String> array) {
 		for (String s : array) {
-			if (hatesPreviousVocals(s) || hatesPreviousConsonants(s) == false)
+			if (hatesPreviousVocals(s) || !hatesPreviousConsonants(s))
 				return true;
 		}
 		return false;
@@ -169,38 +169,26 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 
 	private boolean allowVocs(ArrayList<String> array) {
 		for (String s : array) {
-			if (hatesPreviousConsonants(s) || hatesPreviousVocals(s) == false)
+			if (hatesPreviousConsonants(s) || !hatesPreviousVocals(s))
 				return true;
 		}
 		return false;
 	}
 
 	private boolean expectsVocal(String s) {
-		if (s.substring(1).contains("+v"))
-			return true;
-		else
-			return false;
+		return s.substring(1).contains("+v");
 	}
 
 	private boolean expectsConsonant(String s) {
-		if (s.substring(1).contains("+c"))
-			return true;
-		else
-			return false;
+		return s.substring(1).contains("+c");
 	}
 
 	private boolean hatesPreviousVocals(String s) {
-		if (s.substring(1).contains("-c"))
-			return true;
-		else
-			return false;
+		return s.substring(1).contains("-c");
 	}
 
 	private boolean hatesPreviousConsonants(String s) {
-		if (s.substring(1).contains("-v"))
-			return true;
-		else
-			return false;
+		return s.substring(1).contains("-v");
 	}
 
 	private String pureSyl(String s) {
@@ -267,14 +255,14 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 		if (syls > 2) {
 			if (expectsVocal(pre.get(a))) {
 				expecting = 1;
-				if (containsVocFirst(mid) == false)
+				if (!containsVocFirst(mid))
 					throw new RuntimeException(
 							"Expecting \"middle\" part starting with vocal, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
 			}
 			if (expectsConsonant(pre.get(a))) {
 				expecting = 2;
-				if (containsConsFirst(mid) == false)
+				if (!containsConsFirst(mid))
 					throw new RuntimeException(
 							"Expecting \"middle\" part starting with consonant, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
@@ -282,20 +270,20 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 		} else {
 			if (expectsVocal(pre.get(a))) {
 				expecting = 1;
-				if (containsVocFirst(sur) == false)
+				if (!containsVocFirst(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part starting with vocal, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
 			}
 			if (expectsConsonant(pre.get(a))) {
 				expecting = 2;
-				if (containsConsFirst(sur) == false)
+				if (!containsConsFirst(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part starting with consonant, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
 			}
 		}
-		if (vocalLast(pureSyl(pre.get(a))) && allowVocs(mid) == false)
+		if (vocalLast(pureSyl(pre.get(a))) && !allowVocs(mid))
 			throw new RuntimeException(
 					"Expecting \"middle\" part that allows last character of prefix to be a vocal, "
 							+ "but there is none. You should add one, or remove requirements that cannot be fulfilled.. the prefix used, was : \""
@@ -303,7 +291,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 							+ "\", which"
 							+ "means there should be a part available, that has \"-v\" requirement or no requirements for previous syllables at all.");
 
-		if (consonantLast(pureSyl(pre.get(a))) && allowCons(mid) == false)
+		if (consonantLast(pureSyl(pre.get(a))) && !allowCons(mid))
 			throw new RuntimeException(
 					"Expecting \"middle\" part that allows last character of prefix to be a consonant, "
 							+ "but there is none. You should add one, or remove requirements that cannot be fulfilled.. the prefix used, was : \""
@@ -311,42 +299,42 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 							+ "\", which"
 							+ "means there should be a part available, that has \"-c\" requirement or no requirements for previous syllables at all.");
 
-		int b[] = new int[syls];
+		int[] b = new int[syls];
 		for (int i = 0; i < b.length - 2; i++) {
 
 			do {
 				b[i] = (int) (Math.random() * mid.size());
 			} while (expecting == 1
-					&& vocalFirst(pureSyl(mid.get(b[i]))) == false
+					&& !vocalFirst(pureSyl(mid.get(b[i])))
 					|| expecting == 2
-					&& consonantFirst(pureSyl(mid.get(b[i]))) == false
+					&& !consonantFirst(pureSyl(mid.get(b[i])))
 					|| last == 1 && hatesPreviousVocals(mid.get(b[i]))
 					|| last == 2 && hatesPreviousConsonants(mid.get(b[i])));
 
 			expecting = 0;
 			if (expectsVocal(mid.get(b[i]))) {
 				expecting = 1;
-				if (i < b.length - 3 && containsVocFirst(mid) == false)
+				if (i < b.length - 3 && !containsVocFirst(mid))
 					throw new RuntimeException(
 							"Expecting \"middle\" part starting with vocal, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
-				if (i == b.length - 3 && containsVocFirst(sur) == false)
+				if (i == b.length - 3 && !containsVocFirst(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part starting with vocal, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
 			}
 			if (expectsConsonant(mid.get(b[i]))) {
 				expecting = 2;
-				if (i < b.length - 3 && containsConsFirst(mid) == false)
+				if (i < b.length - 3 && !containsConsFirst(mid))
 					throw new RuntimeException(
 							"Expecting \"middle\" part starting with consonant, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
-				if (i == b.length - 3 && containsConsFirst(sur) == false)
+				if (i == b.length - 3 && !containsConsFirst(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part starting with consonant, "
 									+ "but there is none. You should add one, or remove requirement for one.. ");
 			}
-			if (vocalLast(pureSyl(mid.get(b[i]))) && allowVocs(mid) == false
+			if (vocalLast(pureSyl(mid.get(b[i]))) && !allowVocs(mid)
 					&& syls > 3)
 				throw new RuntimeException(
 						"Expecting \"middle\" part that allows last character of last syllable to be a vocal, "
@@ -356,7 +344,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 								+ "means there should be a part available, that has \"-v\" requirement or no requirements for previous syllables at all.");
 
 			if (consonantLast(pureSyl(mid.get(b[i])))
-					&& allowCons(mid) == false && syls > 3)
+					&& !allowCons(mid) && syls > 3)
 				throw new RuntimeException(
 						"Expecting \"middle\" part that allows last character of last syllable to be a consonant, "
 								+ "but there is none. You should add one, or remove requirements that cannot be fulfilled.. the part used, was : \""
@@ -365,7 +353,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 								+ "means there should be a part available, that has \"-c\" requirement or no requirements for previous syllables at all.");
 			if (i == b.length - 3) {
 				if (vocalLast(pureSyl(mid.get(b[i])))
-						&& allowVocs(sur) == false)
+						&& !allowVocs(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part that allows last character of last syllable to be a vocal, "
 									+ "but there is none. You should add one, or remove requirements that cannot be fulfilled.. the part used, was : \""
@@ -374,7 +362,7 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 									+ "means there should be a suffix available, that has \"-v\" requirement or no requirements for previous syllables at all.");
 
 				if (consonantLast(pureSyl(mid.get(b[i])))
-						&& allowCons(sur) == false)
+						&& !allowCons(sur))
 					throw new RuntimeException(
 							"Expecting \"suffix\" part that allows last character of last syllable to be a consonant, "
 									+ "but there is none. You should add one, or remove requirements that cannot be fulfilled.. the part used, was : \""
@@ -391,9 +379,9 @@ public abstract class AbstractNameGenerator implements Anonymizer {
 		int c;
 		do {
 			c = (int) (Math.random() * sur.size());
-		} while (expecting == 1 && vocalFirst(pureSyl(sur.get(c))) == false
+		} while (expecting == 1 && !vocalFirst(pureSyl(sur.get(c)))
 				|| expecting == 2
-				&& consonantFirst(pureSyl(sur.get(c))) == false || last == 1
+				&& !consonantFirst(pureSyl(sur.get(c))) || last == 1
 				&& hatesPreviousVocals(sur.get(c)) || last == 2
 				&& hatesPreviousConsonants(sur.get(c)));
 

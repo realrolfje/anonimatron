@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertNotEquals;
 
 public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
-    private static Logger LOG = Logger.getLogger(JdbcAnonymizerServiceTest.class);
+    private static final Logger LOG = Logger.getLogger(JdbcAnonymizerServiceTest.class);
 
     public void testSimpleStrings() throws Exception {
         // Create a table with some easy testdata
@@ -243,7 +243,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         anonymize(config, 2);
     }
 
-    private AnonymizerService anonymize(Configuration config, int numberOfRecords) throws Exception, SQLException {
+    private AnonymizerService anonymize(Configuration config, int numberOfRecords) throws Exception {
         // Anonymize the data.
         AnonymizerService anonymizerService = new AnonymizerService();
         anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
@@ -285,7 +285,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         }
     }
 
-    private int getResultFromCount(String sql) throws Exception, SQLException {
+    private int getResultFromCount(String sql) throws Exception {
         Statement statement = connection.createStatement();
         statement.execute(sql);
         ResultSet resultset = statement.getResultSet();

@@ -14,10 +14,10 @@ import java.util.Random;
  * to have a very strange organically grown format.
  */
 public class UkPostCodeAnonymizer implements Anonymizer {
-    private Random random = new Random();
+    private final Random random = new Random();
 
-    private static String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static String DIGITS = "0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String DIGITS = "0123456789";
 
     @Override
     public String getType() {

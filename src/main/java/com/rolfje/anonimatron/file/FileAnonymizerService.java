@@ -22,7 +22,7 @@ import java.util.Map;
  * Reads rows from a file and returns anonymized rows.
  */
 public class FileAnonymizerService {
-    private Logger LOG = Logger.getLogger(FileAnonymizerService.class);
+    private final Logger LOG = Logger.getLogger(FileAnonymizerService.class);
 
     private Configuration config;
     private AnonymizerService anonymizerService;
@@ -179,7 +179,7 @@ public class FileAnonymizerService {
     }
 
     List<File> getInputFiles(DataFile dataFile) {
-        List<File> inFiles = new ArrayList();
+        List<File> inFiles = new ArrayList<>();
         File inFile = new File(dataFile.getInFile());
 
         if (inFile.exists() && inFile.isDirectory()) {

@@ -13,7 +13,7 @@ public class ProgressTest extends TestCase {
 		progress = new Progress();
 	}
 
-	public void testPercentageCalculations() throws Exception {
+	public void testPercentageCalculations() {
 		progress.setTotalitemstodo(1000);
 		progress.setTotalitemscompleted(0);
 

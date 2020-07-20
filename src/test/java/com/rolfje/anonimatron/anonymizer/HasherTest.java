@@ -8,23 +8,23 @@ import java.sql.Date;
 import static org.junit.Assert.assertNotEquals;
 
 public class HasherTest extends TestCase {
-	private Logger LOG = Logger.getLogger(HasherTest.class);
+	private final Logger LOG = Logger.getLogger(HasherTest.class);
 
-	public void testBase64HashHappy() throws Exception {
+	public void testBase64HashHappy() {
 		assertEquals(
 				new Hasher("salt").base64Hash("piep"),
 				new Hasher("salt").base64Hash("piep")
 		);
 	}
 
-	public void testBase64HashHappyDate() throws Exception {
+	public void testBase64HashHappyDate() {
 		assertEquals(
 				new Hasher("salt").base64Hash(new Date(12345)),
 				new Hasher("salt").base64Hash(new Date(12345))
 		);
 	}
 
-	public void testWrongSalt() throws Exception {
+	public void testWrongSalt() {
 		String input = "piep";
 		String salt1 = new Hasher("salt1").base64Hash(input);
 		String salt2 = new Hasher("salt2").base64Hash(input);
@@ -32,7 +32,7 @@ public class HasherTest extends TestCase {
         assertNotEquals(salt1, salt2);
 	}
 
-	public void testWrongInput() throws Exception {
+	public void testWrongInput() {
 		String salt = "piep";
 		String input1 = new Hasher(salt).base64Hash("piep1");
 		String input2 = new Hasher(salt).base64Hash("piep2");
@@ -40,7 +40,7 @@ public class HasherTest extends TestCase {
 		assertNotEquals(input1, input2);
 	}
 
-	public void testHashSpeed() throws Exception {
+	public void testHashSpeed() {
 		long start = System.nanoTime();
 		long iterations = 2000;
 		long size = 0;

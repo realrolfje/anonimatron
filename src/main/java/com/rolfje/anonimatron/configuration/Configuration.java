@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Configuration {
-	private static Logger LOG = Logger.getLogger(Configuration.class);
+	private static final Logger LOG = Logger.getLogger(Configuration.class);
 
 	private String jdbcurl;
 	private String userid;

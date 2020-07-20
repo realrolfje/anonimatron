@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class RecordTest extends TestCase {
 
-	public void testToString() throws Exception {
+	public void testToString() {
 		String[] names = {"name1", "name2", "name3"};
 		Object[] values = {"value1", null, new Object()};
 

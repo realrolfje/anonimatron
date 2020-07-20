@@ -13,7 +13,7 @@ public class AbstractElevenProofAnonymizerTest {
     AbstractElevenProofAnonymizer testdummy;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         testdummy = new AbstractElevenProofAnonymizer() {
 
             @Override

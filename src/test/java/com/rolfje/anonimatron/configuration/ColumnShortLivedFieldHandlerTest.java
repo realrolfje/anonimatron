@@ -11,7 +11,7 @@ public class ColumnShortLivedFieldHandlerTest {
     private ColumnShortLivedFieldHandler handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = new ColumnShortLivedFieldHandler();
     }
 

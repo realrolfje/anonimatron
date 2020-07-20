@@ -11,7 +11,7 @@ public class CountryCodeAnonymizerTest extends TestCase {
 
     private static final Set<String> ISO_3_COUNTRY_CODES = getISO3CountryCodes();
 
-    public void testAnonymize() throws Exception {
+    public void testAnonymize() {
 
         testInternal(2, "EN");
         testInternal(3, "NLD");

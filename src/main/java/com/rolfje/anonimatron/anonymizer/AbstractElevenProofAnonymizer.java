@@ -4,7 +4,7 @@ package com.rolfje.anonimatron.anonymizer;
 public abstract class AbstractElevenProofAnonymizer implements Anonymizer {
 
     protected int[] add(int[] digits, int number) {
-        String numberString = digitsAsNumber(digits);
+        String numberString = digitsAsString(digits);
         int intValue = Integer.parseInt(numberString) + number;
         return numberAsDigits(intValue, digits.length);
     }

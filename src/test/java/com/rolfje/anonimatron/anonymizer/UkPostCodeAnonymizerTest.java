@@ -13,7 +13,7 @@ public class UkPostCodeAnonymizerTest {
     private UkPostCodeAnonymizer ukPostCodeAnonymizer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         ukPostCodeAnonymizer = new UkPostCodeAnonymizer();
     }
 
@@ -63,12 +63,12 @@ public class UkPostCodeAnonymizerTest {
         Synonym s1 = ukPostCodeAnonymizer.anonymize("x", 10, false);
         assertEquals(ukPostCodeAnonymizer.getType(), s1.getType());
         assertNotEquals(s1.getFrom(), s1.getTo());
-        assertEquals(false, s1.isShortLived());
+        assertFalse(s1.isShortLived());
 
         Synonym s2 = ukPostCodeAnonymizer.anonymize("x", 10, true);
         assertEquals(ukPostCodeAnonymizer.getType(), s2.getType());
         assertNotEquals(s2.getFrom(), s2.getTo());
-        assertEquals(true, s2.isShortLived());
+        assertTrue(s2.isShortLived());
 
         assertNotEquals(s1.getTo(), s2.getTo());
     }

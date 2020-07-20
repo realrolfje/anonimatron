@@ -6,7 +6,7 @@ package com.rolfje.anonimatron.synonyms;
  * 
  */
 public class NullSynonym implements Synonym {
-	private String type;
+	private final String type;
 	
 	public NullSynonym(String type) {
 		this.type=type;
