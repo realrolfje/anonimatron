@@ -32,7 +32,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         assertEquals(
                 "Data was not inserted.",
                 100,
-                getResultFromCount("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
+                getIntResult("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
 
         // Create anonimatron configuration
         Configuration config = super.createConfiguration();
@@ -49,12 +49,12 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         assertEquals(
                 "Data was not anonymized completely.",
                 0,
-                getResultFromCount("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
+                getIntResult("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
 
         assertEquals(
                 "Rows dissapeared from the data set.",
                 100,
-                getResultFromCount("select count(*) from TABLE1 where COL1 not like 'varcharstring%'"));
+                getIntResult("select count(*) from TABLE1 where COL1 not like 'varcharstring%'"));
     }
 
     public void testTooShortUUID() throws Exception {
@@ -192,31 +192,34 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
     public void testProgressForMultipleTables() throws Exception {
         executeSql("create table TABLE1 (COL1 VARCHAR(200), ID IDENTITY)");
-        PreparedStatement p = connection
-                .prepareStatement("insert into TABLE1 (COL1) values (?)");
-        for (int i = 0; i < 1251; i++) {
-            p.setString(1, "varcharstring-" + i);
-            p.execute();
+
+        try (PreparedStatement p =
+                     connection.prepareStatement("insert into TABLE1 (COL1) values (?)")) {
+            for (int i = 0; i < 1251; i++) {
+                p.setString(1, "varcharstring-" + i);
+                p.execute();
+            }
         }
-        p.close();
 
         executeSql("create table TABLE2 (COL1 VARCHAR(200), ID IDENTITY)");
-        p = connection
-                .prepareStatement("insert into TABLE2 (COL1) values (?)");
-        for (int i = 0; i < 1251; i++) {
-            p.setString(1, "varcharstring-" + i);
-            p.execute();
+
+        try (PreparedStatement p =
+                     connection.prepareStatement("insert into TABLE2 (COL1) values (?)")) {
+            for (int i = 0; i < 1251; i++) {
+                p.setString(1, "varcharstring-" + i);
+                p.execute();
+            }
         }
-        p.close();
 
         executeSql("create table TABLE3 (COL1 VARCHAR(200), ID IDENTITY)");
-        p = connection
-                .prepareStatement("insert into TABLE3 (COL1) values (?)");
-        for (int i = 0; i < 1251; i++) {
-            p.setString(1, "varcharstring-" + i);
-            p.execute();
+
+        try (PreparedStatement p =
+                     connection.prepareStatement("insert into TABLE3 (COL1) values (?)")) {
+            for (int i = 0; i < 1251; i++) {
+                p.setString(1, "varcharstring-" + i);
+                p.execute();
+            }
         }
-        p.close();
 
         // Create anonimatron configuration
         Configuration config = super.createConfiguration();
@@ -229,13 +232,14 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
     public void testDataTypes() throws Exception {
         executeSql("create table TABLE1 (COL1 DATE, ID IDENTITY)");
-        PreparedStatement p = connection
-                .prepareStatement("insert into TABLE1 (COL1) values (?)");
-        for (int i = 0; i < 2; i++) {
-            p.setDate(1, new Date(Math.round(System.currentTimeMillis() * Math.random())));
-            p.execute();
+
+        try (PreparedStatement p =
+                     connection.prepareStatement("insert into TABLE1 (COL1) values (?)")) {
+            for (int i = 0; i < 2; i++) {
+                p.setDate(1, new Date(Math.round(System.currentTimeMillis() * Math.random())));
+                p.execute();
+            }
         }
-        p.close();
 
         Configuration config = super.createConfiguration();
         super.addToConfig(config, "TABLE1", "COL1", null);
@@ -285,21 +289,17 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         }
     }
 
-    private int getResultFromCount(String sql) throws Exception {
-        Statement statement = connection.createStatement();
-        statement.execute(sql);
-        ResultSet resultset = statement.getResultSet();
-        resultset.next();
-        int count = resultset.getInt(1);
-        resultset.close();
-        statement.close();
-        return count;
+    private int getIntResult(String sql) throws Exception {
+        try (Statement statement = getStatementForSelect(sql);
+             ResultSet resultset = statement.getResultSet()) {
+            resultset.next();
+            return resultset.getInt(1);
+        }
     }
 
     private Statement getStatementForSelect(String select) throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute(select);
         return statement;
-
     }
 }
