@@ -1,5 +1,8 @@
 package com.rolfje.junit;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -11,7 +14,9 @@ public class Asserts {
                 return;
             }
         }
-        fail(expected.toString() + " did not match any of " + values.toString());
+        fail(expected.toString() + " did not match any of "
+                + Arrays.stream(values).map(Object::toString).collect(Collectors.joining(", "))
+                + ".");
     }
 
     public static void assertInstanceOf(Class<?> expectedClass, Object actualClass) {
