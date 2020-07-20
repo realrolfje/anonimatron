@@ -6,6 +6,9 @@
 - Fixed a problem where RANDOMDIGITS was not downwards compatible
   and required a digit mask, issue #95
 - Upgraded code to make better use of Java 8 features.
+- TODO UPGRADE mysql-connector-j to 8.0 (java 8 en mysql 8 compatible, vanaf mysql 5.6
+- Solved a problem where UkPostCodeAnonymizer would not set the Synonym type.
+- Solved a problem where UkPostCodeAnonymizer would respect "shortlived" synonym configuration.
 
 *** Version 1.13
 - Fixed OutOfMemoryError for tables with BLOBs by adding fetch size,

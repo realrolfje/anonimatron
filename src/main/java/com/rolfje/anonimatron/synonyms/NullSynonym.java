@@ -31,7 +31,7 @@ public class NullSynonym implements Synonym {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && this.hashCode() == obj.hashCode();
+		return (obj != null) && (this.getClass() == obj.getClass()) && (this.hashCode() == obj.hashCode());
 	}
 
 	@Override
