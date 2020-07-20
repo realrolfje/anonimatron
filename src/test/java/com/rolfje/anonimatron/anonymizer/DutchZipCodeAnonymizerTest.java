@@ -5,9 +5,7 @@ import org.junit.Test;
 
 import java.util.regex.Pattern;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link DutchZipCodeAnonymizer}.
@@ -22,21 +20,21 @@ public class DutchZipCodeAnonymizerTest {
     @Test
     public void anonymize() {
         for (int i = 0; i < 1000000; i++) {
-            String source = anonymizer.buildZipCode();
-            assertThat(isValidZipCode(source), is(true));
+            String from = anonymizer.buildZipCode();
+            assertTrue(isValidZipCode(from));
+            assertEquals(6, from.length());
 
-            assertThat(source.length(), is(6));
-            testInternal(6, source);
+            internalAnonymize(6, from);
         }
     }
 
-    private void testInternal(int size, String from) {
+    private void internalAnonymize(int size, String from) {
         Synonym synonym = anonymizer.anonymize(from, size, false);
-        assertThat(synonym.getType(), sameInstance(anonymizer.getType()));
+        assertEquals(anonymizer.getType(), synonym.getType());
 
         String value = (String) synonym.getTo();
-        assertThat(isValidZipCode(value), is(true));
-        assertThat(synonym.isShortLived(), is(false));
+        assertTrue(isValidZipCode(value));
+        assertFalse(synonym.isShortLived());
     }
 
     private boolean isValidZipCode(String value) {

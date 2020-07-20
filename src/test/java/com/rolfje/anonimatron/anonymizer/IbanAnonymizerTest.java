@@ -1,18 +1,15 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.assertThat;
-
-import java.util.EnumSet;
-
+import com.rolfje.anonimatron.synonyms.Synonym;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.bban.BbanStructure;
 import org.junit.Test;
 
-import com.rolfje.anonimatron.synonyms.Synonym;
+import java.util.EnumSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link IbanAnonymizer}.
@@ -21,43 +18,56 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  */
 public class IbanAnonymizerTest {
 
-	private IbanAnonymizer anonymizer = new IbanAnonymizer();
-	private EnumSet<CountryCode> countriesWithBankAccountAnonymizer = EnumSet
-			.copyOf(IbanAnonymizer.BANK_ACCOUNT_ANONYMIZERS.keySet());
-	private EnumSet<CountryCode> countriesWithoutBankAccountAnonymizer = EnumSet.complementOf(countriesWithBankAccountAnonymizer);
+    private IbanAnonymizer anonymizer = new IbanAnonymizer();
+    private EnumSet<CountryCode> countriesWithBankAccountAnonymizer = EnumSet
+            .copyOf(IbanAnonymizer.BANK_ACCOUNT_ANONYMIZERS.keySet());
+    private EnumSet<CountryCode> countriesWithoutBankAccountAnonymizer = EnumSet.complementOf(countriesWithBankAccountAnonymizer);
 
-	@Test
-	public void testAnonymizeForCountriesWithBankAccountAnonymizer() {
-		for (CountryCode countryCode : countriesWithBankAccountAnonymizer) {
-			testAnonymize(countryCode);
-		}
-	}
+    @Test
+    public void testAnonymizeForCountriesWithBankAccountAnonymizer() {
+        for (CountryCode countryCode : countriesWithBankAccountAnonymizer) {
+            testAnonymize(countryCode);
+        }
+    }
 
-	@Test
-	public void testAnonymizeForOtherCountries() {
-		for (CountryCode countryCode : countriesWithoutBankAccountAnonymizer) {
-			if (BbanStructure.forCountry(countryCode) != null) {
-				testAnonymize(countryCode);
-			}
-		}
-	}
+    @Test
+    public void testAnonymizeForOtherCountries() {
+        for (CountryCode countryCode : countriesWithoutBankAccountAnonymizer) {
+            if (BbanStructure.forCountry(countryCode) != null) {
+                testAnonymize(countryCode);
+            }
+        }
+    }
 
-	private void testAnonymize(CountryCode countryCode) {
-		for (int i = 0; i < 1000; i++) {
-			String source = anonymizer.generateIban(countryCode);
-			assertThat(Iban.valueOf(source).getCountryCode(), anyOf(is(countryCode), is(IbanAnonymizer.DEFAULT_COUNTRY_CODE)));
+    private void testAnonymize(CountryCode countryCode) {
+        for (int i = 0; i < 1000; i++) {
+            String from = anonymizer.generateIban(countryCode);
 
-			testInternal(source.length(), source, countryCode);
-		}
-	}
+            assertAnyOf(Iban.valueOf(from).getCountryCode(),
+                    countryCode,
+                    IbanAnonymizer.DEFAULT_COUNTRY_CODE
+            );
 
-	private void testInternal(int size, String from, CountryCode countryCode) {
-		Synonym synonym = anonymizer.anonymize(from, size, false);
-		assertThat(synonym.getType(), sameInstance(anonymizer.getType()));
+            testInternal(from.length(), from, countryCode);
+        }
+    }
 
-		String value = (String) synonym.getTo();
+    static void assertAnyOf(Object expected, Object... values) {
+        for (Object value : values) {
+            if (expected.equals(value)) {
+                return;
+            }
+        }
+        fail(expected.toString() + " did not match any of " + values.toString());
+    }
 
-		assertThat(Iban.valueOf(value).getCountryCode(), anyOf(is(countryCode), is(IbanAnonymizer.DEFAULT_COUNTRY_CODE)));
-	}
+    private void testInternal(int size, String from, CountryCode countryCode) {
+        Synonym synonym = anonymizer.anonymize(from, size, false);
+        assertEquals(anonymizer.getType(), synonym.getType());
 
+        assertAnyOf(Iban.valueOf((String) synonym.getTo()).getCountryCode(),
+                countryCode,
+                IbanAnonymizer.DEFAULT_COUNTRY_CODE
+        );
+    }
 }

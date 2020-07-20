@@ -131,11 +131,9 @@ public class UkPostCodeAnonymizer implements Anonymizer {
     // 26 * 10 * 26 = 6.760 combinations
     // ([A-Za-z][0-9][A-Za-z])
     String p2ba() {
-        StringBuilder b = new StringBuilder();
-        b.append(getRandomCharacter(CHARACTERS));
-        b.append(getRandomCharacter(DIGITS));
-        b.append(getRandomCharacter(CHARACTERS));
-        return b.toString();
+        return String.valueOf(getRandomCharacter(CHARACTERS)) +
+                getRandomCharacter(DIGITS) +
+                getRandomCharacter(CHARACTERS);
     }
 
     // Length 3 to 4

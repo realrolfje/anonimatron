@@ -70,6 +70,7 @@ public class FileAnonymizerService {
                     // Skip file
                     process = false;
                     progress.incItemsCompleted(infile.length());
+                    // TODO possible bug: Which loop do we want to break out of?
                     continue;
                 }
             }

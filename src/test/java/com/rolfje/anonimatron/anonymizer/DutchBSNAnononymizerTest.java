@@ -38,7 +38,7 @@ public class DutchBSNAnononymizerTest {
             assertNotEquals(originalAsNumber, synonym.getTo());
             Class<?> expectedClass = originalAsNumber.getClass();
             Object actualClass = synonym.getTo();
-            assertInstanceof(expectedClass, actualClass);
+            assertInstanceOf(expectedClass, actualClass);
             assertEquals(shortlived, synonym.isShortLived());
             validate(synonym);
         }
@@ -108,7 +108,7 @@ public class DutchBSNAnononymizerTest {
         return toString;
     }
 
-    private void assertInstanceof(Class<?> expectedClass, Object actualClass) {
+    public static void assertInstanceOf(Class<?> expectedClass, Object actualClass) {
         Class<?> matchable = matchableClass(expectedClass);
         assertTrue("Class " + actualClass.getClass().getSimpleName() + " is not an instance of " + expectedClass.getSimpleName(),
                 matchable.isInstance(actualClass));
