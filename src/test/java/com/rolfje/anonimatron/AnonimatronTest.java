@@ -52,10 +52,10 @@ public class AnonimatronTest extends TestCase {
         csvFileWriter.close();
 
         File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
-        outFile.delete();
+        assertTrue("Could not delete " + outFile, outFile.delete());
 
         File synonymFile = File.createTempFile(this.getClass().getSimpleName(), "synonyms.xml");
-        synonymFile.delete();
+        assertTrue("Could not delete " + synonymFile, synonymFile.delete());
 
         File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
         PrintWriter printWriter = new PrintWriter(configFile);

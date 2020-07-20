@@ -162,7 +162,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         dataFile.setColumns(columns);
 
         Configuration configuration = new Configuration();
-        configuration.setFiles(Arrays.asList(new DataFile[]{dataFile}));
+        configuration.setFiles(Arrays.asList(dataFile));
         AnonymizerService anonymizerService = new AnonymizerService();
         anonymizerService.registerAnonymizers(configuration.getAnonymizerClasses());
         fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
