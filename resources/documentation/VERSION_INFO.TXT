@@ -1,4 +1,4 @@
-*** Version <NEXT>
+*** Version 1.14-SNAPSHOT
 - Fixed a problem where generated Dutch BSN numbers could be
   syntactically invalid, issue #99
 - Removed references to deprecated Hamcrest matchers in the
@@ -6,9 +6,9 @@
 - Fixed a problem where RANDOMDIGITS was not downwards compatible
   and required a digit mask, issue #95
 - Upgraded code to make better use of Java 8 features.
-- TODO UPGRADE mysql-connector-j to 8.0 (java 8 en mysql 8 compatible, vanaf mysql 5.6
-- Solved a problem where UkPostCodeAnonymizer would not set the Synonym type.
-- Solved a problem where UkPostCodeAnonymizer would respect "shortlived" synonym configuration.
+- Upgraded bundled mysql-connector-j to 8.0.21, also requested in issue #101
+- Solved a problem where UkPostCodeAnonymizer would not set the Synonym
+  type and ignored the "shortlived" synonym configuration.
 
 *** Version 1.13
 - Fixed OutOfMemoryError for tables with BLOBs by adding fetch size,
