@@ -163,8 +163,11 @@ public class JdbcAnonymizerService {
                 Collection<Column> columnsAsList = getDiscriminatedColumnConfiguration(table, results);
 
                 /*
-                 * Assume ready. if any of the calls to the worker indicate that
-                 * we need to continue, we'll fetch the next result (see below(
+                 * If any of the calls to the worker indicate that
+                 * we need to continue, we'll fetch the next result (see below).
+                 * If we had no columns to do because we had no columns and no discriminators firing,
+                 * we assume that we do need to process the next record.
+                 * TODO This is now a strange way to stop the loop on synonym depletion and needs refactoring.
                  */
                 processNextRecord = false || columnsAsList.isEmpty();
 
