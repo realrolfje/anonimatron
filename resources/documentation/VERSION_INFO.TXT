@@ -1,4 +1,4 @@
-*** Version 1.14-SNAPSHOT
+*** Version 1.14
 - Fixed a problem where generated Dutch BSN numbers could be
   syntactically invalid, issue #99
 - Removed references to deprecated Hamcrest matchers in the
@@ -9,6 +9,8 @@
 - Upgraded bundled mysql-connector-j to 8.0.21, also requested in issue #101
 - Solved a problem where UkPostCodeAnonymizer would not set the Synonym
   type and ignored the "shortlived" synonym configuration.
+- Solved a problem where discriminator configuration was parsed
+  incorrectly, see #86
 
 *** Version 1.13
 - Fixed OutOfMemoryError for tables with BLOBs by adding fetch size,
