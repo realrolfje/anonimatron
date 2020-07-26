@@ -23,7 +23,7 @@ to set things up. All data types known by anonimatron
 at the time of running the command are automatically listed.
 
 Have fun playing with anonimatron, and don't forget to
-post bugs or feature requests at 
+check the documentation, post bugs or request features at 
 [https://github.com/realrolfje/anonimatron]
 
 Kind regards,
