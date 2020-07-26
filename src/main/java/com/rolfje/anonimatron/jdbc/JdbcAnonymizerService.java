@@ -14,6 +14,7 @@ import org.apache.log4j.NDC;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JdbcAnonymizerService {
     Logger LOG = Logger.getLogger(JdbcAnonymizerService.class);
@@ -162,10 +163,13 @@ public class JdbcAnonymizerService {
                 Collection<Column> columnsAsList = getDiscriminatedColumnConfiguration(table, results);
 
                 /*
-                 * Assume ready. if any of the calls to the worker indicate that
-                 * we need to continue, we'll fetch the next result (see below(
+                 * If any of the calls to the worker indicate that
+                 * we need to continue, we'll fetch the next result (see below).
+                 * If we had no columns to do because we had no columns and no discriminators firing,
+                 * we assume that we do need to process the next record.
+                 * TODO This is now a strange way to stop the loop on synonym depletion and needs refactoring.
                  */
-                processNextRecord = false;
+                processNextRecord = false || columnsAsList.isEmpty();
 
                 for (Column column : columnsAsList) {
                     // Build a synonym for each column in this row
@@ -260,7 +264,7 @@ public class JdbcAnonymizerService {
         // Get default columns as a map
         Map<String, Column> columnsAsMap = Table.getColumnsAsMap(table.getColumns());
 
-        // Overwrite columns in the map based on discriminators
+        // Overwrite/add columns in the map based on discriminators
         for (Discriminator discriminator : discriminators) {
 
             String columnName = discriminator.getColumnName();
@@ -308,13 +312,22 @@ public class JdbcAnonymizerService {
 
     private String getSelectStatement(Table table) throws SQLException {
         Set<String> columnNames = new HashSet<>();
-        for (Column column : table.getColumns()) {
-            columnNames.add(column.getName());
+        if (table.getColumns() != null) {
+            for (Column column : table.getColumns()) {
+                columnNames.add(column.getName());
+            }
         }
 
         if (table.getDiscriminators() != null) {
+            // Add all columns involved in discriminator selection and its column definitions
             for (Discriminator discriminator : table.getDiscriminators()) {
                 columnNames.add(discriminator.getColumnName());
+                columnNames.addAll(
+                        discriminator.getColumns()
+                                .stream()
+                                .map(Column::getName)
+                                .collect(Collectors.toList())
+                );
             }
         }
 
