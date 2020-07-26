@@ -11,7 +11,7 @@ class DateAnonymizer implements Anonymizer {
 	private static final String TYPE = "DATE";
 	private static final long RANDOMIZATION_MILLIS = 1000L * 60L * 60L * 24L * 31L;
 
-	private Set<Date> generatedDates = new HashSet<Date>();
+	private Set<Date> generatedDates = new HashSet<>();
 
 	@Override
 	public Synonym anonymize(Object from, int size, boolean shortlived) {

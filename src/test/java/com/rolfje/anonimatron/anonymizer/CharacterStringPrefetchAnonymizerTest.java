@@ -16,7 +16,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         anonimyzer = new CharacterStringPrefetchAnonymizer();
     }
 
-    public void testPrefetch() throws Exception {
+    public void testPrefetch() {
         String sourceData = "ABC";
         anonimyzer.prefetch(sourceData);
 
@@ -51,7 +51,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         try {
             anonimyzer.anonymize("any", 10, false, null);
 
-            anonimyzer.anonymize("any", 10, false, new HashMap<String, String>());
+            anonimyzer.anonymize("any", 10, false, new HashMap<>());
 
             anonimyzer.anonymize("any", 10, false, new HashMap<String, String>() {{
                 put("PaRaMeTeR", "any");
@@ -64,7 +64,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         }
     }
 
-    public void testPrefetchNull() throws Exception {
+    public void testPrefetchNull() {
         anonimyzer.prefetch(null);
         String from = "DUMMY";
         Synonym synonym = anonimyzer.anonymize(from, 5, false);

@@ -5,10 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import junit.framework.TestCase;
 
@@ -23,14 +20,14 @@ import com.rolfje.anonimatron.configuration.Table;
  * in-memory Hsql database
  */
 public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
-	private static Logger LOG = Logger
+	private static final Logger LOG = Logger
 			.getLogger(AbstractInMemoryHsqlDbTest.class);
 	protected static Connection connection;
 	public final static String TEST_DB_URL = "jdbc:hsqldb:mem:tests";
 	public final static String TEST_DB_USERID = "testuser";
 	public final static String TEST_DB_PASSWORD = "testpassword";
 
-	Set<String> tableNames = new HashSet<String>();
+	Set<String> tableNames = new HashSet<>();
 
 	@Override
 	protected void setUp() throws Exception {
@@ -78,7 +75,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 			// LOG.debug("Teardown sesssion: "resultset.getInt(1)+", "+inTransaction+", "+resultset.getString(3));
 			if (inTransaction) {
 				sessionsWithTransaction++;
-			};
+			}
 
 		}
 		resultset.close();
@@ -106,13 +103,11 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void executeSql(String sqlStatement) throws Exception {
-		Statement statement = connection.createStatement();
-		try {
+		try (Statement statement = connection.createStatement()) {
 			if (statement.execute(sqlStatement)) {
 				statement.getResultSet().close();
 			}
 		} finally {
-			statement.close();
 			if (!connection.getAutoCommit()) {
 				connection.commit();
 			}
@@ -136,16 +131,13 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		}
 
 		// Build columns
-		List<Column> columnList = new ArrayList<Column>();
-		for (Column column : columns) {
-			columnList.add(column);
-		}
+		List<Column> columnList = new ArrayList<>(Arrays.asList(columns));
 
 		// Build Table
 		Table tab = new Table();
 		tab.setName(tableName);
 		tab.setColumns(columnList);
-		List<Table> tables = new ArrayList<Table>();
+		List<Table> tables = new ArrayList<>();
 		tables.add(tab);
 
 		// Add to configuration
@@ -160,7 +152,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		config.setJdbcurl(TEST_DB_URL);
 		config.setUserid(TEST_DB_USERID);
 		config.setPassword(TEST_DB_PASSWORD);
-		config.setTables(new ArrayList<Table>());
+		config.setTables(new ArrayList<>());
 		return config;
 	}
 	
@@ -176,7 +168,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		if (table == null){
 			table = new Table();
 			table.setName(tableName);
-			table.setColumns(new ArrayList<Column>());
+			table.setColumns(new ArrayList<>());
 			config.getTables().add(table);
 		}
 		

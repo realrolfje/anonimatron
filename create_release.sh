@@ -1,14 +1,31 @@
 #!/usr/bin/env bash
+#
+# Usage of this script:
+# 1. Make sure develop branch build is up to date and has no failing tests.
+# 2. Switch to master and make sure it up to date and has no failing tests.
+# 3. Run this script to:
+#    - Merge develop in master (without fetch)
+#    - Creates a release on master branch
+#    - Merge master into develop (without fetch)
+#    - Push master and develop branch to remote.
+#
 
 if [ "$#" -ne 2 ]
 then
     echo "Please specify the release version number and the next snapshot for this release:"
     echo " ./create_release.sh 1.8 1.9-SNAPSHOT"
+    echo ""
+    echo "The current version recorded in VERSION.TXT is "
+    cat src/main/java/com/rolfje/anonimatron/version.txt
     exit
 fi
 
 # Exit when a command fails.
 set -e
+
+# ------------------------------------------ Update master and create release
+git checkout master
+git merge develop
 
 # Set the new versions
 echo $1 > src/main/java/com/rolfje/anonimatron/version.txt
@@ -22,6 +39,12 @@ mvn versions:commit
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Release $1"
 git tag "v$1"
+
+git push --follow-tags
+
+# ------------------------------------------------- Update develop
+git checkout develop
+git merge master
 
 # Set the version to the new SNAPSHOT version
 echo $2 > src/main/java/com/rolfje/anonimatron/version.txt

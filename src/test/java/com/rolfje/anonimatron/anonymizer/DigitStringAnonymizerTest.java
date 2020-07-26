@@ -8,19 +8,14 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DigitStringAnonymizerTest {
 
     private DigitStringAnonymizer anonymizer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         anonymizer = new DigitStringAnonymizer();
     }
 
@@ -75,8 +70,7 @@ public class DigitStringAnonymizerTest {
         char[] expectedChars = expected.toCharArray();
 
         for (int i = 0; i < expectedChars.length; i++) {
-            assertTrue("Character at position " + i + " not what we expected. String is '" + toString + "'",
-                    (expectedChars[i] == 'x') == (Character.isDigit(toChars[i])));
+            assertEquals("Character at position " + i + " not what we expected. String is '" + toString + "'", (expectedChars[i] == 'x'), (Character.isDigit(toChars[i])));
         }
     }
 
@@ -102,7 +96,58 @@ public class DigitStringAnonymizerTest {
 
     private Map<String, String> getMaskParameters(String mask) {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put(anonymizer.PARAMETER, mask);
+        parameters.put(DigitStringAnonymizer.PARAMETER, mask);
         return parameters;
+    }
+
+    @Test
+    public void testIncorrectParamter() {
+        try {
+            anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+                put("PaRaMeTeR", "any");
+            }});
+            fail("Should fail with unsupported operation exception.");
+        } catch (UnsupportedOperationException e) {
+            assertEquals(
+                    "Please provide '" + DigitStringAnonymizer.PARAMETER + "' with a digit mask in the form 111******, where only stars are replaced with random characters.",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCorrectParameter() {
+        Synonym anonymize = anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+            put(DigitStringAnonymizer.PARAMETER, "any");
+        }});
+
+        // Actual anonymization tests done elsewhere
+        assertNotNull(anonymize);
+    }
+
+    @Test
+    public void testNoParameter() {
+        // Actual anonymization tests done elsewhere
+        assertNotNull(
+                anonymizer.anonymize("dummy", 0, false, new HashMap<>())
+        );
+
+        assertNotNull(
+                anonymizer.anonymize("dummy", 0, false, null)
+        );
+    }
+
+    @Test
+    public void testInCorrectParameter() {
+        try {
+            Synonym anonymize = anonymizer.anonymize("dummy", 0, false, new HashMap<String, String>() {{
+                put("dummy", "any");
+            }});
+            fail("Should result in UnsupportedOperationException with useful message.");
+        } catch (UnsupportedOperationException e) {
+            assertEquals(
+                    "Please provide 'mask' with a digit mask in the form 111******, where only stars are replaced with random characters.",
+                    e.getMessage()
+            );
+        }
     }
 }

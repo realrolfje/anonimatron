@@ -52,10 +52,11 @@ To demonstrate what Anonimatron can do to your data, we will create a little tes
 
 ```SQL
 create database mydb;
-create user myuser identified by 'mypassword';
-grant all privileges on *.* to 'myuser'@'localhost'
-       identified by 'mypassword' with grant option;
- 
+
+create user 'myuser'@'%' identified by 'mypassword';
+grant all on *.* to 'myuser'@'%';
+flush privileges;
+
 create table mydb.userdata (
          id int not null auto_increment primary key,
          firstname varchar(20),

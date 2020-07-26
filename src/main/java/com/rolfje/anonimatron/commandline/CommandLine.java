@@ -18,7 +18,7 @@ public class CommandLine {
     private static final String OPT_DRYRUN = "dryrun";
     private static final String OPT_CONFIGEXAMPLE = "configexample";
 
-    private static Options options = new Options()
+    private static final Options options = new Options()
             .addOption(OPT_CONFIGFILE, true,
                     "The XML Configuration file describing what to anonymize.")
             .addOption(OPT_SYNONYMFILE, true,
@@ -37,7 +37,7 @@ public class CommandLine {
                     "The password for the database connection. " +
                             "If provided, overrides the value in the config file.");
 
-    private org.apache.commons.cli.CommandLine clicommandLine;
+    private final org.apache.commons.cli.CommandLine clicommandLine;
 
     public CommandLine(String[] arguments) throws ParseException {
         CommandLineParser parser = new DefaultParser();

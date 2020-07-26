@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class SynonymTest extends TestCase {
 
-    public void testEqualsHashcode() throws Exception {
+    public void testEqualsHashcode() {
 
         StringSynonym a = new StringSynonym(
                 "Bunk",

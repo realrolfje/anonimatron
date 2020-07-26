@@ -53,7 +53,7 @@ public class DataFile {
 	}
 
 	public static Map<String, Column> getColumnsAsMap(List<Column> columns) {
-		Map<String, Column> columnMap = new HashMap<String, Column>();
+		Map<String, Column> columnMap = new HashMap<>();
 		for (Column column : columns) {
 			columnMap.put(column.getName(), column);
 		}

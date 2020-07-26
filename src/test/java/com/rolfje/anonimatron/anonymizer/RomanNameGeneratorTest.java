@@ -12,7 +12,7 @@ public class RomanNameGeneratorTest extends TestCase {
 
 	public void testUniqueness() throws Exception {
 		RomanNameGenerator r = new RomanNameGenerator();
-		Set<String> names = new HashSet<String>();
+		Set<String> names = new HashSet<>();
 
 		for (int i = 0; i < 10000; i++) {
 			String name = (String) r.anonymize("fakename", 100, false).getTo();
@@ -32,7 +32,7 @@ public class RomanNameGeneratorTest extends TestCase {
 	public void xxxtestMaxNames() throws Exception {
 		
 		RomanNameGenerator r = new RomanNameGenerator();
-		Set<String> names = new HashSet<String>();
+		Set<String> names = new HashSet<>();
 
 		try {
 			String name;

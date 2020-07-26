@@ -38,8 +38,7 @@ public class Base64StringFieldHandler extends GeneralizedFieldHandler {
 		}
 		
 		byte[] decodedBytes = Base64Decoder.decode((String)xmlValue);
-		String decodedString = new String(decodedBytes);
-		return decodedString;
+		return new String(decodedBytes);
 	}
 
 	@SuppressWarnings("rawtypes")

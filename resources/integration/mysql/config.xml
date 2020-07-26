@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration jdbcurl="jdbc:mysql://localhost:3306/mydb"
+               userid="myuser" password="mypassword">
+
+    <table name="userdata">
+        <column name="firstname" type="ROMAN_NAME" />
+        <column name="lastname" type="ELVEN_NAME" />
+        <column name="creditcardnr" type="RANDOMDIGITS"/>
+        <discriminator columnname="firstname" value="first_name">
+            <column name="meta_value" type="ROMAN_NAME"/>
+        </discriminator>
+    </table>
+
+    <table name="lastnames">
+        <column name="lastname" type="ELVEN_NAME" />
+    </table>
+</configuration>

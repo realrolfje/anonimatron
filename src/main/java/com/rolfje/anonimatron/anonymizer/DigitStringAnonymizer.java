@@ -16,7 +16,9 @@ public class DigitStringAnonymizer extends AbstractElevenProofAnonymizer {
 
     @Override
     public Synonym anonymize(Object from, int size, boolean shortlived, Map<String, String> parameters) {
-        if (parameters == null || !parameters.containsKey(PARAMETER)) {
+        if (parameters == null || parameters.isEmpty()) {
+            return anonymize(from, size, shortlived);
+        } else if (!parameters.containsKey(PARAMETER)) {
             throw new UnsupportedOperationException("Please provide '" + PARAMETER + "' with a digit mask in the form 111******, where only stars are replaced with random characters.");
         }
         return anonymizeMasked(from, size, shortlived, parameters.get(PARAMETER));
@@ -24,28 +26,26 @@ public class DigitStringAnonymizer extends AbstractElevenProofAnonymizer {
 
     @Override
     public Synonym anonymize(Object from, int size, boolean shortlived) {
-		if (from == null) {
-			return new StringSynonym(
-					getType(),
-					null,
-					null,
-					shortlived
-			);
-		}
+        if (from == null) {
+            return new StringSynonym(
+                    getType(),
+                    null,
+                    null,
+                    shortlived
+            );
+        }
 
         int length = from.toString().length();
 
         int[] digits = getRandomDigits(length);
         String to = digitsAsString(digits);
 
-        StringSynonym stringSynonym = new StringSynonym(
+        return new StringSynonym(
                 getType(),
                 (String) from,
                 to,
                 shortlived
         );
-
-        return stringSynonym;
     }
 
     /**

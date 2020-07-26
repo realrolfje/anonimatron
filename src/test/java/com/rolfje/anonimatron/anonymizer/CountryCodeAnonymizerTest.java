@@ -5,11 +5,13 @@ import junit.framework.TestCase;
 
 import java.util.*;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class CountryCodeAnonymizerTest extends TestCase {
 
     private static final Set<String> ISO_3_COUNTRY_CODES = getISO3CountryCodes();
 
-    public void testAnonymize() throws Exception {
+    public void testAnonymize() {
 
         testInternal(2, "EN");
         testInternal(3, "NLD");
@@ -21,7 +23,7 @@ public class CountryCodeAnonymizerTest extends TestCase {
         Synonym nld = countryCodeAnonymizer.anonymize(from, size, false);
         assertEquals(countryCodeAnonymizer.getType(), nld.getType());
         assertEquals(from, nld.getFrom());
-        assertFalse(from.equals(nld.getTo()));
+        assertNotEquals(from, nld.getTo());
         assertEquals(size, ((String) nld.getTo()).length());
         assertFalse(nld.isShortLived());
     }

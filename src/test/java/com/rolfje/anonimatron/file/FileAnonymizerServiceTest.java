@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class FileAnonymizerServiceTest extends TestCase {
 
     private FileAnonymizerService fileAnonymizerService;
@@ -33,16 +35,16 @@ public class FileAnonymizerServiceTest extends TestCase {
         fileAnonymizerService = new FileAnonymizerService(config, anonymizerService);
     }
 
-    public void testAnonymize() throws Exception {
+    public void testAnonymize() {
         Record record = new Record(new String[]{"bsn"}, new String[]{"ABC"});
 
-        HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+        HashMap<String, Column> nameTypeMap = new HashMap<>();
         nameTypeMap.put("bsn", new Column("bsn", new DutchBSNAnononymizer().getType(), 50));
 
         Record anonymize = fileAnonymizerService.anonymize(record, nameTypeMap);
 
         assertEquals(record.getNames()[0], anonymize.getNames()[0]);
-        assertFalse(record.getValues()[0].equals(anonymize.getValues()[0]));
+        assertNotEquals(record.getValues()[0], anonymize.getValues()[0]);
 
         assertEquals(1, anonymizerService.getSynonymCache().size());
     }
@@ -51,10 +53,10 @@ public class FileAnonymizerServiceTest extends TestCase {
         fileAnonymizerService.anonymize();
     }
 
-    public void testPassThroughAnonymization() throws Exception {
+    public void testPassThroughAnonymization() {
         Record record = new Record(new String[]{"passthroughColumn"}, new String[]{"passthroughValue"});
 
-        HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+        HashMap<String, Column> nameTypeMap = new HashMap<>();
 
         Record anonymize = fileAnonymizerService.anonymize(record, nameTypeMap);
 
@@ -70,7 +72,7 @@ public class FileAnonymizerServiceTest extends TestCase {
                 new StringAnonymizer().getType()
         };
 
-        final List<Record> sourceRecords = new ArrayList<Record>();
+        final List<Record> sourceRecords = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
             Object[] values = new Object[]{
@@ -82,7 +84,7 @@ public class FileAnonymizerServiceTest extends TestCase {
 
         RecordReader recordReader = new RecordReader() {
             @Override
-            public void close() throws IOException {
+            public void close() {
                 // nothing
             }
 
@@ -102,10 +104,10 @@ public class FileAnonymizerServiceTest extends TestCase {
             }
         };
 
-        final List<Record> targetRecords = new ArrayList<Record>();
+        final List<Record> targetRecords = new ArrayList<>();
         RecordWriter recordWriter = new RecordWriter() {
             @Override
-            public void close() throws IOException {
+            public void close() {
                 // nothing
             }
 
@@ -115,7 +117,7 @@ public class FileAnonymizerServiceTest extends TestCase {
             }
         };
 
-        HashMap<String, Column> nameTypeMap = new HashMap<String, Column>();
+        HashMap<String, Column> nameTypeMap = new HashMap<>();
         nameTypeMap.put(names[0], new Column(names[0], names[0], 50));
         nameTypeMap.put(names[1], new Column(names[1], names[1], 50));
 
@@ -128,7 +130,7 @@ public class FileAnonymizerServiceTest extends TestCase {
 
             for (int j = 0; j < source.getNames().length; j++) {
                 assertEquals(source.getNames()[j], target.getNames()[j]);
-                assertFalse(source.getValues()[j].equals(target.getNames()[j]));
+                assertNotEquals(source.getValues()[j], target.getNames()[j]);
                 assertNotNull(target.getNames()[j]);
             }
         }
@@ -160,7 +162,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         dataFile.setColumns(columns);
 
         Configuration configuration = new Configuration();
-        configuration.setFiles(Arrays.asList(new DataFile[]{dataFile}));
+        configuration.setFiles(Arrays.asList(dataFile));
         AnonymizerService anonymizerService = new AnonymizerService();
         anonymizerService.registerAnonymizers(configuration.getAnonymizerClasses());
         fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
@@ -182,8 +184,8 @@ public class FileAnonymizerServiceTest extends TestCase {
 
         // The fifth column is transient, so anonymization will not be consistent,
         // as the value is not stored in the cache.
-        assertFalse(outputRecord1.getValues()[4].equals(outputRecord2.getValues()[4]));
-        assertFalse("transient".equals(outputRecord2.getValues()[4]));
+        assertNotEquals(outputRecord1.getValues()[4], outputRecord2.getValues()[4]);
+        assertNotEquals("transient", outputRecord2.getValues()[4]);
 
         assertEquals("notouch", outputRecord1.getValues()[1]);
         assertEquals("notouch", outputRecord2.getValues()[1]);
@@ -191,7 +193,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         assertEquals(3, anonymizerService.getSynonymCache().size());
     }
 
-    public void testGetInputFilesNonExisting() throws IOException {
+    public void testGetInputFilesNonExisting() {
 //		Path tempDirectory = Files.createTempDirectory("anonimatron-expand-test");
 //		Files.createTempFile(tempDirectory, "a", ".txt");
 //		Files.createTempFile(tempDirectory, "b", ".txt");

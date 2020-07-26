@@ -21,8 +21,8 @@ public class AnonymizerServiceTest extends TestCase {
                         FixedValueAnonymizer.class.getName()));
     }
 
-    public void testStringAnonymizer() throws Exception {
-        List<Object> fromList = new ArrayList<Object>();
+    public void testStringAnonymizer() {
+        List<Object> fromList = new ArrayList<>();
         fromList.add("String 1");
         fromList.add("String 2");
         fromList.add("String 3");
@@ -32,8 +32,8 @@ public class AnonymizerServiceTest extends TestCase {
         testAnonymizer(fromList, type, type);
     }
 
-    public void testUUIDAnonymizer() throws Exception {
-        List<Object> fromList = new ArrayList<Object>();
+    public void testUUIDAnonymizer() {
+        List<Object> fromList = new ArrayList<>();
         fromList.add("String 1");
         fromList.add("String 2");
         fromList.add("String 3");
@@ -47,7 +47,7 @@ public class AnonymizerServiceTest extends TestCase {
 
         assertEquals(new Date(0), new Date(0));
 
-        List<Object> fromList = new ArrayList<Object>();
+        List<Object> fromList = new ArrayList<>();
         fromList.add(new Date(0));
         fromList.add(new Date(86400000L));
         fromList.add(new Date(172800000L));
@@ -58,7 +58,7 @@ public class AnonymizerServiceTest extends TestCase {
     }
 
     public void testParameterizedAnonymizer() {
-        List<Object> fromList = new ArrayList<Object>();
+        List<Object> fromList = new ArrayList<>();
         fromList.add("String 1");
         fromList.add("String 2");
         fromList.add("String 3");
@@ -69,7 +69,7 @@ public class AnonymizerServiceTest extends TestCase {
     }
 
     private void testAnonymizer(List<Object> fromList, String lookupType, String synonymType) {
-        List<Object> toList = new ArrayList<Object>();
+        List<Object> toList = new ArrayList<>();
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("value", "testValue");

@@ -23,9 +23,7 @@ public class AnonimatronTest extends TestCase {
 
         String versionString = "<version>" + Anonimatron.VERSION + "</version>";
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(pom));
+        try (BufferedReader reader = new BufferedReader(new FileReader(pom))) {
             while (reader.ready()) {
                 String line = reader.readLine();
                 if (line.contains(versionString)) {
@@ -37,8 +35,6 @@ public class AnonimatronTest extends TestCase {
                     fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
                 }
             }
-        } finally {
-            reader.close();
         }
         fail("Incorrect version, pom.xml does not match version info in Anonimatron.VERSION.");
     }
@@ -56,10 +52,10 @@ public class AnonimatronTest extends TestCase {
         csvFileWriter.close();
 
         File outFile = File.createTempFile(this.getClass().getSimpleName(), ".output.csv");
-        outFile.delete();
+        assertTrue("Could not delete " + outFile, outFile.delete());
 
         File synonymFile = File.createTempFile(this.getClass().getSimpleName(), "synonyms.xml");
-        synonymFile.delete();
+        assertTrue("Could not delete " + synonymFile, synonymFile.delete());
 
         File configFile = File.createTempFile(this.getClass().getSimpleName(), ".config.xml)");
         PrintWriter printWriter = new PrintWriter(configFile);
@@ -87,8 +83,8 @@ public class AnonimatronTest extends TestCase {
         // Check that original data is not present in the synonym file.
         SynonymCache synonymCache = SynonymCache.fromFile(synonymFile);
         Object[] inputValues = inputRecords.getValues();
-        for (int i = 0; i < inputValues.length; i++) {
-            assertNull(synonymCache.get("ROMAN_NAME", inputValues[i]));
+        for (Object inputValue : inputValues) {
+            assertNull(synonymCache.get("ROMAN_NAME", inputValue));
         }
 
         // Check that we can find the hashed first column value

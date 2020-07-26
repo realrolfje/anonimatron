@@ -4,15 +4,22 @@ import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class LoremIpsumTest extends TestCase {
 
-	public void testGetParagraphs() throws Exception {
+	public void testGetParagraphs() {
 		String test = LoremIpsum.getParagraphs(3);
+
+		assertFalse(test.startsWith(" "));
+		assertFalse(test.startsWith("\n"));
+		assertTrue(test.contains(" "));
+
 		StringTokenizer t = new StringTokenizer(test, "\n");
 		assertEquals(3, t.countTokens());
 	}
 
-	public void testGetWords() throws Exception {
+	public void testGetWords() {
 		String testText = LoremIpsum.getWords(50);
 		StringTokenizer tokenizer = new StringTokenizer(testText);
 		assertEquals(50, tokenizer.countTokens());
@@ -21,7 +28,7 @@ public class LoremIpsumTest extends TestCase {
 		StringTokenizer tokenizer2 = new StringTokenizer(testText2);
 		assertEquals(50, tokenizer2.countTokens());
 
-		assertFalse(testText.equals(testText2));
+        assertNotEquals(testText, testText2);
 	}
 
 }

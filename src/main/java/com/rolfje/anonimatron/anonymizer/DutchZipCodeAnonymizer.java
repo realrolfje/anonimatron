@@ -40,9 +40,7 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 	@Override
 	public Synonym anonymize(Object from, int size, boolean shortlived) {
 		String result = buildZipCode();
-		StringSynonym stringSynonym = new StringSynonym(TYPE, (String) from, result, shortlived);
-
-		return stringSynonym;
+		return new StringSynonym(TYPE, (String) from, result, shortlived);
 	}
 
 	String buildZipCode() {
@@ -54,19 +52,19 @@ public class DutchZipCodeAnonymizer implements Anonymizer {
 
 	private String buildPcAlpha() {
 
-		char a1 = getCharacter(RANDOM, CHARS);
+		char a1 = getCharacter(CHARS);
 		char a2;
 
 		if (a1 == 'S') {
-			a2 = getCharacter(RANDOM, CHARS_WITHOUT_ADS);
+			a2 = getCharacter(CHARS_WITHOUT_ADS);
 		} else {
-			a2 = getCharacter(RANDOM, CHARS);
+			a2 = getCharacter(CHARS);
 		}
 
 		return new StringBuilder().append(a1).append(a2).toString();
 	}
 
-	private char getCharacter(Random random, String chars) {
-		return chars.charAt(random.nextInt(chars.length()));
+	private char getCharacter(String chars) {
+		return chars.charAt(RANDOM.nextInt(chars.length()));
 	}
 }

@@ -9,7 +9,7 @@ import java.io.FileReader;
 public class CsvFileWriterTest extends TestCase {
 	public void testWrite() throws Exception {
 		File tempFile = File.createTempFile(CsvFileWriter.class.getSimpleName(), ".csv");
-		tempFile.delete();
+		assertTrue("Could not delete " + tempFile, tempFile.delete());
 
 		CsvFileWriter csvFileWriter = new CsvFileWriter(tempFile);
 		csvFileWriter.write(new Record(

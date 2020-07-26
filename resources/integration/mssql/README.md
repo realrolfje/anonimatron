@@ -1,6 +1,6 @@
 # MS-SQL test scripts
 
-THis directory contains scripts for manually testing against an ms-sql or
+This directory contains scripts for manually testing against an ms-sql or
 sql server database. It makes use of an sql server running inside a
 docker container.
 
