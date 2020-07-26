@@ -14,6 +14,9 @@ if [ "$#" -ne 2 ]
 then
     echo "Please specify the release version number and the next snapshot for this release:"
     echo " ./create_release.sh 1.8 1.9-SNAPSHOT"
+    echo ""
+    echo "The current version recorded in VERSION.TXT is "
+    cat src/main/java/com/rolfje/anonimatron/version.txt
     exit
 fi
 
