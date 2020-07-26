@@ -121,9 +121,10 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         statement.close();
     }
 
-    public void testDiscriminatorOnly() throws Exception{
+    public void testDiscriminatorOnly() throws Exception {
         executeSql("create table TABLE1 (id IDENTITY, value1 VARCHAR(100), value2 VARCHAR(100), key VARCHAR(100))");
         executeSql("insert into TABLE1 (value1,value2,key) values ('A','X','NONE')");
+        executeSql("insert into TABLE1 (value1,value2,key) values ('B','X','EMAIL')");
 
         // Create configuration for the table without any column configuration
         Configuration config = super.createConfiguration();
@@ -131,16 +132,39 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         table.setName("TABLE1");
         config.getTables().add(table);
 
-        // Add discriminator for the key column
+        // Add discriminator for the key column to anonymize value1 with an email address if key is EMAIL
         Discriminator discriminator = new Discriminator();
         discriminator.setColumnName("key");
         discriminator.setValue("EMAIL");
+        Column emailcol = new Column();
+        emailcol.setName("value1");
+        emailcol.setType("EMAIL_ADDRESS");
+        List<Column> emailcols = new ArrayList<>();
+        emailcols.add(emailcol);
+        discriminator.setColumns(emailcols);
         List<Discriminator> discriminators = new ArrayList<>();
         discriminators.add(discriminator);
         config.getTables().get(0).setDiscriminators(discriminators);
 
-        anonymize(config, 1);
+        anonymize(config, 2);
 
+        Statement statement = connection.createStatement();
+        statement.execute("select * from TABLE1 order by ID");
+        ResultSet resultset = statement.getResultSet();
+
+        resultset.next();
+        assertEquals("A", resultset.getString("value1"));
+        assertEquals("X", resultset.getString("value2"));
+        assertEquals("NONE", resultset.getString("key"));
+
+        resultset.next();
+        String value1 = resultset.getString("value1");
+        assertTrue("Did not contain example.com: " + value1, value1.contains("@example.com"));
+        assertEquals("X", resultset.getString("value2"));
+        assertEquals("EMAIL", resultset.getString("key"));
+
+        resultset.close();
+        statement.close();
     }
 
     public void testDiscriminators() throws Exception {

@@ -308,8 +308,10 @@ public class JdbcAnonymizerService {
 
     private String getSelectStatement(Table table) throws SQLException {
         Set<String> columnNames = new HashSet<>();
-        for (Column column : table.getColumns()) {
-            columnNames.add(column.getName());
+        if (table.getColumns() != null) {
+            for (Column column : table.getColumns()) {
+                columnNames.add(column.getName());
+            }
         }
 
         if (table.getDiscriminators() != null) {

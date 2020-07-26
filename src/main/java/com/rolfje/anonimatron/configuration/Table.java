@@ -5,60 +5,62 @@ import java.util.List;
 import java.util.Map;
 
 public class Table {
-	private String name;
-	private Integer fetchSize;
-	private List<Column> columns;
-	private List<Discriminator> discriminators;
-	
-	// Used for progress monitoring
-	private long numberOfRows;
+    private String name;
+    private Integer fetchSize;
+    private List<Column> columns;
+    private List<Discriminator> discriminators;
 
-	public String getName() {
-		return name;
-	}
+    // Used for progress monitoring
+    private long numberOfRows;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Integer getFetchSize() {
-		return fetchSize;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setFetchSize(Integer fetchSize) {
-		this.fetchSize = fetchSize;
-	}
+    public Integer getFetchSize() {
+        return fetchSize;
+    }
 
-	public List<Column> getColumns() {
-		return columns;
-	}
-	
-	public static Map<String, Column> getColumnsAsMap(List<Column> columns){
-		Map<String, Column> columnMap = new HashMap<>();
-		for (Column column : columns) {
-			columnMap.put(column.getName(), column);
+    public void setFetchSize(Integer fetchSize) {
+        this.fetchSize = fetchSize;
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public static Map<String, Column> getColumnsAsMap(List<Column> columns) {
+        Map<String, Column> columnMap = new HashMap<>();
+		if (columns != null) {
+			for (Column column : columns) {
+				columnMap.put(column.getName(), column);
+			}
 		}
-		return columnMap;
-	}
+        return columnMap;
+    }
 
-	public void setColumns(List<Column> columns) {
-		this.columns = columns;
-	}
+    public void setColumns(List<Column> columns) {
+        this.columns = columns;
+    }
 
-	public List<Discriminator> getDiscriminators() {
-		return discriminators;
-	}
+    public List<Discriminator> getDiscriminators() {
+        return discriminators;
+    }
 
-	public void setDiscriminators(List<Discriminator> discriminators) {
-		this.discriminators = discriminators;
-	}
+    public void setDiscriminators(List<Discriminator> discriminators) {
+        this.discriminators = discriminators;
+    }
 
-	public long getNumberOfRows() {
-		return numberOfRows;
-	}
+    public long getNumberOfRows() {
+        return numberOfRows;
+    }
 
-	public void setNumberOfRows(long numberOfRows) {
-		this.numberOfRows = numberOfRows;
-	}
+    public void setNumberOfRows(long numberOfRows) {
+        this.numberOfRows = numberOfRows;
+    }
 
 }
