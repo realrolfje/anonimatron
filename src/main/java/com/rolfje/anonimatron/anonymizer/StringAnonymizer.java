@@ -8,20 +8,7 @@ public class StringAnonymizer implements Anonymizer {
 
     @Override
     public Synonym anonymize(Object from, int size, boolean shortlived) {
-        String randomHexString = null;
-
-        if (from == null) {
-            randomHexString = null;
-        } else if (from instanceof String) {
-            randomHexString = Long.toHexString(Double.doubleToLongBits(Math.random()));
-
-            if (randomHexString.length() > size) {
-                throw new UnsupportedOperationException("Can not generate a random hex string with length " + size
-                        + ". Generated String size is " + randomHexString.length() + " characters.");
-            }
-        } else {
-            throw new UnsupportedOperationException("Can not anonymize objects of type " + from.getClass());
-        }
+        String randomHexString = getString(from, size);
 
         return new StringSynonym(
                 getType(),
@@ -29,6 +16,24 @@ public class StringAnonymizer implements Anonymizer {
                 randomHexString,
                 shortlived
         );
+    }
+
+    private String getString(Object from, int size) {
+        if (from == null) {
+            return null;
+        }
+
+        if (from instanceof String) {
+            String randomHexString = Long.toHexString(Double.doubleToLongBits(Math.random()));
+
+            if (randomHexString.length() > size) {
+                throw new UnsupportedOperationException("Can not generate a random hex string with length " + size
+                        + ". Generated String size is " + randomHexString.length() + " characters.");
+            }
+            return randomHexString;
+        }
+
+        throw new UnsupportedOperationException("Can not anonymize objects of type " + from.getClass());
     }
 
     @Override

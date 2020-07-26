@@ -15,7 +15,7 @@ public class DigitStringAnonymizerTest {
     private DigitStringAnonymizer anonymizer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         anonymizer = new DigitStringAnonymizer();
     }
 

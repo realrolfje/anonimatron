@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import java.text.DateFormat;
 
 public class ProgressPrinter implements Runnable {
-	private static Logger LOG = Logger.getLogger(ProgressPrinter.class);
+	private static final Logger LOG = Logger.getLogger(ProgressPrinter.class);
 
 	private int printIntervalMillis = 4000;
 	private Progress progress;
@@ -14,7 +14,7 @@ public class ProgressPrinter implements Runnable {
 	private String message = "";
 	private String lastMessage = "";
 
-	private DateFormat timeformat = DateFormat
+	private final DateFormat timeformat = DateFormat
 			.getTimeInstance(DateFormat.MEDIUM);
 
 	public ProgressPrinter(Progress p) {

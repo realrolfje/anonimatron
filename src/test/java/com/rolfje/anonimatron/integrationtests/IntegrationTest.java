@@ -5,6 +5,7 @@ import com.rolfje.anonimatron.jdbc.AbstractInMemoryHsqlDbTest;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -83,7 +84,7 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 		InputStream stream = IntegrationTest.class.getResourceAsStream("integrationconfig.xml");
 		assertNotNull(stream);
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 
 		File tempConfig = File.createTempFile("anonimatron-config", ".xml");
 		BufferedWriter writer = new BufferedWriter(new FileWriter(tempConfig));

@@ -14,10 +14,10 @@ import java.util.Random;
  * to have a very strange organically grown format.
  */
 public class UkPostCodeAnonymizer implements Anonymizer {
-    private Random random = new Random();
+    private final Random random = new Random();
 
-    private static String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static String DIGITS = "0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String DIGITS = "0123456789";
 
     @Override
     public String getType() {
@@ -26,11 +26,29 @@ public class UkPostCodeAnonymizer implements Anonymizer {
 
     @Override
     public Synonym anonymize(Object from, int size, boolean shortlived) {
-        String result = buildZipCode();
-        StringSynonym s = new StringSynonym();
-        s.setFrom((String) from);
-        s.setTo((String) result);
-        return s;
+        if (from == null) {
+            return new StringSynonym(getType(), null, null, shortlived);
+        }
+
+        if (size < 8) {
+            throw new UnsupportedOperationException(
+                    "Random UK postal codes can be 9 characters in length and will "
+                            + "not always fit configured size of " + size + ".");
+        }
+
+        String to = buildZipCode();
+        if (to.length() > size) {
+            throw new UnsupportedOperationException(
+                    "Generated postalcode was " + to.length() + " characters and does not fit "
+                            + size + " characters.");
+        }
+
+        return new StringSynonym(
+                getType(),
+                (String) from,
+                to,
+                shortlived
+        );
     }
 
     String buildZipCode() {
@@ -41,6 +59,7 @@ public class UkPostCodeAnonymizer implements Anonymizer {
         }
     }
 
+    // Length 7
     // ^([Gg][Ii][Rr] 0[Aa]{2})$
     String buildZipCodeFlavor1() {
         if (random.nextBoolean()) {
@@ -52,7 +71,6 @@ public class UkPostCodeAnonymizer implements Anonymizer {
 
     String buildZipCodeFlavor2() {
         // Total 247.625 * 10 * 26 * 26 = 1.673.945.000 combinations
-
         StringBuilder b = new StringBuilder();
 
         // Prefix:  Total prefix set is 247.625 combinations
@@ -80,9 +98,10 @@ public class UkPostCodeAnonymizer implements Anonymizer {
         return b.toString();
     }
 
+    // Length 3
+    // 26 * 100 = 2.600 combinations
+    // ^((([A-Za-z][0-9]{1,2})$
     String p1() {
-        // 26 * 100 = 2.600 combinations
-        // ^((([A-Za-z][0-9]{1,2})$
         StringBuilder b = new StringBuilder();
         b.append(getRandomCharacter(CHARACTERS));
         b.append(getRandomCharacter(DIGITS));
@@ -94,9 +113,10 @@ public class UkPostCodeAnonymizer implements Anonymizer {
         return b.toString();
     }
 
+    // Length 4
+    // 26 * 24 * 100 = 62.400 combinations
+    // ([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})
     String p2a() {
-        // 26 * 24 * 100 = 62.400 combinations
-        // ([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})
         StringBuilder b = new StringBuilder();
         b.append(getRandomCharacter(CHARACTERS));
         b.append(getRandomCharacter("ABCDEFGHJKLMNOPQRSTUVWXY"));
@@ -107,19 +127,19 @@ public class UkPostCodeAnonymizer implements Anonymizer {
         return b.toString();
     }
 
+    // Length 3
+    // 26 * 10 * 26 = 6.760 combinations
+    // ([A-Za-z][0-9][A-Za-z])
     String p2ba() {
-        // 26 * 10 * 26 = 6.760 combinations
-        // ([A-Za-z][0-9][A-Za-z])
-        StringBuilder b = new StringBuilder();
-        b.append(getRandomCharacter(CHARACTERS));
-        b.append(getRandomCharacter(DIGITS));
-        b.append(getRandomCharacter(CHARACTERS));
-        return b.toString();
+        return String.valueOf(getRandomCharacter(CHARACTERS)) +
+                getRandomCharacter(DIGITS) +
+                getRandomCharacter(CHARACTERS);
     }
 
+    // Length 3 to 4
+    // 26 * 24 * 11 * 26 = 178.464 combinations
+    //([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])
     String p2bb() {
-        // 26 * 24 * 11 * 26 = 178.464 combinations
-        //([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])
         StringBuilder b = new StringBuilder();
         b.append(getRandomCharacter(CHARACTERS));
         b.append(getRandomCharacter("ABCDEFGHJKLMNOPQRSTUVWXY"));

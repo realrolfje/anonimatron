@@ -16,7 +16,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         anonimyzer = new CharacterStringPrefetchAnonymizer();
     }
 
-    public void testPrefetch() throws Exception {
+    public void testPrefetch() {
         String sourceData = "ABC";
         anonimyzer.prefetch(sourceData);
 
@@ -64,7 +64,7 @@ public class CharacterStringPrefetchAnonymizerTest extends TestCase {
         }
     }
 
-    public void testPrefetchNull() throws Exception {
+    public void testPrefetchNull() {
         anonimyzer.prefetch(null);
         String from = "DUMMY";
         Synonym synonym = anonimyzer.anonymize(from, 5, false);

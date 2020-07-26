@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNotEquals;
 
 public class LoremIpsumTest extends TestCase {
 
-	public void testGetParagraphs() throws Exception {
+	public void testGetParagraphs() {
 		String test = LoremIpsum.getParagraphs(3);
 
 		assertFalse(test.startsWith(" "));
@@ -19,7 +19,7 @@ public class LoremIpsumTest extends TestCase {
 		assertEquals(3, t.countTokens());
 	}
 
-	public void testGetWords() throws Exception {
+	public void testGetWords() {
 		String testText = LoremIpsum.getWords(50);
 		StringTokenizer tokenizer = new StringTokenizer(testText);
 		assertEquals(50, tokenizer.countTokens());

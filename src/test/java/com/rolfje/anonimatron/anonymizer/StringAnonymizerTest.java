@@ -14,7 +14,7 @@ public class StringAnonymizerTest {
     private StringAnonymizer stringAnonymizer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         stringAnonymizer = new StringAnonymizer();
     }
 

@@ -17,9 +17,9 @@ import java.security.SecureRandom;
  * See http://nl.wikipedia.org/wiki/Elfproef
  */
 public class DutchBankAccountAnononymizer extends AbstractElevenProofAnonymizer implements BankAccountAnonymizer {
-    private static Logger LOG = Logger.getLogger(DutchBankAccountAnononymizer.class);
+    private static final Logger LOG = Logger.getLogger(DutchBankAccountAnononymizer.class);
 
-    private static int LENGTH = 9;
+    private static final int LENGTH = 9;
 
     private final SecureRandom random = new SecureRandom();
 

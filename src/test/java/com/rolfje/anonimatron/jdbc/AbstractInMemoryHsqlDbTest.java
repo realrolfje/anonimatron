@@ -20,7 +20,7 @@ import com.rolfje.anonimatron.configuration.Table;
  * in-memory Hsql database
  */
 public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
-	private static Logger LOG = Logger
+	private static final Logger LOG = Logger
 			.getLogger(AbstractInMemoryHsqlDbTest.class);
 	protected static Connection connection;
 	public final static String TEST_DB_URL = "jdbc:hsqldb:mem:tests";
@@ -75,7 +75,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 			// LOG.debug("Teardown sesssion: "resultset.getInt(1)+", "+inTransaction+", "+resultset.getString(3));
 			if (inTransaction) {
 				sessionsWithTransaction++;
-			};
+			}
 
 		}
 		resultset.close();
@@ -103,13 +103,11 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	 * @throws Exception
 	 */
 	protected void executeSql(String sqlStatement) throws Exception {
-		Statement statement = connection.createStatement();
-		try {
+		try (Statement statement = connection.createStatement()) {
 			if (statement.execute(sqlStatement)) {
 				statement.getResultSet().close();
 			}
 		} finally {
-			statement.close();
 			if (!connection.getAutoCommit()) {
 				connection.commit();
 			}
@@ -133,8 +131,7 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		}
 
 		// Build columns
-		List<Column> columnList = new ArrayList<>();
-		columnList.addAll(Arrays.asList(columns));
+		List<Column> columnList = new ArrayList<>(Arrays.asList(columns));
 
 		// Build Table
 		Table tab = new Table();

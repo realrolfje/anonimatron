@@ -18,7 +18,7 @@ public class SynonymCacheTest extends TestCase {
 		assertNull(synonymCache.get(n.getType(), n.getFrom()));
 	}
 
-	public void testNoHashing() throws Exception {
+	public void testNoHashing() {
 		SynonymCache synonymCache = new SynonymCache();
 
 		StringSynonym originalSynonym = new StringSynonym("type", "from", "to", false);
@@ -33,7 +33,7 @@ public class SynonymCacheTest extends TestCase {
 		assertEquals(originalSynonym.getTo(), storedSynonym.getTo());
 	}
 
-	public void testHashing() throws Exception {
+	public void testHashing() {
 		SynonymCache synonymCache = new SynonymCache();
 		synonymCache.setHasher(new Hasher("testhash"));
 

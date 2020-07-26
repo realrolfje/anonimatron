@@ -18,7 +18,7 @@ import java.math.BigInteger;
  * See https://nl.wikipedia.org/wiki/Burgerservicenummer
  */
 public class DutchBSNAnononymizer extends AbstractElevenProofAnonymizer {
-    private static int LENGTH = 9;
+    private static final int LENGTH = 9;
 
     @Override
     public String getType() {

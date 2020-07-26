@@ -35,7 +35,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         fileAnonymizerService = new FileAnonymizerService(config, anonymizerService);
     }
 
-    public void testAnonymize() throws Exception {
+    public void testAnonymize() {
         Record record = new Record(new String[]{"bsn"}, new String[]{"ABC"});
 
         HashMap<String, Column> nameTypeMap = new HashMap<>();
@@ -53,7 +53,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         fileAnonymizerService.anonymize();
     }
 
-    public void testPassThroughAnonymization() throws Exception {
+    public void testPassThroughAnonymization() {
         Record record = new Record(new String[]{"passthroughColumn"}, new String[]{"passthroughValue"});
 
         HashMap<String, Column> nameTypeMap = new HashMap<>();
@@ -84,7 +84,7 @@ public class FileAnonymizerServiceTest extends TestCase {
 
         RecordReader recordReader = new RecordReader() {
             @Override
-            public void close() throws IOException {
+            public void close() {
                 // nothing
             }
 
@@ -107,7 +107,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         final List<Record> targetRecords = new ArrayList<>();
         RecordWriter recordWriter = new RecordWriter() {
             @Override
-            public void close() throws IOException {
+            public void close() {
                 // nothing
             }
 
@@ -162,7 +162,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         dataFile.setColumns(columns);
 
         Configuration configuration = new Configuration();
-        configuration.setFiles(Arrays.asList(new DataFile[]{dataFile}));
+        configuration.setFiles(Arrays.asList(dataFile));
         AnonymizerService anonymizerService = new AnonymizerService();
         anonymizerService.registerAnonymizers(configuration.getAnonymizerClasses());
         fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
@@ -193,7 +193,7 @@ public class FileAnonymizerServiceTest extends TestCase {
         assertEquals(3, anonymizerService.getSynonymCache().size());
     }
 
-    public void testGetInputFilesNonExisting() throws IOException {
+    public void testGetInputFilesNonExisting() {
 //		Path tempDirectory = Files.createTempDirectory("anonimatron-expand-test");
 //		Files.createTempFile(tempDirectory, "a", ".txt");
 //		Files.createTempFile(tempDirectory, "b", ".txt");

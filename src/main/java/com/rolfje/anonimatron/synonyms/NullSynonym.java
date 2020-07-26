@@ -6,7 +6,7 @@ package com.rolfje.anonimatron.synonyms;
  * 
  */
 public class NullSynonym implements Synonym {
-	private String type;
+	private final String type;
 	
 	public NullSynonym(String type) {
 		this.type=type;
@@ -31,7 +31,7 @@ public class NullSynonym implements Synonym {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj != null && this.hashCode() == obj.hashCode();
+		return (obj != null) && (this.getClass() == obj.getClass()) && (this.hashCode() == obj.hashCode());
 	}
 
 	@Override

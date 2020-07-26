@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -26,7 +27,7 @@ public class Hasher {
 	private static final int SIZE = 128;
 
 	private static final String ALGORITHM = "PBKDF2WithHmacSHA1";
-	public static final Charset CHARSET = Charset.forName("UTF-8");
+	public static final Charset CHARSET = StandardCharsets.UTF_8;
 	private byte[] salt;
 
 	public Hasher(String salt) {

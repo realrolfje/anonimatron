@@ -21,7 +21,7 @@ public class AnonymizerServiceTest extends TestCase {
                         FixedValueAnonymizer.class.getName()));
     }
 
-    public void testStringAnonymizer() throws Exception {
+    public void testStringAnonymizer() {
         List<Object> fromList = new ArrayList<>();
         fromList.add("String 1");
         fromList.add("String 2");
@@ -32,7 +32,7 @@ public class AnonymizerServiceTest extends TestCase {
         testAnonymizer(fromList, type, type);
     }
 
-    public void testUUIDAnonymizer() throws Exception {
+    public void testUUIDAnonymizer() {
         List<Object> fromList = new ArrayList<>();
         fromList.add("String 1");
         fromList.add("String 2");

@@ -13,7 +13,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * @author rolf
  */
 public class CharacterStringPrefetchAnonymizer extends CharacterStringAnonymizer implements Prefetcher {
-	private static Logger LOG = Logger.getLogger(CharacterStringPrefetchAnonymizer.class);
+	private static final Logger LOG = Logger.getLogger(CharacterStringPrefetchAnonymizer.class);
 
 	public CharacterStringPrefetchAnonymizer() {
 		CHARS = "";
