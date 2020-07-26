@@ -5,6 +5,7 @@ import com.rolfje.anonimatron.anonymizer.ToLowerAnonymizer;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.configuration.Discriminator;
+import com.rolfje.anonimatron.configuration.Table;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -118,6 +119,28 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
         resultset.close();
         statement.close();
+    }
+
+    public void testDiscriminatorOnly() throws Exception{
+        executeSql("create table TABLE1 (id IDENTITY, value1 VARCHAR(100), value2 VARCHAR(100), key VARCHAR(100))");
+        executeSql("insert into TABLE1 (value1,value2,key) values ('A','X','NONE')");
+
+        // Create configuration for the table without any column configuration
+        Configuration config = super.createConfiguration();
+        Table table = new Table();
+        table.setName("TABLE1");
+        config.getTables().add(table);
+
+        // Add discriminator for the key column
+        Discriminator discriminator = new Discriminator();
+        discriminator.setColumnName("key");
+        discriminator.setValue("EMAIL");
+        List<Discriminator> discriminators = new ArrayList<>();
+        discriminators.add(discriminator);
+        config.getTables().get(0).setDiscriminators(discriminators);
+
+        anonymize(config, 1);
+
     }
 
     public void testDiscriminators() throws Exception {
