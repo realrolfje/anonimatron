@@ -39,8 +39,7 @@ mvn versions:commit
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Release $1"
 git tag "v$1"
-
-git push --follow-tags
+git push origin "v$1"
 
 # ------------------------------------------------- Update develop
 git checkout develop
@@ -54,8 +53,7 @@ mvn versions:commit
 # Commit the SNAPSHOT version to git
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Update version to $2"
-
-git push --follow-tags
+git push
 
 # Sign the zip file
 gpg -ab --default-key 45E2A5E085182DC26EFEF6E796BB2760490D54DD target/anonimatron*.zip
