@@ -363,7 +363,7 @@ public class JdbcAnonymizerService {
             tablename = split[1];
         }
 
-        try (ResultSet resultset = connection.getMetaData().getPrimaryKeys(null, schema, tablename)) {
+        try (ResultSet resultset = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), schema, tablename)) {
             String primaryKeys = "";
             while (resultset.next()) {
                 String columnName = resultset.getString("COLUMN_NAME");
