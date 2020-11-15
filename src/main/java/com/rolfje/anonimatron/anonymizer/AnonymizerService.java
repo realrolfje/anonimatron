@@ -125,7 +125,6 @@ public class AnonymizerService {
 	}
 
 
-
 	private Anonymizer getAnonymizer(String type) {
 		if (type == null) {
 			throw new UnsupportedOperationException(

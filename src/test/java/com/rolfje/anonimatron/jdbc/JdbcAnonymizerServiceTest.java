@@ -33,7 +33,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         assertEquals(
                 "Data was not inserted.",
                 100,
-                getIntResult("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
+                getIntResult(connection, "select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
 
         // Create anonimatron configuration
         Configuration config = super.createConfiguration();
@@ -50,12 +50,12 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
         assertEquals(
                 "Data was not anonymized completely.",
                 0,
-                getIntResult("select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
+                getIntResult(connection, "select count(*) from TABLE1 where COL1 like 'varcharstring%'"));
 
         assertEquals(
                 "Rows dissapeared from the data set.",
                 100,
-                getIntResult("select count(*) from TABLE1 where COL1 not like 'varcharstring%'"));
+                getIntResult(connection, "select count(*) from TABLE1 where COL1 not like 'varcharstring%'"));
     }
 
     public void testTooShortUUID() throws Exception {
@@ -309,7 +309,7 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
     private String resultSetAsString(String select) throws SQLException {
         try (
-                Statement statement = getStatementForSelect(select);
+                Statement statement = getStatementForSelect(connection, select);
                 ResultSet resultset = statement.getResultSet()
         ) {
             ResultSetMetaData rsmd = resultset.getMetaData();
@@ -334,19 +334,5 @@ public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
 
             return sbuilder.toString();
         }
-    }
-
-    private int getIntResult(String sql) throws Exception {
-        try (Statement statement = getStatementForSelect(sql);
-             ResultSet resultset = statement.getResultSet()) {
-            resultset.next();
-            return resultset.getInt(1);
-        }
-    }
-
-    private Statement getStatementForSelect(String select) throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute(select);
-        return statement;
     }
 }

@@ -98,11 +98,22 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 	 * Executes the given sqlStatement against the current connection to the
 	 * current in-memory database. Use this method to create tables, for
 	 * instance.
-	 * 
+	 *
 	 * @param sqlStatement the SQL statement to execute.
 	 * @throws Exception
 	 */
 	protected void executeSql(String sqlStatement) throws Exception {
+		executeSql(connection,sqlStatement);
+	}
+
+	/**
+	 * Executes the given sqlStatement against the given connection.
+	 *
+	 * @param connection a Database connection
+	 * @param sqlStatement the SQL statement to execute.
+	 * @throws Exception
+	 */
+	public static void executeSql(Connection connection, String sqlStatement) throws Exception {
 		try (Statement statement = connection.createStatement()) {
 			if (statement.execute(sqlStatement)) {
 				statement.getResultSet().close();
@@ -113,6 +124,21 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 			}
 		}
 	}
+
+	public static int getIntResult(Connection connection, String sql) throws Exception {
+		try (Statement statement = getStatementForSelect(connection, sql);
+			 ResultSet resultset = statement.getResultSet()) {
+			resultset.next();
+			return resultset.getInt(1);
+		}
+	}
+
+	public static Statement getStatementForSelect(Connection connection, String select) throws SQLException {
+		Statement statement = connection.createStatement();
+		statement.execute(select);
+		return statement;
+	}
+
 
 	/**
 	 * Provides a quick an easy way to create a valid configuration against the
@@ -155,9 +181,9 @@ public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
 		config.setTables(new ArrayList<>());
 		return config;
 	}
-	
-	
-	protected void addToConfig(Configuration config, String tableName, String columnName, String columnType){
+
+
+	static void addToConfig(Configuration config, String tableName, String columnName, String columnType){
 		Table table = null;
 		for (Table cftable : config.getTables()) {
 			if (cftable.getName().equals(tableName)){
