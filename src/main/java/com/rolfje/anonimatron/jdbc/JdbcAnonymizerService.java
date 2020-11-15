@@ -11,6 +11,7 @@ import com.rolfje.anonimatron.progress.ProgressPrinter;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import org.apache.log4j.Logger;
 import org.apache.log4j.NDC;
+import org.sqlite.JDBC;
 
 import java.sql.*;
 import java.util.*;
@@ -418,6 +419,8 @@ public class JdbcAnonymizerService {
                 {"jdbc:postgresql://[HOST]:[PORT]/[DB]", "org.postgresql.Driver"},
                 {"jdbc:sybase:Tds:[HOST]:[PORT]", "com.sybase.jdbc.SybDriver"},
                 {"jdbc:sybase:Tds:[HOST]:[PORT]/[DB]", "net.sourceforge.jtds.jdbc.Driver"},
+                {"jdbc:sqlite::memory:", "org.sqlite.JDBC"},
+                {"jdbc:sqlite:[FILE]", "org.sqlite.JDBC"}
         };
 
         for (String[] urlClassCombo : drivers) {

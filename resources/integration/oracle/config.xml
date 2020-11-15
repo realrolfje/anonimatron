@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration jdbcurl="jdbc:oracle:thin:@localhost:1521:xe"
+               userid="c##anonimatron" password="password">
+
+    <table name="clientes">
+        <column name="nome" type="ROMAN_NAME" />
+    </table>
+
+</configuration>
