@@ -35,7 +35,7 @@ public class AnonymizerService {
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
 		registerAnonymizer(new DateAnonymizer());
 		registerAnonymizer(new IbanAnonymizer());
-
+		registerAnonymizer(new BelgianINSZAnononymizer());
 		registerAnonymizer(new CountryCodeAnonymizer());
 
 		// Default anonymizers for plain Java objects. If we really don't

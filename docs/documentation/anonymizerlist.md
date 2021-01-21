@@ -1,4 +1,4 @@
-# Available Anonymizers
+s# Available Anonymizers
 
 Anonimatron comes with the following default anonymizers. Please start Anonimatron with the `-configexample`
 parameter to see how these are configured. For more information on how Anonimatron works and runs, check our [quickstart](index.md). 

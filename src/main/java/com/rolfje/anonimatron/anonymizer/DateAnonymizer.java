@@ -45,6 +45,7 @@ class DateAnonymizer implements Anonymizer {
 		return s;
 	}
 
+
 	@Override
 	public String getType() {
 		return TYPE;

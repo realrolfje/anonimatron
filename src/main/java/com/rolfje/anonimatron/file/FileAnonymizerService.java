@@ -24,8 +24,8 @@ import java.util.Map;
 public class FileAnonymizerService {
     private final Logger LOG = Logger.getLogger(FileAnonymizerService.class);
 
-    private Configuration config;
-    private AnonymizerService anonymizerService;
+    protected Configuration config;
+    protected AnonymizerService anonymizerService;
     private Progress progress;
 
 
@@ -104,7 +104,7 @@ public class FileAnonymizerService {
         System.out.println("\nAnonymization process completed.\n");
     }
 
-    private List<FileFilter> getFileFilters() throws Exception {
+    protected List<FileFilter> getFileFilters() throws Exception {
         List<FileFilter> fileFilters = new ArrayList<>();
         List<String> fileFilterStrings = config.getFileFilters();
         if (fileFilterStrings != null) {
@@ -115,7 +115,7 @@ public class FileAnonymizerService {
         return fileFilters;
     }
 
-    private List<DataFile> expandDirectories(List<DataFile> files) {
+    protected List<DataFile> expandDirectories(List<DataFile> files) {
         ArrayList<DataFile> allFiles = new ArrayList<>();
 
         if (files == null || files.isEmpty()) {
@@ -154,7 +154,7 @@ public class FileAnonymizerService {
         return allFiles;
     }
 
-    void preventDataFileCollisions(List<DataFile> allFiles) {
+   void preventDataFileCollisions(List<DataFile> allFiles) {
         HashSet<String> inFiles = new HashSet<>();
         for (DataFile dataFile : allFiles) {
             inFiles.add(dataFile.getInFile());
@@ -234,7 +234,7 @@ public class FileAnonymizerService {
         return outputRecord;
     }
 
-    private Map<String, Column> toMap(List<Column> columns) {
+    protected Map<String, Column> toMap(List<Column> columns) {
         HashMap<String, Column> map = new HashMap<>();
 
         if (columns == null || columns.isEmpty()) {
