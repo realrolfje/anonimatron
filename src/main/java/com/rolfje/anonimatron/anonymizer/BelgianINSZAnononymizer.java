@@ -123,9 +123,10 @@ public class BelgianINSZAnononymizer implements Anonymizer {
 
         // Keep dateAnonymizer, but give people a credible birth date :-)
         DateAnonymizer dateAnonymizer = new DateAnonymizer();
-        Synonym newBirthDate = dateAnonymizer.anonymize(new java.sql.Date(new Integer(oldRRN.substring(0,1)),
-                new Integer(oldRRN.substring(2,3)),
-                new Integer(oldRRN.substring(4,5))), 6, false);
+        Synonym newBirthDate = dateAnonymizer.anonymize(new java.sql.Date(new Integer(oldRRN.substring(0,2)),
+                new Integer(oldRRN.substring(2,4)),
+                new Integer(oldRRN.substring(4,6))), 6, false);
+       
         Date birthDate = (Date) newBirthDate.getTo();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(birthDate);
@@ -141,8 +142,8 @@ public class BelgianINSZAnononymizer implements Anonymizer {
 
         StringBuilder rrnBuilder = new StringBuilder();
         rrnBuilder.append(String.format("%02d",yy));
-        rrnBuilder.append(String.format("%02d",month));
-        rrnBuilder.append(String.format("%02d",day));
+        rrnBuilder.append(String.format("%02d",month+1));
+        rrnBuilder.append(String.format("%02d",day+1));
         rrnBuilder.append(String.format("%03d",digitsAsInteger(randomDigits)));
 
 
