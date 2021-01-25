@@ -47,7 +47,10 @@ public class BelgianINSZAnonymizerTest {
             "74060114167",
             "77060516385",
             "66082837137",
-            "88101245338" };
+            "88101245338",
+            "90000012321",
+            "00000010026"
+    };
 
     @Before
     public void setUp() {
@@ -77,6 +80,16 @@ public class BelgianINSZAnonymizerTest {
     public void testSampleList() {
         for (String rrn : list) {
             Synonym synonym = RRNAnonymizer.anonymize(rrn, 11, false);
+            assertTrue(isValidRRN(rrn));
+            assertTrue(isValidRRN((String) synonym.getTo()));
+            System.out.println(rrn + " => " + (String) synonym.getTo());
+        }
+    }
+
+    @Test
+    public void testListKeepBirthDate() {
+        for (String rrn : list) {
+            Synonym synonym = RRNAnonymizer.anonymize(rrn, 11, false, true);
             assertTrue(isValidRRN((String) synonym.getTo()));
             System.out.println(rrn + " => " + (String) synonym.getTo());
         }

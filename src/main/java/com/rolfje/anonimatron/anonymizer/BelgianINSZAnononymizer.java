@@ -7,8 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import static java.util.Calendar.YEAR;
 
@@ -23,23 +26,39 @@ import static java.util.Calendar.YEAR;
  * <p>
  * See https://nl.wikipedia.org/wiki/Rijksregisternummer
  */
-public class BelgianINSZAnononymizer implements Anonymizer {
+public class BelgianINSZAnononymizer extends AbstractElevenProofAnonymizer {
     private static final int LENGTH = 11;
+    final static String PARAMETER = "KEEPBIRTHDATE";
 
     @Override
     public String getType() {
         return "RIJKSREGISTERNUMMER";
     }
 
+
+    @Override
+    public Synonym anonymize(Object from, int size, boolean shortlived, Map<String, String> parameters) {
+        if (parameters == null || parameters.isEmpty()) {
+            return anonymize(from, size, shortlived);
+        } else if (!parameters.containsKey(PARAMETER)) {
+            throw new UnsupportedOperationException("Please provide '" + PARAMETER + "' with a digit mask in the form 111******, where only stars are replaced with random characters.");
+        }
+        return anonymize(from, size, shortlived, Boolean.valueOf(parameters.get(PARAMETER)));
+    }
+
     @Override
     public Synonym anonymize(Object from, int size, boolean isShortLived) {
+        return anonymize(from, size, isShortLived, false);
+    }
+
+    public Synonym anonymize(Object from, int size, boolean isShortLived, boolean keepBirthDate) {
         if (size < LENGTH) {
             throw new UnsupportedOperationException(
                     "Cannot generate a RRN that fits in a " + size + " character string. Must be " + LENGTH
                             + " characters or more.");
         }
 
-        String newRRN = generateNonIdenticalRRN(from);
+        String newRRN = generateNonIdenticalRRN(from, keepBirthDate);
 
         if (from instanceof Number) {
             return new NumberSynonym(
@@ -73,13 +92,17 @@ public class BelgianINSZAnononymizer implements Anonymizer {
         }
     }
 
-    String generateNonIdenticalRRN(Object from) {
+    String generateNonIdenticalRRN(Object from, boolean keepBirthDate) {
         String newRRN;
         String oldRRN = from.toString();
 
         do {
             // Never generate identical number
-            newRRN = generateRRN(from);
+            if (keepBirthDate) {
+                newRRN = generateSequence(from);
+            } else {
+                newRRN = generateRRN(from);
+            }
         } while (oldRRN.equals(newRRN));
         return newRRN;
     }
@@ -114,26 +137,26 @@ public class BelgianINSZAnononymizer implements Anonymizer {
 
     String generateRRN(Object from) {
         String oldRRN;
+
         if (from instanceof Number) {
             oldRRN = from.toString();
-        }
-        else {
+        } else {
             oldRRN = (String) from;
         }
 
-        // Keep dateAnonymizer, but give people a credible birth date :-)
+            // Keep dateAnonymizer, but give people a credible birth date :-)
         DateAnonymizer dateAnonymizer = new DateAnonymizer();
-        Synonym newBirthDate = dateAnonymizer.anonymize(new java.sql.Date(new Integer(oldRRN.substring(0,2)),
-                new Integer(oldRRN.substring(2,4)),
-                new Integer(oldRRN.substring(4,6))), 6, false);
-       
+        Synonym newBirthDate = dateAnonymizer.anonymize(new java.sql.Date(new Integer(oldRRN.substring(0, 2)),
+                new Integer(oldRRN.substring(2, 4)),
+                new Integer(oldRRN.substring(4, 6))), 6, false);
+
         Date birthDate = (Date) newBirthDate.getTo();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(birthDate);
         int year = calendar.get(YEAR);
 
         while (year < 1900) year += 100;
-        int yy = year < 2000? (year - 1900) : (year -= 2000);
+        int yy = year < 2000 ? (year - 1900) : (year -= 2000);
 
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -141,15 +164,53 @@ public class BelgianINSZAnononymizer implements Anonymizer {
         int[] randomDigits = getRandomDigits(3);
 
         StringBuilder rrnBuilder = new StringBuilder();
-        rrnBuilder.append(String.format("%02d",yy));
-        rrnBuilder.append(String.format("%02d",month+1));
-        rrnBuilder.append(String.format("%02d",day+1));
-        rrnBuilder.append(String.format("%03d",digitsAsInteger(randomDigits)));
-
+        rrnBuilder.append(String.format("%02d", yy));
+        rrnBuilder.append(String.format("%02d", month + 1));
+        rrnBuilder.append(String.format("%02d", day + 1));
+        rrnBuilder.append(String.format("%03d", digitsAsInteger(randomDigits)));
 
         int birthSeq = Integer.valueOf(rrnBuilder.toString());
 
         if (year >= 2000) {
+            birthSeq += 2000000000;
+            }
+
+        int check = 97 - (birthSeq % 97);
+
+        rrnBuilder.append(String.format("%02d", check));
+        String rijksRegisterNummer = rrnBuilder.toString();
+        return rijksRegisterNummer;
+        }
+
+        private static boolean isRRNMod97 (String rijksRegisterNummer){
+
+            int check = new Integer(rijksRegisterNummer.substring(0, 9)).intValue();
+            int remainder = new Integer(rijksRegisterNummer.substring(9, 11)).intValue();
+            if ((check % 97) == (97 - remainder)) return true;              // 20th century children
+            // 21st century children
+            if (((check + 2000000000) % 97) == (97 - remainder)) return true;
+            return false;
+        }
+
+    String generateSequence(Object from){
+        String oldRRN;
+
+        if (from instanceof Number) {
+            oldRRN = from.toString();
+        } else {
+            oldRRN = (String) from;
+        }
+
+        int checksum = Integer.parseInt(oldRRN.substring(9, 11));
+        int calculated = (int) Long.parseLong(oldRRN.substring(0, 9)) % 97;
+        boolean twentiethCentury = (checksum == (97 - calculated));
+        int[] randomDigits = getRandomDigits(3);
+
+        StringBuilder rrnBuilder = new StringBuilder();
+        rrnBuilder.append(oldRRN.substring(0,6));
+        rrnBuilder.append(String.format("%03d", digitsAsInteger(randomDigits)));
+        int birthSeq = Integer.valueOf(rrnBuilder.toString());
+        if (!twentiethCentury) {
             birthSeq += 2000000000;
         }
 
@@ -160,32 +221,4 @@ public class BelgianINSZAnononymizer implements Anonymizer {
         return rijksRegisterNummer;
     }
 
-    private static boolean isRRNMod97(String rijksRegisterNummer) {
-
-        int check = new Integer(rijksRegisterNummer.substring(0,9)).intValue();
-        int remainder = new Integer(rijksRegisterNummer.substring(9,11)).intValue();
-        if ((check % 97) == (97 - remainder)) return true;              // 20th century children
-        // 21st century children
-        if (((check + 2000000000) % 97) == (97 - remainder)) return true;
-        return false;
-    }
-
-    // subclassing : to avoid duplicating code:
-    // an abstract parent of AbstractElevenProofAnonymizer should be created
-    // but for now, keep it pragmatic
-
-    private int[] getRandomDigits(int numberOfDigits) {
-        int[] randomDigits = new int[numberOfDigits];
-        for (int i = 0; i < randomDigits.length; i++) {
-            randomDigits[i] = (int) Math.floor(Math.random() * 10);
-        }
-        return randomDigits;
-    }
-    protected int digitsAsInteger(int[] digits) {
-        int result = 0;
-        for (int i = 0; i < digits.length; i++) {
-            result += (int) Math.pow(10, (digits.length - i - 1)) * digits[i];
-        }
-        return result;
-    }
 }
