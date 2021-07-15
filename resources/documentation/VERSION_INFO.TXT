@@ -1,3 +1,5 @@
+*** Version 1.16-SNAPSHOT
+
 *** Version 1.15
 - Fixed a problem where tables from other catalogs could prevent
   fetching primary key information from the correct table,
