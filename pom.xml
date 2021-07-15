@@ -4,7 +4,7 @@
 
     <groupId>com.rolfje.anonimatron</groupId>
     <artifactId>anonimatron</artifactId>
-    <version>1.15-SNAPSHOT</version>
+    <version>1.15</version>
     <packaging>jar</packaging>
 
     <name>anonimatron</name>
