@@ -4,7 +4,7 @@
 
     <groupId>com.rolfje.anonimatron</groupId>
     <artifactId>anonimatron</artifactId>
-    <version>1.15-SNAPSHOT</version>
+    <version>1.16-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>anonimatron</name>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.iban4j</groupId>
             <artifactId>iban4j</artifactId>
-            <version>3.2.1</version>
+            <version>3.2.3-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.castor</groupId>
@@ -147,7 +147,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <configuration>
                     <stylesheetfile>${basedir}/src/javadoc/stylesheet.css</stylesheetfile>
                 </configuration>
@@ -231,7 +231,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.6</version>
+                        <version>0.8.7</version>
                         <configuration>
                             <append>true</append>
                         </configuration>
@@ -266,7 +266,7 @@
                         -->
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
+                        <version>3.9.0.2155</version>
                     </plugin>
                 </plugins>
             </build>
