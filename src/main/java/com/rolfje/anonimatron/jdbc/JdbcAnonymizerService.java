@@ -196,8 +196,9 @@ public class JdbcAnonymizerService {
                     NDC.pop(); // column
                 }
 
-                // Do not update for read-only resultsets
-                if (results.getConcurrency() == ResultSet.CONCUR_UPDATABLE) {
+                // Do not update for read-only resultsets or if the list of columns to update is empty
+                // If the list is empty, some JDBC implementations (namely Informix) will throw a syntax error.
+                if (results.getConcurrency() == ResultSet.CONCUR_UPDATABLE && !columnsAsList.isEmpty()) {
                     results.updateRow();
                 }
 
