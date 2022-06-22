@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "07:00"
+  open-pull-requests-limit: 10
+  target-branch: develop
+  ignore:
+  - dependency-name: com.microsoft.sqlserver:mssql-jdbc
+    versions:
+    - "> 7.2.2.jre8, < 8"
+  - dependency-name: com.microsoft.sqlserver:mssql-jdbc
+    versions:
+    - 9.1.1.jre15-preview
+    - 9.2.0.jre15
+    - 9.2.1.jre15
+    - 9.3.0.jre15-preview
