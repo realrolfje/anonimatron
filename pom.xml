@@ -167,7 +167,7 @@
                 <executions>
                     <execution>
                         <id>install-external</id>
-                        <phase>clean</phase>
+                        <phase>install</phase>
                         <configuration>
                             <file>${basedir}/src/test/resources/hsqldb-2.6.1-jdk8.jar</file>
                             <repositoryLayout>default</repositoryLayout>
