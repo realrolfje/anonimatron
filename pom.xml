@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.6.1</version>
+            <version>2.6.1-jdk8</version>
             <scope>test</scope>
         </dependency>
 
@@ -160,6 +160,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>install-external</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <file>${basedir}/src/test/resources/hsqldb-2.6.1-jdk8.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>org.hsqldb</groupId>
+                            <artifactId>hsqldb</artifactId>
+                            <version>2.6.1-jdk8</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
