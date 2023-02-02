@@ -10,6 +10,26 @@ If you noticed a problem, or have a great idea for a feature, you are welcome to
 
 If you already figured out how to fix the bug you've found, or added a great feature, I'd like to hear from you. This being GitHub, you are welcome to [fork this repository](https://help.github.com/articles/fork-a-repo/). I'm happy to review your pull requests or look at your branch.
 
+In order to build the codebase you'll need Maven installed. Run the following command in the root of the project to install the dependencies we'll need and run the tests to ensure your environment is healthy:
+
+```console
+$ mvn install
+```
+
+At this point you can contribute your code changes. Please add unit tests for anything new / changed. You can verify your changes work with:
+
+```console
+$ mvn test
+```
+
+To build the code locally so you can use your release as you'd use the one from GitHub Releases, run:
+
+```console
+$ mvn package
+```
+
+The built version is now in `target/anonimatron-[version].zip`.
+
 ## Publishing to mavenrepo (experimental)
 
 The `pom.xml` file adheres to http://central.sonatype.org/pages/requirements.html. Release to mavenrepo is based on https://medium.com/pleo/deploying-to-mavens-central-repository-835253a119db
