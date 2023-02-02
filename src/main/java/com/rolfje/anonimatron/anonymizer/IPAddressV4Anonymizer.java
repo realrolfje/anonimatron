@@ -5,7 +5,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class IPAddressAnonymizer implements Anonymizer {
+public class IPAddressV4Anonymizer implements Anonymizer {
     private static final String TYPE = "IP_ADDRESS_V4";
 
     @Override
@@ -19,8 +19,8 @@ public class IPAddressAnonymizer implements Anonymizer {
         );
     }
 
-    private String ipChunk() {
-        return ThreadLocalRandom.current().nextInt(0, 256).toString();
+    private int ipChunk() {
+        return ThreadLocalRandom.current().nextInt(0, 256);
     }
 
     private String getString(Object from, int size) {
@@ -29,7 +29,7 @@ public class IPAddressAnonymizer implements Anonymizer {
         }
 
         if (from instanceof String) {
-            String to = String.format('127.%s.%s.%s', ipChunk(), ipChunk(), ipChunk());
+            String to = String.format("127.%d.%d.%d", ipChunk(), ipChunk(), ipChunk());
 
             if (to.length() > size) {
                 throw new UnsupportedOperationException(
