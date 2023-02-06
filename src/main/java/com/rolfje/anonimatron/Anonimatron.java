@@ -141,7 +141,7 @@ public class Anonimatron {
 
 		System.out
 				.println("\nAnonimatron will try to autodetect drivers which are\n"
-						+ "stored in the lib directory. Add you driver there.\n\n");
+						+ "stored in the lib directory. Add your driver there.\n\n");
 
 		System.out.println("Demo configuration file for Anonymatron "+VERSION+":");
 		System.out.println(Configuration.getDemoConfiguration());
