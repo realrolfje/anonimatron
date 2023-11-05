@@ -35,6 +35,7 @@ public class AnonymizerService {
 		registerAnonymizer(new CharacterStringPrefetchAnonymizer());
 		registerAnonymizer(new DateAnonymizer());
 		registerAnonymizer(new IbanAnonymizer());
+		registerAnonymizer(new IPAddressV4Anonymizer());
 
 		registerAnonymizer(new CountryCodeAnonymizer());
 
