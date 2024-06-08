@@ -30,7 +30,7 @@ public class DutchBSNAnononymizerTest {
                 Integer.valueOf(original),
                 Long.valueOf(original),
                 new BigDecimal(original),
-                new Integer(original)
+                Integer.valueOf(original)
         };
 
         for (Object originalAsNumber : originals) {

@@ -50,6 +50,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.jacoco.reportpath>${project.build.directory}/site/jacoco/jacoco.xml</sonar.jacoco.reportpath>
+        <maven.compiler.release>9</maven.compiler.release>
         <java_version>1.9</java_version>
     </properties>
 
@@ -76,12 +77,12 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>org.iban4j</groupId>
             <artifactId>iban4j</artifactId>
-            <version>3.2.3-RELEASE</version>
+            <version>3.2.7-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.castor</groupId>
@@ -126,7 +127,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.12.1</version>
                 <configuration>
                     <source>${java_version}</source>
                     <target>${java_version}</target>
@@ -158,7 +159,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.6.3</version>
                 <configuration>
                     <stylesheetfile>${basedir}/src/javadoc/stylesheet.css</stylesheetfile>
                 </configuration>
@@ -243,7 +244,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.8</version>
+                        <version>0.8.11</version>
                         <configuration>
                             <append>true</append>
                         </configuration>
@@ -278,7 +279,7 @@
                         -->
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.9.1.2184</version>
+                        <version>3.10.0.2594</version>
                     </plugin>
                 </plugins>
             </build>
