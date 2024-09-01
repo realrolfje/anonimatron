@@ -1,7 +1,8 @@
 package com.javamonitor.tools;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
 public final class Stopwatch implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static final Logger log = Logger.getLogger(Stopwatch.class);
+    private static final Logger log = LogManager.getLogger(Stopwatch.class);
 
     private final long start;
     private long lastTime;
@@ -83,7 +84,7 @@ public final class Stopwatch implements Serializable {
         return true;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return message.toString();
     }
 

@@ -6,7 +6,8 @@ import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
 import com.rolfje.anonimatron.configuration.Discriminator;
 import com.rolfje.anonimatron.configuration.Table;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.sql.*;
@@ -16,7 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertNotEquals;
 
 public class JdbcAnonymizerServiceTest extends AbstractInMemoryHsqlDbTest {
-    private static final Logger LOG = Logger.getLogger(JdbcAnonymizerServiceTest.class);
+    private static final Logger LOG = LogManager.getLogger(JdbcAnonymizerServiceTest.class);
 
     public void testSimpleStrings() throws Exception {
         // Create a table with some easy testdata

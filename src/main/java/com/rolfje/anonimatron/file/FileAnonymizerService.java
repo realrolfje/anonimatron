@@ -7,7 +7,8 @@ import com.rolfje.anonimatron.configuration.DataFile;
 import com.rolfje.anonimatron.progress.Progress;
 import com.rolfje.anonimatron.progress.ProgressPrinter;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,7 +23,7 @@ import java.util.Map;
  * Reads rows from a file and returns anonymized rows.
  */
 public class FileAnonymizerService {
-    private final Logger LOG = Logger.getLogger(FileAnonymizerService.class);
+    private final Logger LOG = LogManager.getLogger(FileAnonymizerService.class);
 
     private Configuration config;
     private AnonymizerService anonymizerService;

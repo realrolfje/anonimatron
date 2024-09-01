@@ -5,7 +5,8 @@ import com.rolfje.anonimatron.anonymizer.CharacterStringAnonymizer;
 import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.file.CsvFileReader;
 import com.rolfje.anonimatron.file.CsvFileWriter;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Marshaller;
@@ -23,288 +24,289 @@ import java.util.List;
 import java.util.Set;
 
 public class Configuration {
-	private static final Logger LOG = Logger.getLogger(Configuration.class);
+    private static final Logger LOG = LogManager.getLogger(Configuration.class);
 
-	private String jdbcurl;
-	private String userid;
-	private String password;
+    private String jdbcurl;
+    private String userid;
+    private String password;
 
-	private String salt;
+    private String salt;
 
-	private List<Table> tables;
-	private List<DataFile> files;
-	private List<String> anonymizerClasses;
-	private List<String> fileFilters;
-	private boolean dryrun = false;
-	public boolean isDryrun() {
-		return dryrun;
-	}
+    private List<Table> tables;
+    private List<DataFile> files;
+    private List<String> anonymizerClasses;
+    private List<String> fileFilters;
+    private boolean dryrun = false;
 
-	public void setDryrun(boolean dryrun) {
-		this.dryrun = dryrun;
-	}
+    public boolean isDryrun() {
+        return dryrun;
+    }
 
-	public static Configuration readFromFile(String filename) throws Exception {
-		Mapping mapping = getMapping();
-		Unmarshaller unmarshaller = new Unmarshaller(mapping);
+    public void setDryrun(boolean dryrun) {
+        this.dryrun = dryrun;
+    }
 
-		File file = new File(filename);
-		Reader reader = new FileReader(file);
-		Configuration configuration = (Configuration)unmarshaller.unmarshal(reader);
-		LOG.info("Configuration read from " + file.getAbsoluteFile());
+    public static Configuration readFromFile(String filename) throws Exception {
+        Mapping mapping = getMapping();
+        Unmarshaller unmarshaller = new Unmarshaller(mapping);
 
-		configuration.sanityCheck();
-		return configuration;
-	}
+        File file = new File(filename);
+        Reader reader = new FileReader(file);
+        Configuration configuration = (Configuration) unmarshaller.unmarshal(reader);
+        LOG.info("Configuration read from " + file.getAbsoluteFile());
 
-	private void sanityCheck(){
-		if (getFiles() != null) {
-			for (DataFile dataFile : getFiles()) {
-				if (dataFile.getColumns() == null || dataFile.getColumns().isEmpty()) {
-					LOG.info(
-							String.format("No column definitions for input %s, lines will be passed through.",
-									dataFile.getInFile()));
-				}
-			}
-		}
-	}
+        configuration.sanityCheck();
+        return configuration;
+    }
 
-	private static Mapping getMapping() throws IOException, MappingException {
-		URL url = Configuration.class.getResource("castor-config-mapping.xml");
-		Mapping mapping = new Mapping();
-		mapping.loadMapping(url);
-		return mapping;
-	}
+    private void sanityCheck() {
+        if (getFiles() != null) {
+            for (DataFile dataFile : getFiles()) {
+                if (dataFile.getColumns() == null || dataFile.getColumns().isEmpty()) {
+                    LOG.info(
+                            String.format("No column definitions for input %s, lines will be passed through.",
+                                    dataFile.getInFile()));
+                }
+            }
+        }
+    }
 
-	public static String getDemoConfiguration() throws Exception {
-		Mapping mapping = getMapping();
+    private static Mapping getMapping() throws IOException, MappingException {
+        URL url = Configuration.class.getResource("castor-config-mapping.xml");
+        Mapping mapping = new Mapping();
+        mapping.loadMapping(url);
+        return mapping;
+    }
 
-		StringWriter stringWriter = new StringWriter();
-		Marshaller marshaller = new Marshaller(stringWriter);
-		// I have no idea why this does not work, so I added a castor.properties
-		// file in the root as workaround.
-		// marshaller.setProperty("org.exolab.castor.indent", "true");
-		marshaller.setMapping(mapping);
-		marshaller.marshal(createConfiguration());
-		return stringWriter.toString();
-	}
+    public static String getDemoConfiguration() throws Exception {
+        Mapping mapping = getMapping();
 
-	public void setAnonymizerClasses(List<String> anonymizerClasses) {
-		this.anonymizerClasses = anonymizerClasses;
-	}
+        StringWriter stringWriter = new StringWriter();
+        Marshaller marshaller = new Marshaller(stringWriter);
+        // I have no idea why this does not work, so I added a castor.properties
+        // file in the root as workaround.
+        // marshaller.setProperty("org.exolab.castor.indent", "true");
+        marshaller.setMapping(mapping);
+        marshaller.marshal(createConfiguration());
+        return stringWriter.toString();
+    }
 
-	public List<String> getAnonymizerClasses() {
-		return anonymizerClasses;
-	}
+    public void setAnonymizerClasses(List<String> anonymizerClasses) {
+        this.anonymizerClasses = anonymizerClasses;
+    }
 
-	public String getJdbcurl() {
-		return jdbcurl;
-	}
+    public List<String> getAnonymizerClasses() {
+        return anonymizerClasses;
+    }
 
-	public void setJdbcurl(String jdbcurl) {
-		this.jdbcurl = jdbcurl;
-	}
+    public String getJdbcurl() {
+        return jdbcurl;
+    }
 
-	public String getUserid() {
-		return userid;
-	}
+    public void setJdbcurl(String jdbcurl) {
+        this.jdbcurl = jdbcurl;
+    }
 
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
+    public String getUserid() {
+        return userid;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public List<Table> getTables() {
-		return tables;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setTables(List<Table> tables) {
-		this.tables = tables;
-	}
+    public List<Table> getTables() {
+        return tables;
+    }
 
-	public void setFiles(List<DataFile> files) {
-		this.files = files;
-	}
+    public void setTables(List<Table> tables) {
+        this.tables = tables;
+    }
 
-	public List<DataFile> getFiles() {
-		return files;
-	}
+    public void setFiles(List<DataFile> files) {
+        this.files = files;
+    }
 
-	public List<String> getFileFilters() {
-		return fileFilters;
-	}
+    public List<DataFile> getFiles() {
+        return files;
+    }
 
-	public void setFileFilters(List<String> fileFilters) {
-		this.fileFilters = fileFilters;
-	}
+    public List<String> getFileFilters() {
+        return fileFilters;
+    }
 
-	public String getSalt() {
-		return salt;
-	}
+    public void setFileFilters(List<String> fileFilters) {
+        this.fileFilters = fileFilters;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+    public String getSalt() {
+        return salt;
+    }
 
-	private static Configuration createConfiguration() throws Exception {
-		Configuration conf = new Configuration();
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
-		conf.setSalt("examplesalt");
+    private static Configuration createConfiguration() throws Exception {
+        Configuration conf = new Configuration();
 
-		List<String> anonymizers = new ArrayList<>();
-		anonymizers.add("my.demo.java.SmurfAnonymizer");
-		anonymizers.add("org.sf.anonimatron.CommunityAnonymizer");
-		conf.setAnonymizerClasses(anonymizers);
+        conf.setSalt("examplesalt");
 
-		List<Table> tables = new ArrayList<>();
-		tables.add(getTable("CUSTOM_TYPES_TABLE", getColumns()));
-		tables.add(getTable("DEFAULT_TYPES_TABLE", getDefaultColumns()));
-		tables.add(getDiscriminatorExample());
+        List<String> anonymizers = new ArrayList<>();
+        anonymizers.add("my.demo.java.SmurfAnonymizer");
+        anonymizers.add("org.sf.anonimatron.CommunityAnonymizer");
+        conf.setAnonymizerClasses(anonymizers);
 
-		conf.setTables(tables);
+        List<Table> tables = new ArrayList<>();
+        tables.add(getTable("CUSTOM_TYPES_TABLE", getColumns()));
+        tables.add(getTable("DEFAULT_TYPES_TABLE", getDefaultColumns()));
+        tables.add(getDiscriminatorExample());
 
-		List<DataFile> dataFiles = new ArrayList<>();
-		dataFiles.add(getDataFile("mydatafile.in.csv", "mydatafile.out.csv", getFileColumns()));
-		dataFiles.add(getDataFile("default_types.in.csv", "default_types.out.csv", getDefaultColumns()));
-		dataFiles.add(getDataFile("nocolumns.in.csv","nocolumns.out.csv", null));
+        conf.setTables(tables);
 
-		conf.setFiles(dataFiles);
+        List<DataFile> dataFiles = new ArrayList<>();
+        dataFiles.add(getDataFile("mydatafile.in.csv", "mydatafile.out.csv", getFileColumns()));
+        dataFiles.add(getDataFile("default_types.in.csv", "default_types.out.csv", getDefaultColumns()));
+        dataFiles.add(getDataFile("nocolumns.in.csv", "nocolumns.out.csv", null));
 
-		conf.setUserid("userid");
-		conf.setPassword("password");
-		conf.setJdbcurl("jdbc:oracle:thin:@[HOST]:[PORT]:[SID]");
-		return conf;
-	}
+        conf.setFiles(dataFiles);
 
-	private static DataFile getDataFile(String inFile, String outFile, List<Column> columns) {
-		DataFile t = new DataFile();
-		t.setInFile(inFile);
-		t.setReader(CsvFileReader.class.getCanonicalName());
+        conf.setUserid("userid");
+        conf.setPassword("password");
+        conf.setJdbcurl("jdbc:oracle:thin:@[HOST]:[PORT]:[SID]");
+        return conf;
+    }
 
-		t.setOutFile(outFile);
-		t.setWriter(CsvFileWriter.class.getCanonicalName());
+    private static DataFile getDataFile(String inFile, String outFile, List<Column> columns) {
+        DataFile t = new DataFile();
+        t.setInFile(inFile);
+        t.setReader(CsvFileReader.class.getCanonicalName());
 
-		t.setColumns(columns);
-		return t;
-	}
+        t.setOutFile(outFile);
+        t.setWriter(CsvFileWriter.class.getCanonicalName());
 
-	private static Table getDiscriminatorExample() {
-		// Build example table with a discriminator
-		Table discriminatortable = new Table();
-		discriminatortable.setName("DISCRIMINATOR_DEMO_TABLE");
+        t.setColumns(columns);
+        return t;
+    }
 
-		// The default column contains a "phone number" of some sort
-		List<Column> defaultcolumns = new ArrayList<>();
-		Column defaultColumn = new Column();
-		defaultColumn.setName("CONTACTINFO");
-		defaultColumn.setType("RANDOMDIGITS");
-		defaultcolumns.add(defaultColumn);
-		discriminatortable.setColumns(defaultcolumns);
+    private static Table getDiscriminatorExample() {
+        // Build example table with a discriminator
+        Table discriminatortable = new Table();
+        discriminatortable.setName("DISCRIMINATOR_DEMO_TABLE");
 
-		// The specific column contains an "email address"
-		List<Column> discriminatecolumns = new ArrayList<>();
-		Column discriminateColumn = new Column();
-		discriminateColumn.setName("CONTACTINFO");
-		discriminateColumn.setType("EMAIL_ADDRESS");
-		discriminatecolumns.add(discriminateColumn);
+        // The default column contains a "phone number" of some sort
+        List<Column> defaultcolumns = new ArrayList<>();
+        Column defaultColumn = new Column();
+        defaultColumn.setName("CONTACTINFO");
+        defaultColumn.setType("RANDOMDIGITS");
+        defaultcolumns.add(defaultColumn);
+        discriminatortable.setColumns(defaultcolumns);
 
-		// This is the discriminator which overrides the phone number with an
-		// email address
-		Discriminator discriminator = new Discriminator();
-		discriminator.setColumnName("CONTACTTYPE");
-		discriminator.setValue("email address");
-		discriminator.setColumns(discriminatecolumns);
+        // The specific column contains an "email address"
+        List<Column> discriminatecolumns = new ArrayList<>();
+        Column discriminateColumn = new Column();
+        discriminateColumn.setName("CONTACTINFO");
+        discriminateColumn.setType("EMAIL_ADDRESS");
+        discriminatecolumns.add(discriminateColumn);
 
-		List<Discriminator> discriminators = new ArrayList<>();
-		discriminators.add(discriminator);
+        // This is the discriminator which overrides the phone number with an
+        // email address
+        Discriminator discriminator = new Discriminator();
+        discriminator.setColumnName("CONTACTTYPE");
+        discriminator.setValue("email address");
+        discriminator.setColumns(discriminatecolumns);
 
-		discriminatortable.setDiscriminators(discriminators);
-		return discriminatortable;
-	}
+        List<Discriminator> discriminators = new ArrayList<>();
+        discriminators.add(discriminator);
 
-	private static Table getTable(String tablename, List<Column> columns) {
-		Table t = new Table();
-		t.setName(tablename);
-		t.setColumns(columns);
-		return t;
-	}
+        discriminatortable.setDiscriminators(discriminators);
+        return discriminatortable;
+    }
 
-
-	private static List<Column> getFileColumns() throws Exception {
-		List<Column> columns = new ArrayList<>();
-
-		AnonymizerService as = new AnonymizerService();
-		String[] types = as.getCustomAnonymizerTypes().toArray(new String[]{});
-
-		// For csv files, indexed column names are the more common example
-		for (int i = 0; i < types.length; i++) {
-			Column c = new Column();
-			c.setName(String.valueOf(i+1));
-			c.setType(types[i]);
-			columns.add(c);
-		}
-
-		return columns;
-	}
-
-	private static List<Column> getColumns() throws Exception {
-		List<Column> columns = new ArrayList<>();
-
-		AnonymizerService as = new AnonymizerService();
-		Set<String> types = as.getCustomAnonymizerTypes();
-
-		for (String type : types) {
-			Column c = new Column();
-			c.setName("A_" + type.toUpperCase() + "_COLUMN");
-			c.setType(type);
-			columns.add(c);
-		}
-
-		// Add a demo configuration for a shortlived (non-stored) column.
-		{
-			Column c = new Column();
-			c.setName("A_SHORTLIVED_COLUMN");
-			c.setType(new StringAnonymizer().getType());
-			c.setShortlived(true);
-			columns.add(c);
-		}
-
-		// Add a demo configuration for a column with configuration parameters
-		{
-			Column c = new Column();
-			c.setName("A_PARAMETERIZED_COLUMN");
-			c.setType(new CharacterStringAnonymizer().getType());
-
-			HashMap<String, String> parameters = new HashMap<>();
-			parameters.put(CharacterStringAnonymizer.PARAMETER, "ABC123!*&");
-			c.setParameters(parameters);
-
-			columns.add(c);
-		}
+    private static Table getTable(String tablename, List<Column> columns) {
+        Table t = new Table();
+        t.setName(tablename);
+        t.setColumns(columns);
+        return t;
+    }
 
 
-		return columns;
-	}
+    private static List<Column> getFileColumns() throws Exception {
+        List<Column> columns = new ArrayList<>();
 
-	private static List<Column> getDefaultColumns() throws Exception {
-		List<Column> columns = new ArrayList<>();
+        AnonymizerService as = new AnonymizerService();
+        String[] types = as.getCustomAnonymizerTypes().toArray(new String[]{});
 
-		AnonymizerService as = new AnonymizerService();
-		Set<String> types = as.getDefaultAnonymizerTypes();
+        // For csv files, indexed column names are the more common example
+        for (int i = 0; i < types.length; i++) {
+            Column c = new Column();
+            c.setName(String.valueOf(i + 1));
+            c.setType(types[i]);
+            columns.add(c);
+        }
 
-		for (String type : types) {
-			Column c = new Column();
-			c.setName("A_" + type.toUpperCase().replace('.', '_') + "_COLUMN");
-			c.setType(type);
-			columns.add(c);
-		}
-		return columns;
-	}
+        return columns;
+    }
+
+    private static List<Column> getColumns() throws Exception {
+        List<Column> columns = new ArrayList<>();
+
+        AnonymizerService as = new AnonymizerService();
+        Set<String> types = as.getCustomAnonymizerTypes();
+
+        for (String type : types) {
+            Column c = new Column();
+            c.setName("A_" + type.toUpperCase() + "_COLUMN");
+            c.setType(type);
+            columns.add(c);
+        }
+
+        // Add a demo configuration for a shortlived (non-stored) column.
+        {
+            Column c = new Column();
+            c.setName("A_SHORTLIVED_COLUMN");
+            c.setType(new StringAnonymizer().getType());
+            c.setShortlived(true);
+            columns.add(c);
+        }
+
+        // Add a demo configuration for a column with configuration parameters
+        {
+            Column c = new Column();
+            c.setName("A_PARAMETERIZED_COLUMN");
+            c.setType(new CharacterStringAnonymizer().getType());
+
+            HashMap<String, String> parameters = new HashMap<>();
+            parameters.put(CharacterStringAnonymizer.PARAMETER, "ABC123!*&");
+            c.setParameters(parameters);
+
+            columns.add(c);
+        }
+
+
+        return columns;
+    }
+
+    private static List<Column> getDefaultColumns() throws Exception {
+        List<Column> columns = new ArrayList<>();
+
+        AnonymizerService as = new AnonymizerService();
+        Set<String> types = as.getDefaultAnonymizerTypes();
+
+        for (String type : types) {
+            Column c = new Column();
+            c.setName("A_" + type.toUpperCase().replace('.', '_') + "_COLUMN");
+            c.setType(type);
+            columns.add(c);
+        }
+        return columns;
+    }
 }
