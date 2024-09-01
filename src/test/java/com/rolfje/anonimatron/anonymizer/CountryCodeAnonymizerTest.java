@@ -24,7 +24,8 @@ public class CountryCodeAnonymizerTest extends TestCase {
         assertEquals(countryCodeAnonymizer.getType(), nld.getType());
         assertEquals(from, nld.getFrom());
         assertNotEquals(from, nld.getTo());
-        assertEquals(size, ((String) nld.getTo()).length());
+        assertEquals("String length check failed, should be " + size + ". From: " + nld.getFrom() + " To: " + nld.getTo(),
+                size, ((String) nld.getTo()).length());
         assertFalse(nld.isShortLived());
     }
 
@@ -44,7 +45,7 @@ public class CountryCodeAnonymizerTest extends TestCase {
         for (Locale locale : availableLocales) {
             try {
                 iso3CountryCodes.add(locale.getISO3Country());
-            }catch (MissingResourceException e) {
+            } catch (MissingResourceException e) {
                 // don't add
             }
         }
