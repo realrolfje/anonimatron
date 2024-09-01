@@ -1,12 +1,12 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import static org.apache.log4j.Logger.getLogger;
 
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.Iban4jException;
@@ -26,7 +26,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  */
 public class IbanAnonymizer implements Anonymizer {
 
-	private static final Logger LOGGER = getLogger(IbanAnonymizer.class);
+	private static final Logger LOGGER = LogManager.getLogger(IbanAnonymizer.class);
 
 	private static final String TYPE = "IBAN";
 

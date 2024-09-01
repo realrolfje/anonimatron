@@ -41,6 +41,6 @@ public class IPAddressV4AnonymizerTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testIncorrectInputType() {
-        ipAnonymizer.anonymize(new Long(0), Integer.MAX_VALUE, true);
+        ipAnonymizer.anonymize(0L, Integer.MAX_VALUE, true);
     }
 }

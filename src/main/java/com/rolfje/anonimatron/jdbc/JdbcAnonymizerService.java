@@ -9,15 +9,16 @@ import com.rolfje.anonimatron.configuration.Table;
 import com.rolfje.anonimatron.progress.Progress;
 import com.rolfje.anonimatron.progress.ProgressPrinter;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.apache.log4j.Logger;
-import org.apache.log4j.NDC;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class JdbcAnonymizerService {
-    Logger LOG = Logger.getLogger(JdbcAnonymizerService.class);
+    Logger LOG = LogManager.getLogger(JdbcAnonymizerService.class);
 
     private Configuration config;
     private Connection connection;
@@ -142,7 +143,7 @@ public class JdbcAnonymizerService {
         ResultSet results = null;
         long rowsleft = table.getNumberOfRows();
         try {
-            NDC.push("Table '" + table.getName() + "'");
+            ThreadContext.push("Table '" + table.getName() + "'");
             String select = getSelectStatement(table);
             LOG.debug(select);
 
@@ -173,7 +174,7 @@ public class JdbcAnonymizerService {
 
                 for (Column column : columnsAsList) {
                     // Build a synonym for each column in this row
-                    NDC.push("Column '" + column.getName() + "'");
+                    ThreadContext.push("Column '" + column.getName() + "'");
 
                     String columnType = column.getType();
                     if (columnType == null) {
@@ -181,7 +182,7 @@ public class JdbcAnonymizerService {
                         column.setType(columnType);
                     }
 
-                    NDC.push("Type '" + columnType + "'");
+                    ThreadContext.push("Type '" + columnType + "'");
 
                     int columnDisplaySize = resultsMetaData.getColumnDisplaySize(results.findColumn(column.getName()));
                     column.setSize(columnDisplaySize);
@@ -192,8 +193,8 @@ public class JdbcAnonymizerService {
                     processNextRecord = columnWorker.processColumn(results, column, databaseColumnValue)
                             || processNextRecord;
 
-                    NDC.pop(); // type
-                    NDC.pop(); // column
+                    ThreadContext.pop(); // type
+                    ThreadContext.pop(); // column
                 }
 
                 // Do not update for read-only resultsets or if the list of columns to update is empty
@@ -221,7 +222,7 @@ public class JdbcAnonymizerService {
             LOG.fatal("Anonymyzation stopped because of fatal error.", e);
             throw new RuntimeException(e);
         } finally {
-            NDC.remove();
+            ThreadContext.clearAll();
             commitAndClose(connection, statement, results);
         }
     }

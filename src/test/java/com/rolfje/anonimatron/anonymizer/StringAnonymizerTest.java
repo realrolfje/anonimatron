@@ -36,6 +36,6 @@ public class StringAnonymizerTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testIncorrectInputType() {
-        stringAnonymizer.anonymize(new Long(0), Integer.MAX_VALUE, true);
+        stringAnonymizer.anonymize(0L, Integer.MAX_VALUE, true);
     }
 }
