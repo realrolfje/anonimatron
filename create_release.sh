@@ -32,7 +32,7 @@ echo $1 > src/main/java/com/rolfje/anonimatron/version.txt
 mvn versions:set -DnewVersion=$1
 
 # Deploy the release to mavenrepo
-mvn clean deploy -P release
+export GPG_TTY=$(tty) && mvn clean deploy -P release
 
 # Commit the release and tag it.
 mvn versions:commit
