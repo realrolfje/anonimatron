@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d %-5p (%c{1}.java:0) %m [%x]%n"/>
+        </Console>
+
+        <RollingFile name="FILE"
+                     fileName="anonimatron.log"
+                     filePattern="anonimatron-%i.log.gz"
+                     append="true">
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d %-5p (%c{1}.java:0) %m [%x]%n" charset="UTF-8"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="200KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org" level="WARN"/>
+        <Logger name="com.rolfje" level="DEBUG"/>
+        <Logger name="java.sql" level="DEBUG"/>
+        <Logger name="oracle" level="DEBUG"/>
+
+        <Root level="ERROR">
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>

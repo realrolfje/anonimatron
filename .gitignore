@@ -1,7 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 anonimatron.log
+anonimatron-*.log.gz
 anonimatron.iml
+pom.xml.versionsBackup
 target
 /docs/ruby/
 /docs/.bundle/
