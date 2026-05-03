@@ -5,7 +5,8 @@ import com.rolfje.anonimatron.anonymizer.CharacterStringAnonymizer;
 import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.file.CsvFileReader;
 import com.rolfje.anonimatron.file.CsvFileWriter;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Marshaller;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Configuration {
-	private static final Logger LOG = Logger.getLogger(Configuration.class);
+	private static final Logger LOG = LogManager.getLogger(Configuration.class);
 
 	private String jdbcurl;
 	private String userid;
