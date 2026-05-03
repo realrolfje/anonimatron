@@ -1,4 +1,16 @@
-*** Version 1.16-SNAPSHOT
+*** Version 1.17-SNAPSHOT
+- Updated log4j to 2.25.4 to get rid of a CVE. This bothered some of
+  the security scanners like Nessus, even though Anonimatron is
+  less succeptible to an exploit of this vulnerability.
+- Updated iban4j to 3.2.10-RELEASE
+- Updated mssql-jdbc to 12.8.1.jre8
+- Updated commons-cli to 1.9.0
+- Pinned HSQLDB test dependency on the Java 8 compatible artifact.
+- Added a docker script to test Anonimatron with several Java versions.
+
+*** Version 1.16
+- Fixes for modern java versions, add-opens
+- Fixed a problem where Anonimatron ran out of heap memory
 
 *** Version 1.15
 - Fixed a problem where tables from other catalogs could prevent
