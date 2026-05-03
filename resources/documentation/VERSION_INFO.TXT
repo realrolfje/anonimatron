@@ -3,6 +3,7 @@
   the security scanners like Nessus, even though Anonimatron is
   less succeptible to an exploit of this vulnerability.
 - Updated iban4j to 3.2.10-RELEASE
+- Updated mssql-jdbc to 12.8.1.jre8
 - Pinned HSQLDB test dependency on the Java 8 compatible artifact.
 - Added a docker script to test Anonimatron with several Java versions.
 
