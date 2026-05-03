@@ -1,12 +1,11 @@
 ### Table of contents
 
-+ [How Anonimatron Works](#how-anonimatron-works)
-+ [Quick Start](#quick-start)
-  + [Setting up a test database](#setting-up-a-test-database)
-  + [Installing Anonimatron](#installing-anonimatron)
-  + [Configuring Anonimatron](#configuring-anonimatron)
-  + [Anonymize!](#anonymize)
-+ [Available Anonymizers](anonymizerlist)
+- [How Anonimatron Works](#how-anonimatron-works)
+- [Quick Start](#quick-start)
+  - [Setting up a test database](#setting-up-a-test-database)
+  - [Installing Anonimatron](#installing-anonimatron)
+  - [Configuring Anonimatron](#configuring-anonimatron)
+  - [Anonymize!](#anonymize)
 
 ## How Anonimatron Works
 
@@ -195,6 +194,28 @@ This simple configuration file will tell Anonimatron the following things:
 + The `lastnames.lastname` column is also an Elven name. Because of the way Anonimatron 
   handles data, strings in this column will be processed exactly the same way as the 
   `userdata.lastname` column, as we will see below.
+
+If you need to, Anonimatron can even anonymize CSV files. To do this, use a `<file>` element 
+in your configuration to specify an input file, output file, reader, writer, and optional 
+column definitions. CSV files are read and written as UTF-8 by default. If your CSV file 
+uses another encoding, add an `encoding` attribute with a Java charset name such as 
+`ISO-8859-1` or `windows-1252`:
+
+```XML
+<file inFile="customers.csv"
+      reader="com.rolfje.anonimatron.file.CsvFileReader"
+      encoding="ISO-8859-1"
+      outFile="customers-anonymized.csv"
+      writer="com.rolfje.anonimatron.file.CsvFileWriter">
+  <column name="1" type="ROMAN_NAME" />
+  <column name="2" type="EMAIL_ADDRESS" />
+</file>
+```
+
+The built-in CSV reader does not read column names from a header row. For file
+configuration, column names are 1-based column indexes written as strings. So
+`name="1"` configures the first CSV column, `name="2"` configures the second CSV
+column, and so on.
 
 ### Anonymize!
 

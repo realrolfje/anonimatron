@@ -71,6 +71,10 @@
 			<bind-xml name="reader" node="attribute" />
 		</field>
 
+		<field name="encoding" type="string" required="false">
+			<bind-xml name="encoding" node="attribute" />
+		</field>
+
 		<field name="outFile" type="string">
 			<bind-xml name="outFile" node="attribute" />
 		</field>

@@ -8,6 +8,7 @@
 - Updated HSQLDB test dependency to 2.7.3 and pinned it on the Java 8 compatible artifact.
 - Added a docker script to test Anonimatron with several Java versions.
 - Added the UK postcode anonymizer to the default anonymizers.
+- Fixed issue #235 where encoding of CSV files caused a problem.
 
 *** Version 1.16
 - Fixes for modern java versions, add-opens

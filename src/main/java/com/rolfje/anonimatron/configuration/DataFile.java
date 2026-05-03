@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DataFile {
+	public static final String DEFAULT_ENCODING = "UTF-8";
+
 	private String inFile;
 	private String reader;
+	private String encoding = DEFAULT_ENCODING;
 
 	private String outFile;
 	private String writer;
@@ -30,6 +33,14 @@ public class DataFile {
 
 	public String getReader() {
 		return reader;
+	}
+
+	public String getEncoding() {
+		return encoding == null || encoding.trim().isEmpty() ? DEFAULT_ENCODING : encoding;
+	}
+
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 
 	public String getOutFile() {

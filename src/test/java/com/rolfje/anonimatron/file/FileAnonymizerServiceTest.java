@@ -11,6 +11,7 @@ import junit.framework.TestCase;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -191,6 +192,33 @@ public class FileAnonymizerServiceTest extends TestCase {
         assertEquals("notouch", outputRecord2.getValues()[1]);
 
         assertEquals(3, anonymizerService.getSynonymCache().size());
+    }
+
+    public void testFileEncodingIsUsedForReaderAndWriter() throws Exception {
+        File tempInput = File.createTempFile("tempInput", ".csv");
+        Files.write(tempInput.toPath(), "André;München\n".getBytes(StandardCharsets.ISO_8859_1));
+
+        String tempOutput = tempInput.getAbsoluteFile() + ".out.csv";
+
+        DataFile dataFile = new DataFile();
+        dataFile.setInFile(tempInput.getAbsolutePath());
+        dataFile.setOutFile(tempOutput);
+        dataFile.setReader(CsvFileReader.class.getCanonicalName());
+        dataFile.setWriter(CsvFileWriter.class.getCanonicalName());
+        dataFile.setEncoding("ISO-8859-1");
+
+        Configuration configuration = new Configuration();
+        configuration.setFiles(Arrays.asList(dataFile));
+        AnonymizerService anonymizerService = new AnonymizerService();
+        anonymizerService.registerAnonymizers(configuration.getAnonymizerClasses());
+        fileAnonymizerService = new FileAnonymizerService(configuration, anonymizerService);
+
+        fileAnonymizerService.anonymize();
+
+        File outPutFile = new File(tempOutput);
+        assertTrue(outPutFile.exists());
+        String output = new String(Files.readAllBytes(outPutFile.toPath()), StandardCharsets.ISO_8859_1);
+        assertEquals("André,München\n", output);
     }
 
     public void testGetInputFilesNonExisting() {
