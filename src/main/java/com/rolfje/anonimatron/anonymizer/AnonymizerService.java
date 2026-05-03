@@ -82,6 +82,8 @@ public class AnonymizerService {
 	}
 
 	public Synonym anonymize(Column column, Object from) {
+		from = DatabaseValueNormalizer.normalize(from);
+
 		if (from == null) {
 			return new NullSynonym(column.getType());
 		}
@@ -158,6 +160,8 @@ public class AnonymizerService {
 	}
 
 	public boolean prepare(String type, Object databaseColumnValue) {
+		databaseColumnValue = DatabaseValueNormalizer.normalize(databaseColumnValue);
+
 		Anonymizer anonymizer = getAnonymizer(type);
 		if (anonymizer != null && anonymizer instanceof Prefetcher){
 			((Prefetcher)anonymizer).prefetch(databaseColumnValue);
