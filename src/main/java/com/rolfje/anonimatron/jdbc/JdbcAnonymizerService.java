@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.jdbc;
 
 import com.rolfje.anonimatron.anonymizer.AnonymizerService;
+import com.rolfje.anonimatron.anonymizer.DatabaseValueNormalizer;
 import com.rolfje.anonimatron.anonymizer.Prefetcher;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
@@ -272,7 +273,7 @@ public class JdbcAnonymizerService {
             if (columnName == null) {
                 throw new IllegalArgumentException("A discriminator in the configuration for table " + table.getName() + " did not concain a column name.");
             }
-            Object value = results.getObject(columnName);
+            Object value = DatabaseValueNormalizer.normalize(results.getObject(columnName));
 
             if ((discriminator.getValue() != null && discriminator.getValue().equals(value))
                     || (discriminator.getValue() == null) && (value == null)) {
