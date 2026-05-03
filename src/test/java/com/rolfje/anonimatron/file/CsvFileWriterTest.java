@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CsvFileWriterTest extends TestCase {
 	public void testWrite() throws Exception {
@@ -21,5 +23,25 @@ public class CsvFileWriterTest extends TestCase {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(tempFile));
 		String line = bufferedReader.readLine();
 		assertEquals("value1,value2", line);
+	}
+
+	public void testWriteWithConfiguredDelimiter() throws Exception {
+		File tempFile = File.createTempFile(CsvFileWriter.class.getSimpleName(), ".csv");
+		assertTrue("Could not delete " + tempFile, tempFile.delete());
+
+		CsvFileWriter csvFileWriter = new CsvFileWriter(tempFile);
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put(CsvFileWriter.DELIMITER_PARAMETER, ";");
+		csvFileWriter.setParameters(parameters);
+
+		csvFileWriter.write(new Record(
+				new String[]{"name1", "name2"},
+				new String[]{"value1", "value2"}
+		));
+		csvFileWriter.close();
+
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(tempFile));
+		String line = bufferedReader.readLine();
+		assertEquals("value1;value2", line);
 	}
 }
