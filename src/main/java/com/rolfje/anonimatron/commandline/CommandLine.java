@@ -47,7 +47,7 @@ public class CommandLine {
     public static void printHelp() {
         System.out
                 .println("\nThis is Anonimatron " + VERSION + ", a command line tool to consistently \n"
-                        + "replace live data in your database or data files with data data which \n"
+                        + "replace live data in your database or data files with data which \n"
                         + "can not easily be traced back to the original data.\n"
                         + "You can use this tool to transform a dump from a production \n"
                         + "database into a large representative dataset you can \n"
