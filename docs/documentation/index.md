@@ -207,6 +207,8 @@ uses another encoding, add an `encoding` attribute with a Java charset name such
       encoding="ISO-8859-1"
       outFile="customers-anonymized.csv"
       writer="com.rolfje.anonimatron.file.CsvFileWriter">
+  <readerParameter id="delimiter">;</readerParameter>
+  <writerParameter id="delimiter">;</writerParameter>
   <column name="1" type="ROMAN_NAME" />
   <column name="2" type="EMAIL_ADDRESS" />
 </file>
@@ -216,6 +218,11 @@ The built-in CSV reader does not read column names from a header row. For file
 configuration, column names are 1-based column indexes written as strings. So
 `name="1"` configures the first CSV column, `name="2"` configures the second CSV
 column, and so on.
+
+The readerParameter and writerParameter "delimiter" are optional. If left out, the reader
+will read files with delimiters `,`, `;`, and tab. The writer will write files 
+using the `,` as a delimiter by default.
+
 
 ### Anonymize!
 

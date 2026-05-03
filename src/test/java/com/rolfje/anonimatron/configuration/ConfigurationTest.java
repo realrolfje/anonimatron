@@ -64,4 +64,24 @@ public class ConfigurationTest extends TestCase {
 		assertEquals("ISO-8859-1", configuration.getFiles().get(0).getEncoding());
 	}
 
+	public void testReadReaderAndWriterParametersFromConfiguration() throws Exception {
+		File configFile = File.createTempFile(ConfigurationTest.class.getSimpleName(), ".xml");
+		PrintWriter printWriter = new PrintWriter(configFile, "UTF-8");
+		printWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		printWriter.write("<configuration salt=\"testsalt\">\n");
+		printWriter.write("  <file inFile=\"in.csv\" reader=\"com.rolfje.anonimatron.file.CsvFileReader\" ");
+		printWriter.write("outFile=\"out.csv\" writer=\"com.rolfje.anonimatron.file.CsvFileWriter\">\n");
+		printWriter.write("    <readerParameter id=\"delimiter\">|</readerParameter>\n");
+		printWriter.write("    <writerParameter id=\"delimiter\">;</writerParameter>\n");
+		printWriter.write("  </file>\n");
+		printWriter.write("</configuration>\n");
+		printWriter.close();
+
+		Configuration configuration = Configuration.readFromFile(configFile.getAbsolutePath());
+
+		DataFile dataFile = configuration.getFiles().get(0);
+		assertEquals("|", dataFile.getReaderParameters().get("delimiter"));
+		assertEquals(";", dataFile.getWriterParameters().get("delimiter"));
+	}
+
 }

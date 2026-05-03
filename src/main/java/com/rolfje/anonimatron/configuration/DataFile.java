@@ -14,6 +14,9 @@ public class DataFile {
 	private String outFile;
 	private String writer;
 
+	private Map<String, String> readerParameters;
+	private Map<String, String> writerParameters;
+
 	private List<Column> columns;
 
 	private List<Discriminator> discriminators;
@@ -57,6 +60,22 @@ public class DataFile {
 
 	public void setWriter(String writer) {
 		this.writer = writer;
+	}
+
+	public Map<String, String> getReaderParameters() {
+		return readerParameters;
+	}
+
+	public void setReaderParameters(Map<String, String> readerParameters) {
+		this.readerParameters = readerParameters;
+	}
+
+	public Map<String, String> getWriterParameters() {
+		return writerParameters;
+	}
+
+	public void setWriterParameters(Map<String, String> writerParameters) {
+		this.writerParameters = writerParameters;
 	}
 
 	public List<Column> getColumns() {
