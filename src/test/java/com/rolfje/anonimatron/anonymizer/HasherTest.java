@@ -1,14 +1,15 @@
 package com.rolfje.anonimatron.anonymizer;
 
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Date;
 
 import static org.junit.Assert.assertNotEquals;
 
 public class HasherTest extends TestCase {
-	private final Logger LOG = Logger.getLogger(HasherTest.class);
+	private final Logger LOG = LogManager.getLogger(HasherTest.class);
 
 	public void testBase64HashHappy() {
 		assertEquals(

@@ -5,10 +5,11 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RomanNameGeneratorTest extends TestCase {
-	Logger LOG = Logger.getLogger(RomanNameGenerator.class);
+	Logger LOG = LogManager.getLogger(RomanNameGenerator.class);
 
 	public void testUniqueness() throws Exception {
 		RomanNameGenerator r = new RomanNameGenerator();

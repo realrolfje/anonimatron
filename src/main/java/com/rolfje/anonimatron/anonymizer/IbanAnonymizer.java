@@ -1,12 +1,12 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import static org.apache.log4j.Logger.getLogger;
+import static org.apache.logging.log4j.LogManager.getLogger;
 
 import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
 import org.iban4j.Iban4jException;

@@ -1,6 +1,6 @@
 package com.javamonitor.tools;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 /**
  * Provides a {@link ThreadLocal} implementation of {@link StopwatchNano} to facilitate cross-object

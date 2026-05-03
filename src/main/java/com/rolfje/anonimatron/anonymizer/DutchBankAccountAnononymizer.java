@@ -2,7 +2,8 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
@@ -17,7 +18,7 @@ import java.security.SecureRandom;
  * See http://nl.wikipedia.org/wiki/Elfproef
  */
 public class DutchBankAccountAnononymizer extends AbstractElevenProofAnonymizer implements BankAccountAnonymizer {
-    private static final Logger LOG = Logger.getLogger(DutchBankAccountAnononymizer.class);
+    private static final Logger LOG = LogManager.getLogger(DutchBankAccountAnononymizer.class);
 
     private static final int LENGTH = 9;
 

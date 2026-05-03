@@ -3,13 +3,14 @@ package com.rolfje.anonimatron.anonymizer;
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.synonyms.NullSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Date;
 import java.util.*;
 
 public class AnonymizerService {
-	private static final Logger LOG = Logger.getLogger(AnonymizerService.class);
+	private static final Logger LOG = LogManager.getLogger(AnonymizerService.class);
 
 	private Map<String, Anonymizer> customAnonymizers = new HashMap<>();
 	private Map<String, String> defaultTypeMapping = new HashMap<>();
