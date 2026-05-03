@@ -196,6 +196,24 @@ This simple configuration file will tell Anonimatron the following things:
   handles data, strings in this column will be processed exactly the same way as the 
   `userdata.lastname` column, as we will see below.
 
+Anonimatron can also anonymize CSV files. File configuration uses a `<file>` element with
+an input file, output file, reader, writer, and optional column definitions. CSV files are
+read and written as UTF-8 by default. If your CSV file uses another encoding, add an
+`encoding` attribute with a Java charset name such as `ISO-8859-1` or `windows-1252`:
+
+```XML
+<file inFile="customers.csv"
+      reader="com.rolfje.anonimatron.file.CsvFileReader"
+      encoding="ISO-8859-1"
+      outFile="customers-anonymized.csv"
+      writer="com.rolfje.anonimatron.file.CsvFileWriter">
+  <column name="1" type="ROMAN_NAME" />
+  <column name="2" type="EMAIL_ADDRESS" />
+</file>
+```
+
+If the `encoding` attribute is omitted, Anonimatron uses `UTF-8`.
+
 ### Anonymize!
 
 Now that we have configured Anonimatron, it’s time to start it up and tell it to use our configuration file and store synonyms. It will be finished in the blink of an eye, and your output should look somewhat like this:

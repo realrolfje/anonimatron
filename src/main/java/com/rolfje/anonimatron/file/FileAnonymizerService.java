@@ -143,6 +143,7 @@ public class FileAnonymizerService {
                 newDataFile.setColumns(dataFile.getColumns());
                 newDataFile.setReader(dataFile.getReader());
                 newDataFile.setWriter(dataFile.getWriter());
+                newDataFile.setEncoding(dataFile.getEncoding());
                 newDataFile.setInFile(inFile.getAbsolutePath());
                 newDataFile.setOutFile(outFile.getAbsolutePath());
                 newDataFile.setDiscriminators(dataFile.getDiscriminators());
@@ -250,8 +251,13 @@ public class FileAnonymizerService {
     private RecordReader createReader(DataFile file) throws Exception {
         try {
             Class clazz = Class.forName(file.getReader());
-            Constructor constructor = clazz.getConstructor(String.class);
-            return (RecordReader) constructor.newInstance(file.getInFile());
+            try {
+                Constructor constructor = clazz.getConstructor(String.class, String.class);
+                return (RecordReader) constructor.newInstance(file.getInFile(), file.getEncoding());
+            } catch (NoSuchMethodException e) {
+                Constructor constructor = clazz.getConstructor(String.class);
+                return (RecordReader) constructor.newInstance(file.getInFile());
+            }
         } catch (Exception e) {
             throw new RuntimeException("Problem creating reader " + file.getReader() + " for input file " + file.getInFile() + ".", e);
         }
@@ -260,8 +266,13 @@ public class FileAnonymizerService {
     private RecordWriter createWriter(DataFile file) throws Exception {
         try {
             Class clazz = Class.forName(file.getWriter());
-            Constructor constructor = clazz.getConstructor(String.class);
-            return (RecordWriter) constructor.newInstance(file.getOutFile());
+            try {
+                Constructor constructor = clazz.getConstructor(String.class, String.class);
+                return (RecordWriter) constructor.newInstance(file.getOutFile(), file.getEncoding());
+            } catch (NoSuchMethodException e) {
+                Constructor constructor = clazz.getConstructor(String.class);
+                return (RecordWriter) constructor.newInstance(file.getOutFile());
+            }
         } catch (Exception e) {
             throw new RuntimeException("Problem creating writer " + file.getWriter() + " for output file " + file.getOutFile() + ".", e);
         }

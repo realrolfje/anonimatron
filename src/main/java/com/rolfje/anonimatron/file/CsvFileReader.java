@@ -1,6 +1,8 @@
 package com.rolfje.anonimatron.file;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -14,9 +16,21 @@ public class CsvFileReader implements RecordReader, Closeable {
 	}
 
 	public CsvFileReader(File file) throws IOException {
+		this(file, StandardCharsets.UTF_8);
+	}
+
+	public CsvFileReader(String fileName, String encoding) throws IOException {
+		this(new File(fileName), Charset.forName(encoding));
+	}
+
+	public CsvFileReader(File file, String encoding) throws IOException {
+		this(file, Charset.forName(encoding));
+	}
+
+	private CsvFileReader(File file, Charset charset) throws IOException {
 		this.file = file;
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("Problem while reading file " + file.getAbsolutePath() + ".", e);
 		}
