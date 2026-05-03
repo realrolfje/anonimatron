@@ -78,7 +78,7 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 127
 fi
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 image="maven:${maven_version}-eclipse-temurin-${java_version}"
 
 if [[ $# -eq 0 ]]; then
