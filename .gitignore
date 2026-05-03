@@ -1,10 +1,13 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 anonimatron.log
+anonimatron-*.log.gz
 anonimatron.iml
+pom.xml.versionsBackup
 target
 /docs/ruby/
 /docs/.bundle/
 /docs/Gemfile.lock
 /docs/.env
 /docs/_site/
+/worktrees/
