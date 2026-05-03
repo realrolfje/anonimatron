@@ -9,6 +9,7 @@
 - Added a docker script to test Anonimatron with several Java versions.
 - Added the UK postcode anonymizer to the default anonymizers.
 - Fixed issue #235 where encoding of CSV files caused a problem.
+- CsvFileReader and CsvFileWriter now support a delimiter parameter, see issue #192.
 
 *** Version 1.16
 - Fixes for modern java versions, add-opens

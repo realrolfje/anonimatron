@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-public class CsvFileWriter implements RecordWriter {
+public class CsvFileWriter implements RecordWriter, ParameterizedRecordWriter {
+	public static final String DELIMITER_PARAMETER = "delimiter";
 
 	private BufferedWriter writer;
 	private File file;
+	private String delimiter = ",";
 
 	public CsvFileWriter(String fileName) throws IOException {
 		this(new File(fileName));
@@ -43,7 +46,7 @@ public class CsvFileWriter implements RecordWriter {
 			String value = values[i].toString();
 			line.append(value);
 			if (i < values.length - 1) {
-				line.append(",");
+				line.append(delimiter);
 			}
 		}
 
@@ -58,5 +61,17 @@ public class CsvFileWriter implements RecordWriter {
 	@Override
 	public void close() throws IOException {
 		writer.close();
+	}
+
+	@Override
+	public void setParameters(Map<String, String> parameters) {
+		if (parameters == null) {
+			return;
+		}
+
+		String configuredDelimiter = parameters.get(DELIMITER_PARAMETER);
+		if (configuredDelimiter != null) {
+			delimiter = configuredDelimiter;
+		}
 	}
 }

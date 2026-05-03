@@ -83,6 +83,32 @@
 			<bind-xml name="writer" node="attribute" />
 		</field>
 
+		<field name="readerParameters" collection="map">
+			<bind-xml name="readerParameter">
+				<class name="org.exolab.castor.mapping.MapItem">
+					<field name="key" type="java.lang.String">
+						<bind-xml name="id" node="attribute"/>
+					</field>
+					<field name="value" type="java.lang.String">
+						<bind-xml name="value" node="text"/>
+					</field>
+				</class>
+			</bind-xml>
+		</field>
+
+		<field name="writerParameters" collection="map">
+			<bind-xml name="writerParameter">
+				<class name="org.exolab.castor.mapping.MapItem">
+					<field name="key" type="java.lang.String">
+						<bind-xml name="id" node="attribute"/>
+					</field>
+					<field name="value" type="java.lang.String">
+						<bind-xml name="value" node="text"/>
+					</field>
+				</class>
+			</bind-xml>
+		</field>
+
 		<field name="columns" collection="arraylist"
 			   type="com.rolfje.anonimatron.configuration.Column">
 			<bind-xml name="column" />
