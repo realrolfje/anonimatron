@@ -2,6 +2,8 @@
 - Updated log4j to 2.25.4 to get rid of a CVE. This bothered some of
   the security scanners like Nessus, even though Anonimatron is
   less succeptible to an exploit of this vulnerability.
+- Updated iban4j to 3.2.10-RELEASE
+- Pinned HSQLDB test dependency on the Java 8 compatible artifact.
 - Added a docker script to test Anonimatron with several Java versions.
 
 *** Version 1.16

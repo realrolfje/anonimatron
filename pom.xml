@@ -50,6 +50,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.jacoco.reportpath>${project.build.directory}/site/jacoco/jacoco.xml</sonar.jacoco.reportpath>
+        <surefire.argLine></surefire.argLine>
     </properties>
 
     <dependencies>
@@ -64,6 +65,7 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.7.2</version>
+            <classifier>jdk8</classifier>
             <scope>test</scope>
         </dependency>
 
@@ -149,7 +151,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <argLine>--add-opens java.xml/com.sun.org.apache.xml.internal.serialize=ALL-UNNAMED</argLine>
+                    <argLine>${surefire.argLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -190,6 +192,15 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>java9-plus-test-args</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
+                <surefire.argLine>--add-opens java.xml/com.sun.org.apache.xml.internal.serialize=ALL-UNNAMED</surefire.argLine>
+            </properties>
+        </profile>
         <profile>
             <!--
                 To release to the central maven repo or sonatype Nexus, use this profile:
