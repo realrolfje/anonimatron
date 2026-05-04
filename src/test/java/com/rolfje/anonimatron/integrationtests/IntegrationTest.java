@@ -29,6 +29,7 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	protected void tearDown() throws Exception {
 		assertTrue("Could not delete temporary configuration.", configFile.delete());
 		assertTrue("Could not delete temporary synonym file.", synonymFile.delete());
+		executeSql("DROP SCHEMA IF EXISTS TESTSCHEMA CASCADE");
 		super.tearDown();
 	}
 
