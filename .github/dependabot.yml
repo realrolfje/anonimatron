@@ -17,3 +17,7 @@ updates:
     - 9.2.0.jre15
     - 9.2.1.jre15
     - 9.3.0.jre15-preview
+  # iban4j 3.2.13-RELEASE and newer are compiled for Java 11, while Anonimatron still targets Java 8.
+  - dependency-name: org.iban4j:iban4j
+    versions:
+    - "> 3.2.10-RELEASE"
