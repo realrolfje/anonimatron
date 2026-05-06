@@ -1,7 +1,8 @@
 # Available Anonymizers
 
 Anonimatron comes with the following default anonymizers. Please start Anonimatron with the `-configexample`
-parameter to see how these are configured. For more information on how Anonimatron works and runs, check our [quickstart](index.md). 
+parameter to see how these are configured. For more information on how Anonimatron works and runs, check our [quickstart](index.md).
+For XML configuration options, see the [configuration file reference](configurationfile.md).
 
 | Name                              | Type                | Input            | Output                                                                   |
 |:----------------------------------|:--------------------|:-----------------|:-------------------------------------------------------------------------|
