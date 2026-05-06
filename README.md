@@ -11,3 +11,5 @@ Running Anonimatron is as simple as downloading, unzipping and running
 
 Please find all documentation, downloads and quickstarts at the 
 [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/).  
+
+For coding, tinkering and other fun articles go to [www.rolfje.com](https://www.rolfje.com/).
