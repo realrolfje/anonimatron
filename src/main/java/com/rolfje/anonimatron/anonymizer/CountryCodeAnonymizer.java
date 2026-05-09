@@ -2,10 +2,8 @@ package com.rolfje.anonimatron.anonymizer;
 
 import com.rolfje.anonimatron.synonyms.StringSynonym;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -15,7 +13,7 @@ import java.util.MissingResourceException;
 public class CountryCodeAnonymizer implements Anonymizer {
 
 	private static final String TYPE = "COUNTRY_CODE";
-	protected static final Locale[] AVAILABLE_LOCALES = SimpleDateFormat.getAvailableLocales();
+	protected static final String[] ISO_COUNTRIES = Locale.getISOCountries();
 	SecureRandom r = new SecureRandom();
 
 	@Override
@@ -32,22 +30,18 @@ public class CountryCodeAnonymizer implements Anonymizer {
 
 		String country = null;
 		while (country == null || country.length() < 1) {
-			Locale l = AVAILABLE_LOCALES[r.nextInt(AVAILABLE_LOCALES.length)];
+			country = ISO_COUNTRIES[r.nextInt(ISO_COUNTRIES.length)];
+			Locale l = new Locale("", country);
 
 			try {
 				if (size > 2) {
 					country = l.getISO3Country();
-					if(StringUtils.isEmpty(country)) {
-						continue;
-					}
 					country = padRight(country, size);
-				}
-				else if (size == 2) {
-					country = l.getCountry();
 				}
 			} catch (MissingResourceException e) {
 				// Locale.getISOCountries() has inconsistent behaviour for "AN", "BU" and "CS" country codes
 				// See https://bugs.openjdk.java.net/browse/JDK-8071929
+				country = null;
 			}
 		}
 

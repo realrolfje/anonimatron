@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNotEquals;
 
 public class CountryCodeAnonymizerTest extends TestCase {
 
+    private static final Set<String> ISO_2_COUNTRY_CODES = new HashSet<>(Arrays.asList(Locale.getISOCountries()));
     private static final Set<String> ISO_3_COUNTRY_CODES = getISO3CountryCodes();
 
     public void testAnonymize() {
@@ -39,11 +40,22 @@ public class CountryCodeAnonymizerTest extends TestCase {
         }
     }
 
+    public void testTwoDigitCountryCodes_shouldAnonymizeToTwoDigitCountryCodes() {
+        CountryCodeAnonymizer anonymizer = new CountryCodeAnonymizer();
+        String countryCode = "NL";
+        for (int i = 0; i < 100; i++) {
+            Synonym synonym = anonymizer.anonymize(countryCode, 2, false);
+            assertTrue(synonym.getTo() + " is not a valid country code.",
+                    ISO_2_COUNTRY_CODES.contains(String.valueOf(synonym.getTo())));
+        }
+    }
+
     private static Set<String> getISO3CountryCodes() {
-        Locale[] availableLocales = Locale.getAvailableLocales();
-        Set<String> iso3CountryCodes = new HashSet<>(availableLocales.length);
-        for (Locale locale : availableLocales) {
+        String[] isoCountries = Locale.getISOCountries();
+        Set<String> iso3CountryCodes = new HashSet<>(isoCountries.length);
+        for (String country : isoCountries) {
             try {
+                Locale locale = new Locale("", country);
                 iso3CountryCodes.add(locale.getISO3Country());
             } catch (MissingResourceException e) {
                 // don't add

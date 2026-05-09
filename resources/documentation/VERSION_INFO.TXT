@@ -8,8 +8,10 @@
 - Updated HSQLDB test dependency to 2.7.3 and pinned it on the Java 8 compatible artifact.
 - Added a docker script to test Anonimatron with several Java versions.
 - Added the UK postcode anonymizer to the default anonymizers.
+- Fixed CountryCodeAnonymizer for newer JDK locale data with region identifiers.
 - Fixed issue #235 where encoding of CSV files caused a problem.
 - CsvFileReader and CsvFileWriter now support a delimiter parameter, see issue #192.
+- Configurations can now contain both tables and files. Anonimatron processes all configured tables and files, sharing synonyms across both phases.
 
 *** Version 1.16
 - Fixes for modern java versions, add-opens
