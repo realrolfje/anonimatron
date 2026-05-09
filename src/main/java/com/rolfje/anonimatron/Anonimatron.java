@@ -89,15 +89,21 @@ public class Anonimatron {
 		AnonymizerService anonymizerService = new AnonymizerService(synonymCache);
 		anonymizerService.registerAnonymizers(config.getAnonymizerClasses());
 
+		boolean didWork = false;
+
 		if (config.getTables() != null && !config.getTables().isEmpty()) {
 			JdbcAnonymizerService jdbcService = new JdbcAnonymizerService(config, anonymizerService);
 			jdbcService.anonymize();
+			didWork = true;
+		}
 
-		} else if (config.getFiles() != null && !config.getFiles().isEmpty()) {
+		if (config.getFiles() != null && !config.getFiles().isEmpty()) {
 			FileAnonymizerService fileService = new FileAnonymizerService(config, anonymizerService);
 			fileService.anonymize();
+			didWork = true;
+		}
 
-		} else {
+		if (!didWork) {
 			System.err.println("Configuration does not contain <table> or <file> elements. Nothing done.");
 		}
 
