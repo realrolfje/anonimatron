@@ -1,6 +1,7 @@
 package com.rolfje.anonimatron.anonymizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.rolfje.anonimatron.synonyms.Synonym;
 
@@ -13,7 +14,7 @@ import com.rolfje.anonimatron.synonyms.Synonym;
  * @author rolf
  */
 public class CharacterStringPrefetchAnonymizer extends CharacterStringAnonymizer implements Prefetcher {
-	private static final Logger LOG = Logger.getLogger(CharacterStringPrefetchAnonymizer.class);
+	private static final Logger LOG = LogManager.getLogger(CharacterStringPrefetchAnonymizer.class);
 
 	public CharacterStringPrefetchAnonymizer() {
 		CHARS = "";

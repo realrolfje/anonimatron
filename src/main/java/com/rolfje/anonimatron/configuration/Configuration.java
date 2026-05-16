@@ -5,25 +5,29 @@ import com.rolfje.anonimatron.anonymizer.CharacterStringAnonymizer;
 import com.rolfje.anonimatron.anonymizer.StringAnonymizer;
 import com.rolfje.anonimatron.file.CsvFileReader;
 import com.rolfje.anonimatron.file.CsvFileWriter;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.mapping.MappingException;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 public class Configuration {
-	private static final Logger LOG = Logger.getLogger(Configuration.class);
+	private static final Logger LOG = LogManager.getLogger(Configuration.class);
 
 	private String jdbcurl;
 	private String userid;
@@ -49,8 +53,10 @@ public class Configuration {
 		Unmarshaller unmarshaller = new Unmarshaller(mapping);
 
 		File file = new File(filename);
-		Reader reader = new FileReader(file);
-		Configuration configuration = (Configuration)unmarshaller.unmarshal(reader);
+		Configuration configuration;
+		try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+			configuration = (Configuration)unmarshaller.unmarshal(reader);
+		}
 		LOG.info("Configuration read from " + file.getAbsoluteFile());
 
 		configuration.sanityCheck();
@@ -64,6 +70,15 @@ public class Configuration {
 					LOG.info(
 							String.format("No column definitions for input %s, lines will be passed through.",
 									dataFile.getInFile()));
+				}
+				try {
+					Charset.forName(dataFile.getEncoding());
+				} catch (Exception e) {
+					throw new RuntimeException(
+							String.format("Invalid encoding '%s' configured for input %s.",
+									dataFile.getEncoding(),
+									dataFile.getInFile()),
+							e);
 				}
 			}
 		}
@@ -187,6 +202,7 @@ public class Configuration {
 		DataFile t = new DataFile();
 		t.setInFile(inFile);
 		t.setReader(CsvFileReader.class.getCanonicalName());
+		t.setEncoding(DataFile.DEFAULT_ENCODING);
 
 		t.setOutFile(outFile);
 		t.setWriter(CsvFileWriter.class.getCanonicalName());

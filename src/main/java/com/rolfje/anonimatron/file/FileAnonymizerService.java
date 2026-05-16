@@ -7,7 +7,8 @@ import com.rolfje.anonimatron.configuration.DataFile;
 import com.rolfje.anonimatron.progress.Progress;
 import com.rolfje.anonimatron.progress.ProgressPrinter;
 import com.rolfje.anonimatron.synonyms.Synonym;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,7 +23,7 @@ import java.util.Map;
  * Reads rows from a file and returns anonymized rows.
  */
 public class FileAnonymizerService {
-    private final Logger LOG = Logger.getLogger(FileAnonymizerService.class);
+    private final Logger LOG = LogManager.getLogger(FileAnonymizerService.class);
 
     private Configuration config;
     private AnonymizerService anonymizerService;
@@ -143,6 +144,9 @@ public class FileAnonymizerService {
                 newDataFile.setColumns(dataFile.getColumns());
                 newDataFile.setReader(dataFile.getReader());
                 newDataFile.setWriter(dataFile.getWriter());
+                newDataFile.setEncoding(dataFile.getEncoding());
+                newDataFile.setReaderParameters(dataFile.getReaderParameters());
+                newDataFile.setWriterParameters(dataFile.getWriterParameters());
                 newDataFile.setInFile(inFile.getAbsolutePath());
                 newDataFile.setOutFile(outFile.getAbsolutePath());
                 newDataFile.setDiscriminators(dataFile.getDiscriminators());
@@ -250,8 +254,18 @@ public class FileAnonymizerService {
     private RecordReader createReader(DataFile file) throws Exception {
         try {
             Class clazz = Class.forName(file.getReader());
-            Constructor constructor = clazz.getConstructor(String.class);
-            return (RecordReader) constructor.newInstance(file.getInFile());
+            RecordReader reader;
+            try {
+                Constructor constructor = clazz.getConstructor(String.class, String.class);
+                reader = (RecordReader) constructor.newInstance(file.getInFile(), file.getEncoding());
+            } catch (NoSuchMethodException e) {
+                Constructor constructor = clazz.getConstructor(String.class);
+                reader = (RecordReader) constructor.newInstance(file.getInFile());
+            }
+            if (reader instanceof ParameterizedRecordReader) {
+                ((ParameterizedRecordReader) reader).setParameters(file.getReaderParameters());
+            }
+            return reader;
         } catch (Exception e) {
             throw new RuntimeException("Problem creating reader " + file.getReader() + " for input file " + file.getInFile() + ".", e);
         }
@@ -260,8 +274,18 @@ public class FileAnonymizerService {
     private RecordWriter createWriter(DataFile file) throws Exception {
         try {
             Class clazz = Class.forName(file.getWriter());
-            Constructor constructor = clazz.getConstructor(String.class);
-            return (RecordWriter) constructor.newInstance(file.getOutFile());
+            RecordWriter writer;
+            try {
+                Constructor constructor = clazz.getConstructor(String.class, String.class);
+                writer = (RecordWriter) constructor.newInstance(file.getOutFile(), file.getEncoding());
+            } catch (NoSuchMethodException e) {
+                Constructor constructor = clazz.getConstructor(String.class);
+                writer = (RecordWriter) constructor.newInstance(file.getOutFile());
+            }
+            if (writer instanceof ParameterizedRecordWriter) {
+                ((ParameterizedRecordWriter) writer).setParameters(file.getWriterParameters());
+            }
+            return writer;
         } catch (Exception e) {
             throw new RuntimeException("Problem creating writer " + file.getWriter() + " for output file " + file.getOutFile() + ".", e);
         }

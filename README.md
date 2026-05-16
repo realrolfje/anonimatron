@@ -1,4 +1,4 @@
-# Anonimatron [![Maven version](https://img.shields.io/maven-central/v/com.rolfje.anonimatron/anonimatron.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.rolfje.anonimatron%22%20AND%20a:%22anonimatron%22) [![Build Status](https://travis-ci.org/realrolfje/anonimatron.svg?branch=master)](https://travis-ci.org/realrolfje/anonimatron)
+# Anonimatron [![Maven version](https://img.shields.io/maven-central/v/com.rolfje.anonimatron/anonimatron.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.rolfje.anonimatron%22%20AND%20a:%22anonimatron%22) [![CI](https://github.com/realrolfje/anonimatron/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/realrolfje/anonimatron/actions/workflows/ci.yml)
 
 Did you ever have that problem where you needed "production data" to find a bug
 or do performance tests outside of the client’s production environment? Are
@@ -12,3 +12,4 @@ Running Anonimatron is as simple as downloading, unzipping and running
 Please find all documentation, downloads and quickstarts at the 
 [Anonimatron official homepage](https://realrolfje.github.io/anonimatron/).  
 
+For coding, tinkering and other fun articles go to [www.rolfje.com](https://www.rolfje.com/).

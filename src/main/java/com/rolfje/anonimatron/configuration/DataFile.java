@@ -5,11 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 public class DataFile {
+	public static final String DEFAULT_ENCODING = "UTF-8";
+
 	private String inFile;
 	private String reader;
+	private String encoding = DEFAULT_ENCODING;
 
 	private String outFile;
 	private String writer;
+
+	private Map<String, String> readerParameters;
+	private Map<String, String> writerParameters;
 
 	private List<Column> columns;
 
@@ -32,6 +38,14 @@ public class DataFile {
 		return reader;
 	}
 
+	public String getEncoding() {
+		return encoding == null || encoding.trim().isEmpty() ? DEFAULT_ENCODING : encoding;
+	}
+
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
+	}
+
 	public String getOutFile() {
 		return outFile;
 	}
@@ -46,6 +60,22 @@ public class DataFile {
 
 	public void setWriter(String writer) {
 		this.writer = writer;
+	}
+
+	public Map<String, String> getReaderParameters() {
+		return readerParameters;
+	}
+
+	public void setReaderParameters(Map<String, String> readerParameters) {
+		this.readerParameters = readerParameters;
+	}
+
+	public Map<String, String> getWriterParameters() {
+		return writerParameters;
+	}
+
+	public void setWriterParameters(Map<String, String> writerParameters) {
+		this.writerParameters = writerParameters;
 	}
 
 	public List<Column> getColumns() {

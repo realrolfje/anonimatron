@@ -4,6 +4,10 @@ import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.synonyms.Synonym;
 import junit.framework.TestCase;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,6 +72,28 @@ public class AnonymizerServiceTest extends TestCase {
         testAnonymizer(fromList, type, type);
     }
 
+    public void testEmailAddressAnonymizerHandlesPostgreSqlCitextObject() throws Exception {
+        Column column = new Column("email", "EMAIL_ADDRESS", 100, false);
+        Object citextValue = createPostgreSqlObject("citext", "source@example.com");
+
+        Synonym synonym = anonService.anonymize(column, citextValue);
+
+        assertEquals("EMAIL_ADDRESS", synonym.getType());
+        assertEquals("source@example.com", synonym.getFrom());
+        assertTrue(synonym.getTo().toString().contains("@example.com"));
+    }
+
+    public void testStringAnonymizerHandlesPostgreSqlObject() throws Exception {
+        Column column = new Column("description", "STRING", 100, false);
+        Object postgreSqlValue = createPostgreSqlObject("citext", "source value");
+
+        Synonym synonym = anonService.anonymize(column, postgreSqlValue);
+
+        assertEquals("STRING", synonym.getType());
+        assertEquals("source value", synonym.getFrom());
+        assertNotNull(synonym.getTo());
+    }
+
     private void testAnonymizer(List<Object> fromList, String lookupType, String synonymType) {
         List<Object> toList = new ArrayList<>();
 
@@ -95,5 +121,17 @@ public class AnonymizerServiceTest extends TestCase {
 
         // Test passing in null
         assertNull(anonService.anonymize(column, null).getTo());
+    }
+
+    private Object createPostgreSqlObject(String type, String value) throws Exception {
+        File postgresqlDriver = new File("resources/libraries/postgresql-9.0-801.jdbc4.jar");
+        URLClassLoader classLoader = new URLClassLoader(new URL[]{postgresqlDriver.toURI().toURL()});
+        Class<?> pgObjectClass = classLoader.loadClass("org.postgresql.util.PGobject");
+        Object pgObject = pgObjectClass.newInstance();
+        Method setType = pgObjectClass.getMethod("setType", String.class);
+        Method setValue = pgObjectClass.getMethod("setValue", String.class);
+        setType.invoke(pgObject, type);
+        setValue.invoke(pgObject, value);
+        return pgObject;
     }
 }

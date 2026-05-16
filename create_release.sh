@@ -23,19 +23,21 @@ fi
 # Exit when a command fails.
 set -e
 
+MVN=(./scripts/mvn-in-docker.sh --java 8)
+
 # ------------------------------------------ Update master and create release
 git checkout master
 git merge develop
 
 # Set the new versions
-echo $1 > src/main/java/com/rolfje/anonimatron/version.txt
-mvn versions:set -DnewVersion=$1
+echo "$1" > src/main/java/com/rolfje/anonimatron/version.txt
+"${MVN[@]}" versions:set -DnewVersion="$1"
 
 # Deploy the release to mavenrepo
-mvn clean deploy -P release
+export GPG_TTY=$(tty) && "${MVN[@]}" clean deploy -P release
 
 # Commit the release and tag it.
-mvn versions:commit
+"${MVN[@]}" versions:commit
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt
 git commit -m "Release $1"
 git tag "v$1"
@@ -46,9 +48,9 @@ git checkout develop
 git merge master
 
 # Set the version to the new SNAPSHOT version
-echo $2 > src/main/java/com/rolfje/anonimatron/version.txt
-mvn versions:set -DnewVersion=$2
-mvn versions:commit
+echo "$2" > src/main/java/com/rolfje/anonimatron/version.txt
+"${MVN[@]}" versions:set -DnewVersion="$2"
+"${MVN[@]}" versions:commit
 
 # Commit the SNAPSHOT version to git
 git add pom.xml src/main/java/com/rolfje/anonimatron/version.txt

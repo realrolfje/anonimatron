@@ -9,7 +9,8 @@ import java.util.*;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.rolfje.anonimatron.configuration.Column;
 import com.rolfje.anonimatron.configuration.Configuration;
@@ -20,7 +21,7 @@ import com.rolfje.anonimatron.configuration.Table;
  * in-memory Hsql database
  */
 public abstract class AbstractInMemoryHsqlDbTest extends TestCase {
-	private static final Logger LOG = Logger
+	private static final Logger LOG = LogManager
 			.getLogger(AbstractInMemoryHsqlDbTest.class);
 	protected static Connection connection;
 	public final static String TEST_DB_URL = "jdbc:hsqldb:mem:tests";

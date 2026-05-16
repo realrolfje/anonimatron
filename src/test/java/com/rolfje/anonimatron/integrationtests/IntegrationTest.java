@@ -2,7 +2,8 @@ package com.rolfje.anonimatron.integrationtests;
 
 import com.rolfje.anonimatron.Anonimatron;
 import com.rolfje.anonimatron.jdbc.AbstractInMemoryHsqlDbTest;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
-	Logger LOG = Logger.getLogger(IntegrationTest.class);
+	Logger LOG = LogManager.getLogger(IntegrationTest.class);
 
 	private File configFile;
 	private File synonymFile;
@@ -28,6 +29,7 @@ public class IntegrationTest extends AbstractInMemoryHsqlDbTest {
 	protected void tearDown() throws Exception {
 		assertTrue("Could not delete temporary configuration.", configFile.delete());
 		assertTrue("Could not delete temporary synonym file.", synonymFile.delete());
+		executeSql("DROP SCHEMA IF EXISTS TESTSCHEMA CASCADE");
 		super.tearDown();
 	}
 

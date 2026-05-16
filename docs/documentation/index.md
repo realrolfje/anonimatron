@@ -1,12 +1,13 @@
 ### Table of contents
 
-+ [How Anonimatron Works](#how-anonimatron-works)
-+ [Quick Start](#quick-start)
-  + [Setting up a test database](#setting-up-a-test-database)
-  + [Installing Anonimatron](#installing-anonimatron)
-  + [Configuring Anonimatron](#configuring-anonimatron)
-  + [Anonymize!](#anonymize)
-+ [Available Anonymizers](anonymizerlist)
+- [How Anonimatron Works](#how-anonimatron-works)
+- [Quick Start](#quick-start)
+  - [Setting up a test database](#setting-up-a-test-database)
+  - [Installing Anonimatron](#installing-anonimatron)
+  - [Configuring Anonimatron](#configuring-anonimatron)
+  - [Anonymize!](#anonymize)
+- [Configuration File Reference](configurationfile.md)
+- [Available Anonymizers](anonymizerlist.md)
 
 ## How Anonimatron Works
 
@@ -195,6 +196,12 @@ This simple configuration file will tell Anonimatron the following things:
 + The `lastnames.lastname` column is also an Elven name. Because of the way Anonimatron 
   handles data, strings in this column will be processed exactly the same way as the 
   `userdata.lastname` column, as we will see below.
+
+For all available anonymizer types, see the [available anonymizers list](anonymizerlist.md).
+
+If you need to, Anonimatron can even anonymize CSV files. See the [configuration file reference](configurationfile.md).
+
+
 
 ### Anonymize!
 
