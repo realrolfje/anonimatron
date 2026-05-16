@@ -43,9 +43,6 @@
       <includes>
         <include>*.sh</include>
       </includes>
-      <excludes>
-        <exclude>test-in-docker.sh</exclude>
-      </excludes>
       <fileMode>0755</fileMode>
     </fileSet>
   </fileSets>
