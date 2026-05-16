@@ -16,9 +16,9 @@ Runs Maven in Docker. The project is mounted into /workspace, Maven settings
 are mounted read-only from \$HOME/.m2/settings.xml, and the writable Maven
 repository is kept under target/docker-maven.
 
-When GPG_TTY is set in the host environment, \$HOME/.gnupg is mounted into the
-container and GPG_TTY is set to the container tty before Maven starts. This is
-used by the release script for Maven artifact signing.
+When GPG_TTY is set in the host environment, an isolated copy of \$HOME/.gnupg
+is mounted into the container and GPG_TTY is set to the container tty before
+Maven starts. This is used by the release script for Maven artifact signing.
 
 Options:
   -j, --java VERSION     Java version to use. Default: $DEFAULT_JAVA_VERSION.
@@ -91,6 +91,14 @@ readonly docker_maven_dir="$repo_root/target/docker-maven"
 readonly host_settings="$HOME/.m2/settings.xml"
 readonly host_gnupg="$HOME/.gnupg"
 readonly image="maven:${maven_version}-eclipse-temurin-${java_version}"
+container_gnupg_home=""
+
+cleanup() {
+  if [[ -n "$container_gnupg_home" && -d "$container_gnupg_home" ]]; then
+    rm -rf "$container_gnupg_home"
+  fi
+}
+trap cleanup EXIT
 
 mkdir -p "$docker_maven_dir"
 
@@ -120,9 +128,22 @@ if [[ -n "${GPG_TTY:-}" ]]; then
     echo "GPG_TTY is set, but GPG home was not found: $host_gnupg" >&2
     exit 1
   fi
+  if ! command -v rsync >/dev/null 2>&1; then
+    echo "GPG signing requires rsync to copy $host_gnupg without live sockets or locks." >&2
+    exit 127
+  fi
+
+  container_gnupg_home="$(mktemp -d "${TMPDIR:-/tmp}/anonimatron-docker-gnupg.XXXXXX")"
+  rsync -a --delete \
+    --exclude 'S.*' \
+    --exclude '*.lock' \
+    "$host_gnupg"/ "$container_gnupg_home"/
+  chmod 700 "$container_gnupg_home"
+  find "$container_gnupg_home" -type d -exec chmod 700 {} +
+  find "$container_gnupg_home" -type f -exec chmod 600 {} +
 
   docker_args+=(
-    -v "$host_gnupg":/home/maven/.gnupg
+    -v "$container_gnupg_home":/home/maven/.gnupg
     -e GNUPGHOME=/home/maven/.gnupg
   )
 
@@ -133,6 +154,6 @@ if [[ -n "${GPG_TTY:-}" ]]; then
   fi
 fi
 
-exec docker run "${docker_args[@]}" \
+docker run "${docker_args[@]}" \
   "$image" \
   sh -c 'if tty -s; then export GPG_TTY="$(tty)"; fi; exec mvn -Duser.home=/home/maven "$@"' sh "$@"
