@@ -143,8 +143,9 @@ if [[ -n "${GPG_TTY:-}" ]]; then
   find "$container_gnupg_home" -type f -exec chmod 600 {} +
 
   docker_args+=(
-    -v "$container_gnupg_home":/home/maven/.gnupg
-    -e GNUPGHOME=/home/maven/.gnupg
+    -v "$container_gnupg_home":/tmp/host-gnupg:ro
+    -e ANONIMATRON_DOCKER_GNUPG_SOURCE=/tmp/host-gnupg
+    -e GNUPGHOME=/tmp/gnupg
   )
 
   if [[ -t 0 && -t 1 ]]; then
@@ -156,4 +157,15 @@ fi
 
 docker run "${docker_args[@]}" \
   "$image" \
-  sh -c 'if tty -s; then export GPG_TTY="$(tty)"; fi; exec mvn -Duser.home=/home/maven "$@"' sh "$@"
+  sh -c '
+    if [ -n "${ANONIMATRON_DOCKER_GNUPG_SOURCE:-}" ]; then
+      rm -rf "$GNUPGHOME"
+      mkdir -p "$GNUPGHOME"
+      cp -R "$ANONIMATRON_DOCKER_GNUPG_SOURCE"/. "$GNUPGHOME"/
+      chmod 700 "$GNUPGHOME"
+      find "$GNUPGHOME" -type d -exec chmod 700 {} +
+      find "$GNUPGHOME" -type f -exec chmod 600 {} +
+    fi
+    if tty -s; then export GPG_TTY="$(tty)"; fi
+    exec mvn -Duser.home=/home/maven "$@"
+  ' sh "$@"
