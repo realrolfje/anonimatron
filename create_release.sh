@@ -9,6 +9,12 @@
 #    - Merge master into develop (without fetch)
 #    - Push master and develop branch to remote.
 #
+# Log in to https://central.sonatype.com/ using github oauth
+# Create a token at https://central.sonatype.com/usertoken
+# Put the token into your ~/.m2/settings.xml with <id>ossrh</id> (matching the id in the pom.xml)
+#
+# Create a GPG keypair to sign the release.
+
 
 if [ "$#" -ne 2 ]
 then
