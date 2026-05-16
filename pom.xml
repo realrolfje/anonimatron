@@ -4,7 +4,7 @@
 
     <groupId>com.rolfje.anonimatron</groupId>
     <artifactId>anonimatron</artifactId>
-    <version>1.17-SNAPSHOT</version>
+    <version>1.17</version>
     <packaging>jar</packaging>
 
     <name>anonimatron</name>
@@ -269,7 +269,7 @@
                                 <configuration>
                                     <!-- realrolfje@users.noreply.github.com -->
                                     <!-- new key, replaces the old key -->
-                                    <keyname>45E2A5E085182DC26EFEF6E796BB2760490D54DD</keyname>
+                                    <keyname>13DD7078E8A5EB254AAD452A63523D1D684A1E09</keyname>
                                 </configuration>
                             </execution>
                         </executions>
