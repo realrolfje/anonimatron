@@ -6,15 +6,17 @@ import java.sql.Date;
 import java.util.Map;
 
 /**
- * Provides functionality for consitently anonymizing a piece of data.
+ * Provides functionality for anonymizing a piece of (sensitive) data.
  * <p>
- * Implementations of this interface must make sure that anonymization is done
- * in a reproducable manner. That is, if A transforms into B, it has to
- * consistently do so on each and every call.
+ * Anonimatron will call {@link #anonymize(Object, int, boolean)} to
+ * generate new values for sensitive records.
  * <p>
- * By doing this, anonimatron can guarantee that data is transformed
- * consistently accross all tables of the database, and referential constraints
- * can be re-enforced after anonymization.
+ * Implementations should not have side effects, be fast and have like
+ * almost like a calculation. Please check existing implementations in
+ * Anonimatron as example.
+ * <p>
+ * Anonimatron will not call an Anonymizer twice with the same value (for
+ * the same synonym file).
  */
 public interface Anonymizer {
 
@@ -56,5 +58,4 @@ public interface Anonymizer {
     default Synonym anonymize(Object from, int size, boolean shortlived, Map<String, String> parameters) {
         return anonymize(from, size, shortlived);
     }
-
 }
